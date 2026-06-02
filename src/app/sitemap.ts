@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/blog", priority: 0.7, changeFrequency: "weekly" },
     { url: "/careers", priority: 0.6, changeFrequency: "monthly" },
     { url: "/contact", priority: 0.7, changeFrequency: "yearly" },
-  ].map((r) => ({ ...r, url: `${SITE_URL}${r.url}`, lastModified: now }));
+  ].map((r) => ({ ...r, url: `${SITE_URL}${r.url}`, lastModified: now })) as MetadataRoute.Sitemap;
 
   const productRoutes: MetadataRoute.Sitemap = productList.map((p) => ({
     url: `${SITE_URL}/products/${p.slug}`,

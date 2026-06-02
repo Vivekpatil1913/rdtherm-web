@@ -49,10 +49,7 @@ export function Navbar() {
 
         <nav className="hidden lg:flex items-center gap-7">
           {mainNav.map((item) => {
-            const isActive =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href);
+            const isActive = pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
