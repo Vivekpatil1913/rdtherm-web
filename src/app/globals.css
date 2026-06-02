@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette — sampled from R&D Therm reference */
+  --color-bg: #f1f1ef;
+  --color-bg-soft: #f1f1ef;
+  --color-bg-dark: #0d0d0d;
+  --color-ink: #111111;
+  --color-ink-soft: #2a2a2a;
+  --color-muted: #6b6b6b;
+  --color-line: #d9d9d6;
+  --color-line-dark: #1f1f1f;
+  --color-surface: #ffffff;
+
+  --color-accent: #e94e1b;
+  --color-accent-hover: #d44513;
+  --color-accent-soft: #fde4d8;
+
+  /* Typography */
+  --font-sans: var(--font-mona-sans), "Mona Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Display sizes */
+  --text-display-2xl: 5.5rem;
+  --text-display-xl: 4.25rem;
+  --text-display-lg: 3.25rem;
+  --text-display-md: 2.5rem;
+
+  /* Layout */
+  --container-narrow: 1200px;
+  --container-default: 1320px;
+  --container-wide: 1440px;
+
+  /* Radii */
+  --radius-pill: 9999px;
+  --radius-tag: 0.5rem;
+  --radius-card: 0.75rem;
+
+  /* Easing curves used across motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  color-scheme: light;
+  --background: var(--color-bg);
+  --foreground: var(--color-ink);
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle vertical grid lines used by the reference layout */
+.bg-grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 25% 100%;
+}
+
+.bg-grid-lines-dark {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 25% 100%;
+}
+
+/* Hide horizontal scrollbar on marquee/logo strip */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Smooth focus outline used by buttons / links */
+:where(button, a):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Subtle section reveal helper if motion is disabled */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/*
+ * Rich-text "article" prose — renders HTML produced by the admin text editor
+ * (Tiptap / Lexical / TinyMCE all output the same set of HTML tags).
+ * Frontend never needs to know what's inside `content`; whatever the admin
+ * types will be displayed as-is.
+ */
+.prose-article {
+  color: var(--color-ink-soft);
+  font-size: 17px;
+  line-height: 1.75;
+}
+.prose-article > * + * { margin-top: 1.1em; }
+.prose-article > p:first-child {
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--color-ink);
+}
+.prose-article p { margin: 0.9em 0; }
+.prose-article h1,
+.prose-article h2,
+.prose-article h3,
+.prose-article h4 {
+  color: var(--color-ink);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.prose-article h2 {
+  font-size: 30px;
+  margin-top: 2.2em;
+  margin-bottom: 0.6em;
+}
+.prose-article h3 {
+  font-size: 24px;
+  margin-top: 1.9em;
+  margin-bottom: 0.5em;
+}
+.prose-article h4 {
+  font-size: 20px;
+  margin-top: 1.6em;
+  margin-bottom: 0.4em;
+}
+.prose-article strong { color: var(--color-ink); font-weight: 600; }
+.prose-article em { font-style: italic; }
+.prose-article a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.prose-article a:hover { color: var(--color-accent-hover); }
+.prose-article ul,
+.prose-article ol {
+  margin: 1.1em 0;
+  padding-left: 1.4em;
+}
+.prose-article ul { list-style: disc; }
+.prose-article ol { list-style: decimal; }
+.prose-article li { margin: 0.4em 0; }
+.prose-article blockquote {
+  margin: 1.6em 0;
+  padding: 0.4em 1.2em;
+  border-left: 3px solid var(--color-accent);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--color-ink);
+}
+.prose-article hr {
+  margin: 2.2em 0;
+  border: 0;
+  border-top: 1px solid var(--color-line);
+}
+.prose-article img {
+  margin: 1.6em 0;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--color-line);
+}
+.prose-article figure { margin: 1.6em 0; }
+.prose-article figcaption {
+  margin-top: 0.6em;
+  font-size: 13px;
+  color: var(--color-muted);
+  text-align: center;
+}
+.prose-article code {
+  background: var(--color-bg-soft);
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+.prose-article pre {
+  background: var(--color-bg-dark);
+  color: #f1f1ef;
+  padding: 1.1em 1.3em;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 1.4em 0;
+}
+.prose-article pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+.prose-article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.6em 0;
+  font-size: 15px;
+}
+.prose-article th,
+.prose-article td {
+  border: 1px solid var(--color-line);
+  padding: 0.6em 0.9em;
+  text-align: left;
+}
+.prose-article th {
+  background: var(--color-bg-soft);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+@media (max-width: 640px) {
+  .prose-article { font-size: 16px; }
+  .prose-article > p:first-child { font-size: 18px; }
+  .prose-article h2 { font-size: 26px; }
+  .prose-article h3 { font-size: 21px; }
+}
