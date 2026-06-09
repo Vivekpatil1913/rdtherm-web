@@ -31,7 +31,7 @@ export function ProductGalleryLightbox({ title, images }: Props) {
   const slides = images.map((img) => ({
     src: img.url,
     alt: img.alt ?? title,
-    title: img.label,
+    title: img.label || img.alt,
     description: img.caption,
   }));
 
@@ -106,12 +106,14 @@ function GalleryTile({
   priority,
   onClick,
 }: {
-  image: { url: string; label?: string; caption?: string };
+  image: { url: string; alt?: string; label?: string; caption?: string };
   alt: string;
   className: string;
   priority?: boolean;
   onClick: () => void;
 }) {
+  // Name shown on hover — the admin-entered label, or the image's alt text.
+  const caption = image.label || image.alt;
   const handleKey = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -138,14 +140,14 @@ function GalleryTile({
         className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
         priority={priority}
       />
-      {image.label ? (
+      {caption ? (
         <figcaption
           aria-hidden
           className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex translate-y-full items-center gap-3 bg-gradient-to-t from-black/85 via-black/70 to-transparent px-5 py-4 text-white opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100"
         >
           <span className="inline-block h-px w-7 bg-[var(--color-accent)]" />
           <p className="text-[13px] font-semibold tracking-[-0.01em] sm:text-[14px]">
-            {image.label}
+            {caption}
           </p>
         </figcaption>
       ) : null}

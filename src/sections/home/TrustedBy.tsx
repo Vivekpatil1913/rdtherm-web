@@ -3,11 +3,12 @@
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { fadeUp, viewportOnce } from "@/animations/motion";
-import { trustedLogos } from "@/data/home";
+import type { ApiLogo } from "@/lib/api-types";
 
-export function TrustedBy() {
+export function TrustedBy({ logos = [] }: { logos?: ApiLogo[] }) {
+  if (logos.length === 0) return null;
   // Duplicate the list so the marquee loops seamlessly
-  const marqueeLogos = [...trustedLogos, ...trustedLogos];
+  const marqueeLogos = [...logos, ...logos];
 
   return (
     <section className="bg-white py-14 lg:py-20">
@@ -41,17 +42,21 @@ export function TrustedBy() {
         >
           {marqueeLogos.map((logo, i) => (
             <div
-              key={`${logo.name}-${i}`}
+              key={`${logo.id}-${i}`}
               className="marquee-item group/logo flex h-24 lg:h-28 w-[200px] sm:w-[220px] lg:w-[240px] shrink-0 items-center justify-center gap-2 rounded-[14px] bg-[var(--color-bg-soft)] px-6 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:ring-1 hover:ring-[var(--color-line)]"
             >
-              {logo.glyph ? (
-                <span className="text-[22px] lg:text-[26px] leading-none text-[var(--color-ink)]">
-                  {logo.glyph}
+              {logo.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={logo.imageUrl}
+                  alt={logo.name}
+                  className="max-h-12 max-w-[160px] object-contain"
+                />
+              ) : (
+                <span className="text-[18px] lg:text-[22px] font-semibold tracking-tight text-[var(--color-ink)]">
+                  {logo.name}
                 </span>
-              ) : null}
-              <span className="text-[18px] lg:text-[22px] font-semibold tracking-tight text-[var(--color-ink)]">
-                {logo.name}
-              </span>
+              )}
             </div>
           ))}
         </div>

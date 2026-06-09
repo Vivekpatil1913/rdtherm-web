@@ -83,7 +83,7 @@ function Card({
       <h3 className="relative z-10 text-[28px] sm:text-[34px] lg:text-[40px] font-bold leading-tight">
         {title}
       </h3>
-      <p className="relative z-10 mt-5 text-[15px] sm:text-[16px] leading-[1.6] text-white/90 max-w-[640px]">
+      <p className="relative z-10 mt-5 text-justify text-[15px] sm:text-[16px] leading-[1.6] text-white/90 max-w-[640px]">
         {body}
       </p>
     </motion.article>

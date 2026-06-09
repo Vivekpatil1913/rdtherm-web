@@ -15,9 +15,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { EASE_OUT_SOFT } from "@/animations/motion";
-import { teamCarouselSection, teamMembers } from "@/data/about";
+import { teamCarouselSection } from "@/data/about";
+import type { ApiTeamMember } from "@/lib/api-types";
 
-type Member = (typeof teamMembers)[number];
+type Member = ApiTeamMember;
 
 const BREAKPOINTS = {
   mobile: 0,
@@ -43,10 +44,10 @@ function useVisibleCount() {
   return count;
 }
 
-export function TeamCarousel() {
+export function TeamCarousel({ members = [] }: { members?: ApiTeamMember[] }) {
   const [start, accent] = teamCarouselSection.heading;
   const visible = useVisibleCount();
-  const total = teamMembers.length;
+  const total = members.length;
   const maxIndex = Math.max(0, Math.ceil(total - visible));
 
   const [rawIndex, setIndex] = useState(0);
@@ -112,6 +113,8 @@ export function TeamCarousel() {
   const progress = maxIndex === 0 ? 1 : (index + 1) / (maxIndex + 1);
   const hasOverflow = maxIndex > 0;
 
+  if (total === 0) return null;
+
   return (
     <section className="relative overflow-hidden bg-white pt-4 pb-20 lg:pt-6 lg:pb-24">
       <Container size="wide" className="relative z-10">
@@ -163,16 +166,16 @@ export function TeamCarousel() {
               dragMomentum={false}
               onDragEnd={onDragEnd}
             >
-              {teamMembers.map((m) => (
+              {members.map((m) => (
                 <div
-                  key={m.name}
+                  key={m.id}
                   className="shrink-0 px-2 sm:px-3 lg:px-3.5"
                   style={{ width: slotWidth || `${100 / visible}%` }}
                 >
                   <TeamCard
                     member={m}
-                    isHovered={hoverId === m.name}
-                    onHoverStart={() => setHoverId(m.name)}
+                    isHovered={hoverId === m.id}
+                    onHoverStart={() => setHoverId(m.id)}
                     onHoverEnd={() => setHoverId(null)}
                   />
                 </div>

@@ -3,6 +3,7 @@ import { PageHero } from "@/sections/shared/PageHero";
 import { ProductGrid } from "@/sections/products/ProductGrid";
 import { TrustedBy } from "@/sections/home/TrustedBy";
 import { productsHero } from "@/data/products";
+import { getProducts, getLogosByKind } from "@/services/content";
 
 const TITLE = "Products — Process Equipment";
 const DESCRIPTION =
@@ -31,8 +32,9 @@ export const metadata: Metadata = {
   twitter: { title: TITLE, description: DESCRIPTION },
 };
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
   const [start, accent] = productsHero.heading;
+  const [products, logos] = await Promise.all([getProducts(), getLogosByKind("client")]);
   return (
     <>
       <PageHero
@@ -45,8 +47,8 @@ export default function ProductsPage() {
         }
         description={productsHero.description}
       />
-      <ProductGrid />
-      <TrustedBy />
+      <ProductGrid products={products} />
+      <TrustedBy logos={logos} />
     </>
   );
 }

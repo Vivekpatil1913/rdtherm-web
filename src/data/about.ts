@@ -1,10 +1,12 @@
 export const aboutIntro = {
   eyebrow: "About R&D Therm",
-  heading: "Engineering excellence rooted in three decades of process industry expertise.",
+  heading: "Engineering and Fabrication excellence in three decades of process industry expertise.",
   body: [
-    "R & D Therm (I) Pvt. Ltd. is a Nashik-based design and manufacturing company specialising in code-compliant process equipment for the global Chemical, Pharma, Agro and Energy industries.",
-    "Since 1993, we have delivered pressure vessels, heat exchangers, distillation columns, reactors and complete process skids — engineered to ASME, PED, IBR and IS standards — with a deep focus on quality, traceability and on-time delivery.",
-    "As part of the Konark Global family, we combine the rigour of a specialised fabricator with the reach of a multi-disciplinary engineering group covering process design, manufacturing, dealership and turnkey project commissioning.",
+    "Established in 1995, R&D Therm India Pvt. Ltd. is a Nashik based manufacturer expert in the design and fabrication of industrial process equipment. A family business at heart, R&D Therm is today powered by a strong second generation of leadership bringing fresh vision and ambition to a three decade legacy.",
+    "Our core product range includes Pressure Vessels, Shell & Tube Heat Exchangers, Distillation Columns, and Reactors, along with a broader portfolio covering Deaerators, Air Receivers, Tanks, Stacks, and Piping & Erection services. We have recently extended our portfolio to include Spinning Disc Flow Reactors and Flow Skids, through a global collaboration with Flowid, a Netherlands based company. We work across a wide range of materials of construction including SS 304, SS 316, Hastelloy, Inconel, and Carbon Steel enabling us to address the most demanding process and corrosion requirements across industries.",
+    "Our manufacturing facility spans over 60,000 sq. ft., equipped with modern fabrication and automation infrastructure, and staffed by a team of more than 100 professionals including skilled in-house welders, fitters, and quality engineers. This integrated, in-house capability gives us direct control over quality, timelines, and workmanship at every stage of production.",
+    "We hold ASME U Stamp, IBR, and ISO 9001:2015 certifications reflecting our commitment to domestic as well as global quality standards and our ability to supply equipment for the most regulated and safety-critical applications.",
+    "As a proud member of the Konark Global group, R&D Therm combines the values of a family-built enterprise with the ambition and capability to compete on the world stage.",
   ],
 };
 

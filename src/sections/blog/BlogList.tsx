@@ -5,14 +5,27 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
-import { blogList } from "@/data/blog";
+import type { ApiBlog } from "@/lib/api-types";
 
-export function BlogList() {
+const FALLBACK_COVER = "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1200&q=80";
+
+export function BlogList({ posts = [] }: { posts?: ApiBlog[] }) {
+  if (posts.length === 0) {
+    return (
+      <section className="bg-white py-16 lg:py-20">
+        <Container size="wide">
+          <p className="py-12 text-center text-[16px] text-[var(--color-muted)]">
+            No articles have been published yet. Please check back soon.
+          </p>
+        </Container>
+      </section>
+    );
+  }
   return (
     <section className="bg-white py-16 lg:py-20">
       <Container size="wide">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-          {blogList.map((post, i) => (
+          {posts.map((post, i) => (
             <motion.article
               key={post.slug}
               initial={{ opacity: 0, y: 28 }}
@@ -29,7 +42,7 @@ export function BlogList() {
                 className="group relative block aspect-square overflow-hidden rounded-[14px] bg-[var(--color-bg-dark)]"
               >
                 <Image
-                  src={post.cover}
+                  src={post.cover || FALLBACK_COVER}
                   alt={post.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

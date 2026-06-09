@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/sections/shared/PageHero";
 import { ContactSection } from "@/sections/contact/ContactSection";
+import { getSettings } from "@/services/content";
 
 const TITLE = "Contact — Talk to an Engineer";
 const DESCRIPTION =
@@ -26,7 +27,8 @@ export const metadata: Metadata = {
   twitter: { title: TITLE, description: DESCRIPTION },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSettings();
   return (
     <>
       <PageHero
@@ -38,7 +40,7 @@ export default function ContactPage() {
         }
         description="Send us your enquiry and we'll route it to the right engineer within one business day."
       />
-      <ContactSection />
+      <ContactSection settings={settings} />
     </>
   );
 }

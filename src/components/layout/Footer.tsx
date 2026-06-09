@@ -6,11 +6,21 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { footerLinks, siteConfig } from "@/data/site";
+import type { ApiSettings } from "@/lib/api-types";
 import { cn } from "@/lib/cn";
 
-export function Footer() {
+export function Footer({ settings }: { settings?: ApiSettings | null }) {
   const pathname = usePathname();
   const [email, setEmail] = useState("");
+
+  // Live contact details from the CMS, falling back to static config.
+  const contact = {
+    address: settings?.address || siteConfig.contact.address,
+    phone: settings?.phone || siteConfig.contact.phone,
+    email: settings?.email || siteConfig.contact.email,
+  };
+  const hours = settings?.hours?.length ? settings.hours : siteConfig.contact.hours;
+  const social = settings?.social?.length ? settings.social : siteConfig.social;
 
   const onSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,21 +101,18 @@ export function Footer() {
           {/* Contact info */}
           <FooterColumn title="Contact info">
             <ul className="flex flex-col gap-3 text-[14px] leading-relaxed text-white/70">
-              <li className="max-w-[230px]">{siteConfig.contact.address}</li>
+              <li className="max-w-[230px]">{contact.address}</li>
               <li>
                 <a
-                  href={`tel:${siteConfig.contact.phone.replace(/\s+/g, "")}`}
+                  href={`tel:${contact.phone.replace(/\s+/g, "")}`}
                   className="transition-colors hover:text-white"
                 >
-                  {siteConfig.contact.phone}
+                  {contact.phone}
                 </a>
               </li>
               <li>
-                <a
-                  href={`mailto:${siteConfig.contact.email}`}
-                  className="transition-colors hover:text-white"
-                >
-                  {siteConfig.contact.email}
+                <a href={`mailto:${contact.email}`} className="transition-colors hover:text-white">
+                  {contact.email}
                 </a>
               </li>
             </ul>
@@ -114,7 +121,7 @@ export function Footer() {
           {/* Working hours */}
           <FooterColumn title="Working hours">
             <ul className="flex flex-col gap-4 text-[14px] leading-[1.55] text-white/70">
-              {siteConfig.contact.hours.map((h) => {
+              {hours.map((h) => {
                 const isRange = h.value.includes("-");
                 return (
                   <li key={h.label}>
@@ -144,7 +151,7 @@ export function Footer() {
             <span className="text-white">Innovation</span>
           </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px]">
-            {siteConfig.social.map((s) => {
+            {social.map((s) => {
               const Icon = SOCIAL_ICONS[s.label as keyof typeof SOCIAL_ICONS];
               const brand = SOCIAL_BRAND[s.label as keyof typeof SOCIAL_BRAND];
               return (

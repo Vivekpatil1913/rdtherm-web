@@ -6,17 +6,22 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
-import { productList } from "@/data/products";
+import type { ApiProduct } from "@/lib/api-types";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&q=80&auto=format&fit=crop";
 
-export function ProductGrid() {
+export function ProductGrid({ products = [] }: { products?: ApiProduct[] }) {
   return (
     <section className="bg-white py-16 lg:py-20">
       <Container size="wide">
+        {products.length === 0 ? (
+          <p className="py-16 text-center text-[16px] text-[var(--color-muted)]">
+            No products are available right now. Please check back soon.
+          </p>
+        ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-          {productList.map((product, i) => (
+          {products.map((product, i) => (
             <motion.article
               key={product.slug}
               initial={{ opacity: 0, y: 24 }}
@@ -30,7 +35,7 @@ export function ProductGrid() {
               >
                 <div className="relative h-60 sm:h-72 lg:h-80 w-full overflow-hidden rounded-[12px] bg-[var(--color-bg-soft)]">
                   <Image
-                    src={product.images?.[0]?.url ?? FALLBACK_IMAGE}
+                    src={product.cover || product.images?.[0]?.url || FALLBACK_IMAGE}
                     alt={product.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
@@ -63,6 +68,7 @@ export function ProductGrid() {
             </motion.article>
           ))}
         </div>
+        )}
       </Container>
     </section>
   );

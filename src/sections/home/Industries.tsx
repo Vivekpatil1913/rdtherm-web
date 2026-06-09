@@ -1,11 +1,13 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { fadeUp, stagger, viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
 import { industries, industryDecor } from "@/data/home";
+import type { ApiIndustry } from "@/lib/api-types";
 import { cn } from "@/lib/cn";
 
 const DECOR_TONES: Record<string, string> = {
@@ -21,23 +23,11 @@ const DECOR_TONES: Record<string, string> = {
     "bg-[linear-gradient(135deg,#dadcde_0%,#9aa0a8_50%,#5b6066_100%)]",
 };
 
-const COVER_TONES: Record<string, string> = {
-  chemical:
-    "bg-[linear-gradient(135deg,#5b5b5b_0%,#8a8a8a_50%,#3d3d3d_100%)]",
-  pharma:
-    "bg-[linear-gradient(135deg,#cfd4dc_0%,#9aa5b6_50%,#5d6776_100%)]",
-  oilgas:
-    "bg-[linear-gradient(135deg,#3a5b8a_0%,#5b86c4_50%,#1c3158_100%)]",
-  food:
-    "bg-[linear-gradient(135deg,#c89a6c_0%,#9b6e3c_50%,#5e421f_100%)]",
-  power:
-    "bg-[linear-gradient(135deg,#94a89c_0%,#5e7d6a_50%,#2b3f33_100%)]",
-};
-
-export function Industries() {
-  const [activeKey, setActiveKey] = useState(industries.items[0].key);
-  const active = industries.items.find((i) => i.key === activeKey) ?? industries.items[0];
+export function Industries({ items = [] }: { items?: ApiIndustry[] }) {
+  const [activeKey, setActiveKey] = useState(items[0]?.key ?? "");
   const [headStart, accent, headEnd] = industries.heading;
+  if (items.length === 0) return null;
+  const active = items.find((i) => i.key === activeKey) ?? items[0];
 
   return (
     <section className="relative bg-[var(--color-bg-soft)] pt-16 lg:pt-20 pb-24 lg:pb-32 overflow-hidden">
@@ -84,7 +74,7 @@ export function Industries() {
         <div className="mt-16 lg:mt-24 grid grid-cols-1 lg:grid-cols-12 gap-y-10 gap-x-10 items-start">
           <ul className="lg:col-span-5 relative flex flex-col">
             <span aria-hidden className="absolute left-0 top-0 h-full w-px bg-[var(--color-line)]" />
-            {industries.items.map((item) => {
+            {items.map((item) => {
               const isActive = item.key === activeKey;
               return (
                 <li key={item.key} className="relative">
@@ -126,16 +116,16 @@ export function Industries() {
                 transition={{ duration: 0.45, ease: EASE_OUT_SOFT }}
                 className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8 rounded-[18px] border border-[var(--color-line)] bg-white p-5 sm:p-6 lg:p-7"
               >
-                <div
-                  className={cn(
-                    "relative overflow-hidden rounded-[14px] aspect-[5/4]",
-                    COVER_TONES[active.cover] ?? COVER_TONES.chemical,
-                  )}
-                >
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 bg-[radial-gradient(80%_60%_at_30%_30%,rgba(255,255,255,0.18),transparent_70%)]"
-                  />
+                <div className="relative overflow-hidden rounded-[14px] aspect-[5/4] bg-[var(--color-bg-soft)]">
+                  {active.cover ? (
+                    <Image
+                      src={active.cover}
+                      alt={active.label}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 35vw"
+                      className="object-cover"
+                    />
+                  ) : null}
                 </div>
                 <div className="flex flex-col gap-4 justify-center">
                   <h3 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold leading-[1.15] tracking-[-0.01em]">

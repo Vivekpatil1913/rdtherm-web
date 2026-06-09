@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Phone, Clock } from "lucide-react";
+import { Mail, MapPin, Phone, Clock, Loader2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
-import { Button } from "@/components/ui/Button";
 import { fadeUp, stagger, viewportOnce } from "@/animations/motion";
 import { siteConfig } from "@/data/site";
+import type { ApiSettings } from "@/lib/api-types";
+import { submitLead } from "@/services/content";
 
 const MESSAGE_LIMIT = 250;
 
@@ -25,14 +26,53 @@ const INITIAL_STATE: FormState = {
   message: "",
 };
 
-export function ContactSection() {
+export function ContactSection({ settings }: { settings?: ApiSettings | null }) {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
 
-  const onSubmit = (e: React.FormEvent) => {
+  const contact = {
+    address: settings?.address || siteConfig.contact.address,
+    phone: settings?.phone || siteConfig.contact.phone,
+    email: settings?.email || siteConfig.contact.email,
+  };
+  const firstHours = settings?.hours?.[0] ?? siteConfig.contact.hours[0];
+
+  const validate = (): boolean => {
+    const next: Partial<Record<keyof FormState, string>> = {};
+    if (!form.name.trim()) next.name = "Please enter your full name.";
+    if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(form.email))
+      next.email = "Please enter a valid email address.";
+    if (!form.company.trim()) next.company = "Please enter your company name.";
+    if (!form.message.trim()) next.message = "Please enter a short message.";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setForm(INITIAL_STATE);
+    if (submitting) return;
+    if (!validate()) return;
+    setSubmitting(true);
+    setError(null);
+    const res = await submitLead({
+      name: form.name,
+      email: form.email,
+      company: form.company,
+      message: form.message,
+      subject: "Website enquiry",
+      source: "Website contact form",
+    });
+    setSubmitting(false);
+    if (res.ok) {
+      setSubmitted(true);
+      setForm(INITIAL_STATE);
+      setErrors({});
+    } else {
+      setError(res.error || "Could not send your enquiry. Please try again.");
+    }
   };
 
   const set =
@@ -41,8 +81,12 @@ export function ContactSection() {
       e: React.ChangeEvent<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
       >,
-    ) =>
-      setForm((prev) => ({ ...prev, [key]: e.target.value }));
+    ) => {
+      const { value } = e.target;
+      setForm((prev) => ({ ...prev, [key]: value }));
+      // Clear this field's error as soon as the user edits it.
+      setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev));
+    };
 
   return (
     <section className="bg-[var(--color-bg-soft)] py-16 lg:py-20">
@@ -77,28 +121,21 @@ export function ContactSection() {
               className="mt-2 flex flex-col gap-5 text-[15px] text-[var(--color-ink-soft)]"
             >
               <Item icon={<MapPin className="size-5" strokeWidth={1.8} />}>
-                {siteConfig.contact.address}
+                {contact.address}
               </Item>
               <Item icon={<Phone className="size-5" strokeWidth={1.8} />}>
-                <a
-                  href={`tel:${siteConfig.contact.phone}`}
-                  className="hover:text-[var(--color-ink)]"
-                >
-                  {siteConfig.contact.phone}
+                <a href={`tel:${contact.phone.replace(/\s+/g, "")}`} className="hover:text-[var(--color-ink)]">
+                  {contact.phone}
                 </a>
               </Item>
               <Item icon={<Mail className="size-5" strokeWidth={1.8} />}>
-                <a
-                  href={`mailto:${siteConfig.contact.email}`}
-                  className="hover:text-[var(--color-ink)]"
-                >
-                  {siteConfig.contact.email}
+                <a href={`mailto:${contact.email}`} className="hover:text-[var(--color-ink)]">
+                  {contact.email}
                 </a>
               </Item>
               <Item icon={<Clock className="size-5" strokeWidth={1.8} />}>
                 <span>
-                  {siteConfig.contact.hours[0].label}:{" "}
-                  {siteConfig.contact.hours[0].value}
+                  {firstHours.label}: {firstHours.value}
                 </span>
               </Item>
             </motion.ul>
@@ -106,6 +143,7 @@ export function ContactSection() {
 
           <motion.form
             onSubmit={onSubmit}
+            noValidate
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
@@ -117,6 +155,7 @@ export function ContactSection() {
                 label="Full name"
                 value={form.name}
                 onChange={set("name")}
+                error={errors.name}
                 required
               />
               <Field
@@ -124,6 +163,7 @@ export function ContactSection() {
                 type="email"
                 value={form.email}
                 onChange={set("email")}
+                error={errors.email}
                 required
               />
             </div>
@@ -131,17 +171,18 @@ export function ContactSection() {
               label="Company"
               value={form.company}
               onChange={set("company")}
+              error={errors.company}
               required
             />
             <TextareaField
               label="Message"
               value={form.message}
-              onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  message: e.target.value.slice(0, MESSAGE_LIMIT),
-                }))
-              }
+              onChange={(e) => {
+                const value = e.target.value.slice(0, MESSAGE_LIMIT);
+                setForm((prev) => ({ ...prev, message: value }));
+                setErrors((prev) => (prev.message ? { ...prev, message: undefined } : prev));
+              }}
+              error={errors.message}
               required
               maxLength={MESSAGE_LIMIT}
             />
@@ -150,15 +191,23 @@ export function ContactSection() {
               <p className="text-[13px] text-[var(--color-muted)]">
                 By submitting, you agree to our privacy policy.
               </p>
-              <Button type="submit" variant="primary">
-                Send enquiry
-              </Button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="inline-flex h-13 items-center gap-2 rounded-tl-[6px] rounded-tr-[6px] rounded-bl-[6px] rounded-br-[16px] bg-[#C8370B] px-6 text-[15px] font-medium text-white transition-colors duration-300 hover:bg-[#A82E08] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {submitting ? <Loader2 className="size-4 animate-spin" /> : null}
+                {submitting ? "Sending…" : "Send enquiry"}
+              </button>
             </div>
 
             {submitted ? (
               <p className="rounded-[10px] bg-[var(--color-accent-soft)] px-4 py-3 text-[14px] text-[var(--color-accent)]">
                 Thanks — we&apos;ve received your enquiry and will reply within one business day.
               </p>
+            ) : null}
+            {error ? (
+              <p className="rounded-[10px] bg-red-50 px-4 py-3 text-[14px] text-red-600">{error}</p>
             ) : null}
           </motion.form>
         </div>
@@ -198,12 +247,14 @@ function Field({
   onChange,
   type = "text",
   required,
+  error,
 }: {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   required?: boolean;
+  error?: string;
 }) {
   return (
     <label className="flex flex-col gap-2">
@@ -214,8 +265,15 @@ function Field({
         type={type}
         required={required}
         aria-required={required}
-        className="h-12 rounded-[10px] border border-[var(--color-line)] bg-white px-4 text-[15px] text-[var(--color-ink)] outline-none transition-colors duration-200 focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)]"
+        aria-invalid={!!error}
+        className={
+          "h-12 rounded-[10px] border bg-white px-4 text-[15px] text-[var(--color-ink)] outline-none transition-colors duration-200 focus:ring-2 focus:ring-[var(--color-accent-soft)] " +
+          (error
+            ? "border-[var(--color-accent)] focus:border-[var(--color-accent)]"
+            : "border-[var(--color-line)] focus:border-[var(--color-accent)]")
+        }
       />
+      {error ? <span className="text-[12px] text-[var(--color-accent)]">{error}</span> : null}
     </label>
   );
 }
@@ -226,12 +284,14 @@ function TextareaField({
   onChange,
   required,
   maxLength,
+  error,
 }: {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   required?: boolean;
   maxLength?: number;
+  error?: string;
 }) {
   return (
     <label className="flex flex-col gap-2">
@@ -241,22 +301,35 @@ function TextareaField({
         onChange={onChange}
         required={required}
         aria-required={required}
+        aria-invalid={!!error}
         maxLength={maxLength}
         rows={5}
-        className="resize-y rounded-[10px] border border-[var(--color-line)] bg-white px-4 py-3 text-[15px] text-[var(--color-ink)] outline-none transition-colors duration-200 focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)]"
+        className={
+          "resize-y rounded-[10px] border bg-white px-4 py-3 text-[15px] text-[var(--color-ink)] outline-none transition-colors duration-200 focus:ring-2 focus:ring-[var(--color-accent-soft)] " +
+          (error
+            ? "border-[var(--color-accent)] focus:border-[var(--color-accent)]"
+            : "border-[var(--color-line)] focus:border-[var(--color-accent)]")
+        }
       />
-      {maxLength ? (
-        <span
-          className={
-            "self-end text-[11px] font-medium tabular-nums " +
-            (value.length >= maxLength
-              ? "text-[var(--color-accent)]"
-              : "text-[var(--color-muted)]")
-          }
-        >
-          {value.length}/{maxLength}
-        </span>
-      ) : null}
+      <div className="flex items-center justify-between gap-3">
+        {error ? (
+          <span className="text-[12px] text-[var(--color-accent)]">{error}</span>
+        ) : (
+          <span />
+        )}
+        {maxLength ? (
+          <span
+            className={
+              "text-[11px] font-medium tabular-nums " +
+              (value.length >= maxLength
+                ? "text-[var(--color-accent)]"
+                : "text-[var(--color-muted)]")
+            }
+          >
+            {value.length}/{maxLength}
+          </span>
+        ) : null}
+      </div>
     </label>
   );
 }

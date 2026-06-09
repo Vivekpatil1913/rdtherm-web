@@ -42,7 +42,7 @@ export function JoinTeam() {
   const validate = (): boolean => {
     const next: Partial<Record<keyof FormState, string>> = {};
     if (!form.name.trim()) next.name = "Please enter your full name.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+    if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(form.email))
       next.email = "Please enter a valid email address.";
     if (!/^[6-9]\d{9}$/.test(form.phone))
       next.phone = "Enter a 10-digit Indian mobile number starting 6–9.";

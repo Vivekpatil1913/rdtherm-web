@@ -6,44 +6,34 @@ import { ArrowLeft, ArrowUpRight, Calendar, Clock, Tag } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { Reveal } from "@/components/ui/Reveal";
-import { blogList } from "@/data/blog";
+import { getBlog, getBlogs } from "@/services/content";
 
-export function generateStaticParams() {
-  return blogList.map((post) => ({ slug: post.slug }));
-}
+const FALLBACK_COVER = "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1200&q=80";
 
 export async function generateMetadata(
   props: PageProps<"/blog/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const post = blogList.find((p) => p.slug === slug);
+  const post = await getBlog(slug);
   if (!post) return { title: "Article not found", robots: { index: false } };
   const url = `/blog/${slug}`;
+  const cover = post.cover || FALLBACK_COVER;
   return {
     title: post.title,
     description: post.excerpt,
-    keywords: [
-      post.category,
-      post.title.toLowerCase(),
-      "process equipment blog",
-      "manufacturing case study",
-    ],
+    keywords: [post.category, post.title.toLowerCase(), "process equipment blog"],
     alternates: { canonical: url },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       url,
       type: "article",
-      publishedTime: post.date,
-      authors: ["R&D Therm Engineering Desk"],
+      publishedTime: post.date ?? undefined,
+      authors: [post.author || "R&D Therm Engineering Desk"],
       tags: [post.category],
-      images: [{ url: post.cover, alt: post.title }],
+      images: [{ url: cover, alt: post.title }],
     },
-    twitter: {
-      title: post.title,
-      description: post.excerpt,
-      images: [post.cover],
-    },
+    twitter: { title: post.title, description: post.excerpt, images: [cover] },
   };
 }
 
@@ -51,10 +41,10 @@ export default async function BlogDetailPage(
   props: PageProps<"/blog/[slug]">,
 ) {
   const { slug } = await props.params;
-  const post = blogList.find((p) => p.slug === slug);
+  const [post, all] = await Promise.all([getBlog(slug), getBlogs()]);
   if (!post) notFound();
 
-  const related = blogList.filter((p) => p.slug !== slug).slice(0, 3);
+  const related = all.filter((p) => p.slug !== slug).slice(0, 3);
 
   return (
     <>
@@ -87,7 +77,7 @@ export default async function BlogDetailPage(
           <Reveal className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] font-medium text-[var(--color-ink-soft)] sm:text-[14px]">
             <span className="inline-flex items-center gap-2">
               <Calendar className="size-4 text-[var(--color-accent)]" />
-              {post.date}
+              {post.date ?? ""}
             </span>
             <span className="inline-flex items-center gap-2">
               <Clock className="size-4 text-[var(--color-accent)]" />
@@ -105,7 +95,7 @@ export default async function BlogDetailPage(
       <Container size="wide">
         <Reveal className="relative aspect-[16/9] overflow-hidden rounded-[20px] border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
           <Image
-            src={post.cover}
+            src={post.cover || FALLBACK_COVER}
             alt={post.title}
             fill
             sizes="(max-width: 1280px) 100vw, 1280px"
@@ -122,7 +112,7 @@ export default async function BlogDetailPage(
           <Reveal>
             <div
               className="prose-article"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: post.content || "" }}
             />
           </Reveal>
 
@@ -168,7 +158,7 @@ export default async function BlogDetailPage(
                   className="group relative block aspect-square overflow-hidden rounded-[14px] bg-[var(--color-bg-dark)]"
                 >
                   <Image
-                    src={p.cover}
+                    src={p.cover || FALLBACK_COVER}
                     alt={p.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

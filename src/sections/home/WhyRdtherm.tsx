@@ -50,17 +50,21 @@ export function WhyRdtherm() {
           </div>
         </motion.div>
 
-        <div className="mt-16 lg:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-10 border-t border-[var(--color-line)] pt-12">
-          {firstRow.map((feature, i) => (
-            <FeatureCol key={feature.title} title={feature.title} body={feature.body} index={i} />
-          ))}
-        </div>
+        {firstRow.length > 0 ? (
+          <div className="mt-16 lg:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-10 border-t border-[var(--color-line)] pt-12">
+            {firstRow.map((feature, i) => (
+              <FeatureCol key={feature.title} title={feature.title} body={feature.body} index={i} />
+            ))}
+          </div>
+        ) : null}
 
-        <div className="mt-12 lg:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-10 border-t border-[var(--color-line)] pt-12">
-          {secondRow.map((feature, i) => (
-            <FeatureCol key={feature.title} title={feature.title} body={feature.body} index={i + 3} />
-          ))}
-        </div>
+        {secondRow.length > 0 ? (
+          <div className="mt-12 lg:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-10 border-t border-[var(--color-line)] pt-12">
+            {secondRow.map((feature, i) => (
+              <FeatureCol key={feature.title} title={feature.title} body={feature.body} index={i + 3} />
+            ))}
+          </div>
+        ) : null}
       </Container>
     </section>
   );

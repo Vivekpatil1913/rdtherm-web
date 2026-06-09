@@ -15,6 +15,8 @@ const VIDEO_SOURCES = ["/videos/hero/rdthern.mp4"];
 
 const POSTER_IMG =
   "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1920&q=80";
+const PORTRAIT_IMG =
+  "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&q=80";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -178,7 +180,7 @@ function FounderCard() {
     <div className="relative w-[240px] sm:w-[260px] lg:w-[290px] overflow-hidden rounded-[18px] border border-white/12 bg-[#0d0d0d]/85 p-2.5 backdrop-blur-md shadow-[0_24px_70px_-20px_rgba(0,0,0,0.6)]">
       <div className="relative aspect-[5/5] w-full overflow-hidden rounded-[12px]">
         <Image
-          src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&q=80"
+          src={PORTRAIT_IMG}
           alt={heroQuote.author}
           fill
           className="object-cover"

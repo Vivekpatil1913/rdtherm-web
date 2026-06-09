@@ -12,12 +12,27 @@ import {
   viewportOnce,
   EASE_OUT_SOFT,
 } from "@/animations/motion";
-import { testimonials, heroStats, supportCard } from "@/data/home";
+import { heroStats, supportCard } from "@/data/home";
+import type { ApiTestimonial } from "@/lib/api-types";
 import { cn } from "@/lib/cn";
 
-export function Testimonials() {
-  const [activeId, setActiveId] = useState(testimonials[0].id);
-  const active = testimonials.find((t) => t.id === activeId) ?? testimonials[0];
+const TONES = [
+  "from-[#f5b894] to-[#c97d4e]",
+  "from-[#b8c4d6] to-[#5d6b85]",
+  "from-[#dabc8a] to-[#7e5a36]",
+  "from-[#e4c4d9] to-[#8c5070]",
+  "from-[#a3b7a0] to-[#4d6447]",
+  "from-[#f1c4a2] to-[#a86838]",
+];
+
+function initials(name: string) {
+  return name.split(/\s+/).filter(Boolean).slice(0, 1).map((w) => w[0]?.toUpperCase()).join("");
+}
+
+export function Testimonials({ items = [] }: { items?: ApiTestimonial[] }) {
+  const [activeId, setActiveId] = useState(items[0]?.id ?? "");
+  if (items.length === 0) return null;
+  const active = items.find((t) => t.id === activeId) ?? items[0];
 
   return (
     <section className="bg-white py-16 lg:py-20">
@@ -42,6 +57,7 @@ export function Testimonials() {
 
         <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-5">
           <AvatarColumn
+            items={items}
             activeId={activeId}
             onSelect={setActiveId}
           />
@@ -145,9 +161,11 @@ export function Testimonials() {
 }
 
 function AvatarColumn({
+  items,
   activeId,
   onSelect,
 }: {
+  items: ApiTestimonial[];
   activeId: string;
   onSelect: (id: string) => void;
 }) {
@@ -285,7 +303,7 @@ function AvatarColumn({
         ref={scrollRef}
         className="custom-scroll flex flex-row items-center lg:flex-col overflow-x-auto overflow-y-hidden lg:overflow-x-hidden lg:overflow-y-auto max-h-[380px] snap-x lg:snap-y snap-proximity scroll-py-2 scroll-px-2"
       >
-        {testimonials.map((t) => {
+        {items.map((t, i) => {
           const isActive = t.id === activeId;
           return (
             <div
@@ -301,15 +319,20 @@ function AvatarColumn({
                 aria-pressed={isActive}
                 aria-label={`Show testimonial from ${t.author}`}
                 className={cn(
-                  "relative inline-flex items-center justify-center rounded-full text-[15px] lg:text-[17px] font-semibold text-white transition-all duration-300",
+                  "relative inline-flex items-center justify-center overflow-hidden rounded-full text-[15px] lg:text-[17px] font-semibold text-white transition-all duration-300",
                   "size-12 sm:size-14 lg:size-[3.2rem]",
-                  "bg-gradient-to-br " + t.avatarTone,
+                  "bg-gradient-to-br " + TONES[i % TONES.length],
                   isActive
                     ? "ring-2 ring-[var(--color-accent)] ring-offset-2 ring-offset-[var(--color-bg-dark)] shadow-[0_8px_24px_-6px_rgba(233,78,27,0.5)]"
                     : "opacity-75 hover:opacity-100 hover:scale-105",
                 )}
               >
-                <span aria-hidden>{t.avatar}</span>
+                {t.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={t.avatarUrl} alt={t.author} className="size-full object-cover" />
+                ) : (
+                  <span aria-hidden>{initials(t.author)}</span>
+                )}
               </button>
             </div>
           );

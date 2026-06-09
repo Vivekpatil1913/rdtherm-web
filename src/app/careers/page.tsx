@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/sections/shared/PageHero";
 import { Benefits } from "@/sections/careers/Benefits";
+import { Openings } from "@/sections/careers/Openings";
 import { JoinTeam } from "@/sections/careers/JoinTeam";
 import { careersHero } from "@/data/careers";
+import { getCareers } from "@/services/content";
 
 const TITLE = "Careers — Build with R&D Therm";
 const DESCRIPTION =
@@ -29,8 +31,9 @@ export const metadata: Metadata = {
   twitter: { title: TITLE, description: DESCRIPTION },
 };
 
-export default function CareersPage() {
+export default async function CareersPage() {
   const [start, accent] = careersHero.heading;
+  const roles = await getCareers();
   return (
     <>
       <PageHero
@@ -44,6 +47,7 @@ export default function CareersPage() {
         description={careersHero.description}
       />
       <Benefits />
+      <Openings roles={roles} />
       <JoinTeam />
     </>
   );

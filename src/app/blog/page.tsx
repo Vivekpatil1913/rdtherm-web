@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/sections/shared/PageHero";
 import { BlogList } from "@/sections/blog/BlogList";
 import { blogHero } from "@/data/blog";
+import { getBlogs } from "@/services/content";
 
 const TITLE = "Blog — Engineering Notes & Case Studies";
 const DESCRIPTION =
@@ -27,8 +28,9 @@ export const metadata: Metadata = {
   twitter: { title: TITLE, description: DESCRIPTION },
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
   const [start, accent, end] = blogHero.heading;
+  const posts = await getBlogs();
   return (
     <>
       <PageHero
@@ -42,7 +44,7 @@ export default function BlogPage() {
         }
         description={blogHero.description}
       />
-      <BlogList />
+      <BlogList posts={posts} />
     </>
   );
 }

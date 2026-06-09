@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   twitter: { title: TITLE, description: DESCRIPTION },
 };
 
-export default function ManufacturingPage() {
+export default async function ManufacturingPage() {
   const [start, accent, end] = manufacturingHero.heading;
   return (
     <>

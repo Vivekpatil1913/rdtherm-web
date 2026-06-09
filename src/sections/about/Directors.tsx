@@ -1,14 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { fadeUp, stagger, viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
-import { directors, directorsSection } from "@/data/about";
+import { directorsSection } from "@/data/about";
+import type { ApiTeamMember } from "@/lib/api-types";
 
-export function Directors() {
+export function Directors({ members = [] }: { members?: ApiTeamMember[] }) {
   const [start, accent] = directorsSection.heading;
+  if (members.length === 0) return null;
 
   return (
     <section className="bg-white py-16 lg:py-20">
@@ -40,9 +43,9 @@ export function Directors() {
           </motion.p>
         </motion.div>
 
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
-          {directors.map((d, i) => (
-            <DirectorCard key={d.name} {...d} index={i} />
+        <div className="mt-12 flex flex-wrap items-start justify-center gap-6 lg:gap-7">
+          {members.map((d, i) => (
+            <DirectorCard key={d.id} name={d.name} role={d.role} bio={d.bio} photo={d.photo} index={i} />
           ))}
         </div>
       </Container>
@@ -59,13 +62,16 @@ type DirectorCardProps = {
 };
 
 function DirectorCard({ name, role, bio, photo, index }: DirectorCardProps) {
+  const [expanded, setExpanded] = useState(false);
+  // Only show the toggle when the bio is long enough to be clamped.
+  const isLong = bio.length > 180;
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewportOnce}
       transition={{ duration: 0.7, ease: EASE_OUT_SOFT, delay: 0.08 + index * 0.08 }}
-      className="group relative flex flex-col overflow-hidden rounded-[16px] border border-[var(--color-line)] bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_28px_60px_-30px_rgba(0,0,0,0.22)]"
+      className="group relative flex w-full flex-col overflow-hidden rounded-[16px] border border-[var(--color-line)] bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_28px_60px_-30px_rgba(0,0,0,0.22)] sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.3125rem)]"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--color-bg-soft)]">
         <Image
@@ -92,9 +98,23 @@ function DirectorCard({ name, role, bio, photo, index }: DirectorCardProps) {
         <h3 className="text-[19px] sm:text-[20px] lg:text-[21px] font-semibold leading-tight tracking-[-0.01em] text-[var(--color-ink)]">
           {name}
         </h3>
-        <p className="mt-1 text-[13.5px] leading-[1.55] text-[var(--color-ink-soft)]">
+        <p
+          className={
+            "mt-1 text-[13.5px] leading-[1.55] text-[var(--color-ink-soft)] " +
+            (expanded ? "" : "line-clamp-5")
+          }
+        >
           {bio}
         </p>
+        {isLong ? (
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="self-start pt-0.5 text-[12.5px] font-semibold text-[var(--color-accent)] transition-colors hover:underline underline-offset-4"
+          >
+            {expanded ? "Read less" : "Read more"}
+          </button>
+        ) : null}
       </div>
     </motion.article>
   );

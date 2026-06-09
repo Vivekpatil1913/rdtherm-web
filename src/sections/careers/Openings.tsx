@@ -5,9 +5,9 @@ import { ArrowUpRight, MapPin } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { fadeUp, stagger, viewportOnce } from "@/animations/motion";
-import { openings } from "@/data/careers";
+import type { ApiJobOpening } from "@/lib/api-types";
 
-export function Openings() {
+export function Openings({ roles = [] }: { roles?: ApiJobOpening[] }) {
   return (
     <section className="bg-[var(--color-bg)] py-16 lg:py-20">
       <Container size="wide">
@@ -41,10 +41,20 @@ export function Openings() {
           </motion.p>
         </motion.div>
 
+        {roles.length === 0 ? (
+          <p className="mt-12 rounded-[14px] border border-[var(--color-line)] bg-white px-6 py-10 text-center text-[15px] text-[var(--color-muted)]">
+            There are no open positions right now. We&apos;re always glad to hear from talented people —
+            email your resume to{" "}
+            <a className="font-semibold text-[var(--color-accent)] underline underline-offset-4" href="mailto:sales@rdtherm.com">
+              sales@rdtherm.com
+            </a>
+            .
+          </p>
+        ) : (
         <ul className="mt-14 flex flex-col">
-          {openings.map((role, i) => (
+          {roles.map((role, i) => (
             <motion.li
-              key={role.title}
+              key={role.id}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportOnce}
@@ -73,6 +83,7 @@ export function Openings() {
             </motion.li>
           ))}
         </ul>
+        )}
       </Container>
     </section>
   );

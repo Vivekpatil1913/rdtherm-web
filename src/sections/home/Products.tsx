@@ -10,18 +10,15 @@ import { Button } from "@/components/ui/Button";
 import { ColumnTick } from "@/components/ui/SectionDivider";
 import { fadeUp, stagger, viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
 import { products } from "@/data/home";
-import { productList } from "@/data/products";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&q=80&auto=format&fit=crop";
 
-function imageFor(slug: string): string {
-  const product = productList.find((p) => p.slug === slug);
-  return product?.images?.[0]?.url ?? FALLBACK_IMAGE;
-}
+export type HomeProduct = { label: string; slug: string; image: string };
 
-export function Products() {
+export function Products({ items = [] }: { items?: HomeProduct[] }) {
   const [headStart, accent, headEnd] = products.heading;
+  if (items.length === 0) return null;
 
   return (
     <section className="bg-white py-16 lg:py-20">
@@ -55,15 +52,17 @@ export function Products() {
 
         <div className="mt-14 lg:mt-20 border-t border-[var(--color-line)]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-x divide-[var(--color-line)]">
-            {products.items.slice(0, 4).map((item, i) => (
+            {items.slice(0, 4).map((item, i) => (
               <ProductCell key={item.slug} item={item} index={i} />
             ))}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-x divide-[var(--color-line)] border-t border-[var(--color-line)]">
-            {products.items.slice(4, 8).map((item, i) => (
-              <ProductCell key={item.slug} item={item} index={i + 4} />
-            ))}
-          </div>
+          {items.length > 4 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-x divide-[var(--color-line)] border-t border-[var(--color-line)]">
+              {items.slice(4, 8).map((item, i) => (
+                <ProductCell key={item.slug} item={item} index={i + 4} />
+              ))}
+            </div>
+          ) : null}
         </div>
       </Container>
     </section>
@@ -74,7 +73,7 @@ function ProductCell({
   item,
   index,
 }: {
-  item: { label: string; slug: string };
+  item: HomeProduct;
   index: number;
 }) {
   return (
@@ -94,7 +93,7 @@ function ProductCell({
       >
         <div className="relative h-52 sm:h-60 lg:h-72 w-full overflow-hidden rounded-[12px] bg-[var(--color-bg-soft)]">
           <Image
-            src={imageFor(item.slug)}
+            src={item.image || FALLBACK_IMAGE}
             alt={item.label}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

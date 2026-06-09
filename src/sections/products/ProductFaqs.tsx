@@ -2,15 +2,14 @@ import { ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { Reveal } from "@/components/ui/Reveal";
-import { productFaqs } from "@/data/products";
+import type { ApiFaq } from "@/lib/api-types";
 
 /**
- * Shared product-FAQ section. Same Q&A on every product detail page.
- * Future admin panel manages a single FAQ list — this component renders it.
+ * Shared product-FAQ section, managed via the Admin FAQ module.
  * Uses native <details>/<summary> so it stays server-rendered (no JS needed).
  */
-export function ProductFaqs() {
-  if (!productFaqs || productFaqs.length === 0) return null;
+export function ProductFaqs({ faqs = [] }: { faqs?: ApiFaq[] }) {
+  if (!faqs || faqs.length === 0) return null;
 
   return (
     <section className="bg-[var(--color-bg-soft)] py-10 lg:py-14">
@@ -24,9 +23,9 @@ export function ProductFaqs() {
         </Reveal>
 
         <div className="mt-10 flex flex-col gap-3">
-          {productFaqs.map((faq) => (
+          {faqs.map((faq) => (
             <details
-              key={faq.question}
+              key={faq.id}
               className="group rounded-[14px] border border-[var(--color-line)] bg-white px-5 py-4 lg:px-6 lg:py-5 open:border-[var(--color-accent)]/40 open:shadow-[0_20px_50px_-30px_rgba(0,0,0,0.15)] transition-all duration-300"
             >
               <summary className="flex cursor-pointer items-center justify-between gap-6 list-none text-[16px] sm:text-[18px] font-semibold text-[var(--color-ink)] [&::-webkit-details-marker]:hidden">

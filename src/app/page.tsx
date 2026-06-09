@@ -7,6 +7,13 @@ import { TrustedBy } from "@/sections/home/TrustedBy";
 import { LatestBlog } from "@/sections/home/LatestBlog";
 import { Testimonials } from "@/sections/home/Testimonials";
 import { siteConfig } from "@/data/site";
+import {
+  getProducts,
+  getIndustries,
+  getLogosByKind,
+  getBlogs,
+  getTestimonials,
+} from "@/services/content";
 
 export const metadata: Metadata = {
   title: {
@@ -26,16 +33,30 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [products, industries, logos, blogs, testimonials] = await Promise.all([
+    getProducts(),
+    getIndustries(),
+    getLogosByKind("client"),
+    getBlogs(),
+    getTestimonials(),
+  ]);
+
+  const homeProducts = products.slice(0, 8).map((p) => ({
+    label: p.title,
+    slug: p.slug,
+    image: p.cover,
+  }));
+
   return (
     <>
       <Hero />
       <WhyRdtherm />
-      <Products />
-      <Industries />
-      <TrustedBy />
-      <LatestBlog />
-      <Testimonials />
+      <Products items={homeProducts} />
+      <Industries items={industries} />
+      <TrustedBy logos={logos} />
+      <LatestBlog posts={blogs.slice(0, 3)} />
+      <Testimonials items={testimonials} />
     </>
   );
 }

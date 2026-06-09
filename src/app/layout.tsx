@@ -7,6 +7,7 @@ import { FloatingActions } from "@/components/layout/FloatingActions";
 import { ScrollManager } from "@/components/utility/ScrollManager";
 import { LenisProvider } from "@/components/utility/LenisProvider";
 import { siteConfig } from "@/data/site";
+import { getSettings } from "@/services/content";
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -133,11 +134,12 @@ const organizationJsonLd = {
   sameAs: siteConfig.social.map((s) => s.href).filter((h) => h && h !== "#"),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSettings();
   return (
     <html lang="en" className={`${monaSans.variable}`}>
       <head>
@@ -157,7 +159,7 @@ export default function RootLayout({
         <LenisProvider />
         <Navbar />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <Footer settings={settings} />
         <FloatingActions />
       </body>
     </html>

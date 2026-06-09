@@ -8,6 +8,7 @@ import { CoreValues } from "@/sections/about/CoreValues";
 import { Timeline } from "@/sections/about/Timeline";
 import { MilestonesInMotion } from "@/sections/about/MilestonesInMotion";
 import { aboutIntro } from "@/data/about";
+import { getTeamByGroup } from "@/services/content";
 
 const TITLE = "About — Engineering Excellence Since 1993";
 const DESCRIPTION =
@@ -33,23 +34,27 @@ export const metadata: Metadata = {
   twitter: { title: TITLE, description: DESCRIPTION },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [directors, team] = await Promise.all([
+    getTeamByGroup("director"),
+    getTeamByGroup("team"),
+  ]);
   return (
     <>
       <PageHero
         eyebrow={aboutIntro.eyebrow}
         heading={
           <>
-            Engineering excellence rooted in{" "}
+            Engineering and Fabrication excellence in{" "}
             <span className="text-[var(--color-accent)]">three decades</span> of process industry expertise.
           </>
         }
-        description="Nashik-based, ASME-certified, and trusted by global EPCs across chemical, pharma, agro and energy plants."
+        description="Nashik-based, ASME-certified, and trusted by global EPCs across chemical, pharma, oil & gas and energy plants."
       />
       <CompanyIntro />
       <VisionMission />
-      <Directors />
-      <TeamCarousel />
+      <Directors members={directors} />
+      <TeamCarousel members={team} />
       <CoreValues />
       <Timeline />
       <MilestonesInMotion />
