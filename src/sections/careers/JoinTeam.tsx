@@ -30,6 +30,10 @@ const INITIAL: FormState = {
   resume: null,
 };
 
+// Name: letters/spaces (+ basic name punctuation) only — no digits or symbols.
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
+const sanitizeName = (v: string) => v.replace(/[^A-Za-z .'-]/g, "");
+
 export function JoinTeam() {
   const [form, setForm] = useState<FormState>(INITIAL);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
@@ -42,6 +46,7 @@ export function JoinTeam() {
   const validate = (): boolean => {
     const next: Partial<Record<keyof FormState, string>> = {};
     if (!form.name.trim()) next.name = "Please enter your full name.";
+    else if (!NAME_RE.test(form.name.trim())) next.name = "Name can contain letters only.";
     if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(form.email))
       next.email = "Please enter a valid email address.";
     if (!/^[6-9]\d{9}$/.test(form.phone))
@@ -181,7 +186,7 @@ export function JoinTeam() {
                     autoComplete="name"
                     value={form.name}
                     onChange={(e) =>
-                      setForm((f) => ({ ...f, name: e.target.value }))
+                      setForm((f) => ({ ...f, name: sanitizeName(e.target.value) }))
                     }
                     placeholder="Jane Sharma"
                     className={INPUT_CLS}

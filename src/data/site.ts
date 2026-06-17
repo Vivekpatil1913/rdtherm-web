@@ -27,6 +27,7 @@ export const siteConfig = {
 export const mainNav = [
   { label: "Who We Are", href: "/about" },
   { label: "Products", href: "/products" },
+  { label: "Air Receiver", href: "/air-receiver" },
   { label: "Manufacturing", href: "/manufacturing" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/careers" },
@@ -43,9 +44,9 @@ export const footerLinks = {
     { label: "Blog", href: "/blog" },
   ],
   secondary: [
-    { label: "Case Studies", href: "#" },
+    { label: "Case Studies", href: "/case-studies" },
     { label: "Contact", href: "/contact" },
-    { label: "Privacy Policy", href: "#" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Error 404", href: "/404" },
   ],
 };

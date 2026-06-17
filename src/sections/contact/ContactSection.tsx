@@ -12,6 +12,13 @@ import { submitLead } from "@/services/content";
 
 const MESSAGE_LIMIT = 250;
 
+// Name: letters/spaces (+ basic name punctuation) only — no digits or symbols.
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
+const sanitizeName = (v: string) => v.replace(/[^A-Za-z .'-]/g, "");
+// Company must not contain numbers.
+const sanitizeCompany = (v: string) => v.replace(/\d/g, "");
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+
 type FormState = {
   name: string;
   email: string;
@@ -43,9 +50,11 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
   const validate = (): boolean => {
     const next: Partial<Record<keyof FormState, string>> = {};
     if (!form.name.trim()) next.name = "Please enter your full name.";
-    if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(form.email))
+    else if (!NAME_RE.test(form.name.trim())) next.name = "Name can contain letters only.";
+    if (!EMAIL_RE.test(form.email.trim()))
       next.email = "Please enter a valid email address.";
     if (!form.company.trim()) next.company = "Please enter your company name.";
+    else if (/\d/.test(form.company)) next.company = "Company name can't contain numbers.";
     if (!form.message.trim()) next.message = "Please enter a short message.";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -82,7 +91,9 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
       >,
     ) => {
-      const { value } = e.target;
+      let value = e.target.value;
+      if (key === "name") value = sanitizeName(value);
+      else if (key === "company") value = sanitizeCompany(value);
       setForm((prev) => ({ ...prev, [key]: value }));
       // Clear this field's error as soon as the user edits it.
       setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev));

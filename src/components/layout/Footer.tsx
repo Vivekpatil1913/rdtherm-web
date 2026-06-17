@@ -20,7 +20,9 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
     email: settings?.email || siteConfig.contact.email,
   };
   const hours = settings?.hours?.length ? settings.hours : siteConfig.contact.hours;
-  const social = settings?.social?.length ? settings.social : siteConfig.social;
+  const social = (settings?.social?.length ? settings.social : siteConfig.social).filter(
+    (s) => (s as { active?: boolean }).active !== false,
+  );
 
   const onSubscribe = (e: React.FormEvent) => {
     e.preventDefault();

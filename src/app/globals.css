@@ -56,6 +56,15 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Clickable controls show the pointer cursor (Tailwind v4 doesn't add it by
+   default), so users can tell they're interactive. Disabled stays default. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+label[for],
+summary {
+  cursor: pointer;
+}
+
 /* Subtle vertical grid lines used by the reference layout */
 .bg-grid-lines {
   background-image:
@@ -102,6 +111,8 @@ body {
   line-height: 1.75;
 }
 .prose-article > * + * { margin-top: 1.1em; }
+/* No leading gap above the first block (e.g. an opening heading). */
+.prose-article > :first-child { margin-top: 0; }
 .prose-article > p:first-child {
   font-size: 20px;
   line-height: 1.6;

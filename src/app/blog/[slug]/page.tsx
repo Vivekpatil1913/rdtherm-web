@@ -91,14 +91,14 @@ export default async function BlogDetailPage(
         </Container>
       </section>
 
-      {/* COVER IMAGE — single image from admin */}
-      <Container size="wide">
-        <Reveal className="relative aspect-[16/9] overflow-hidden rounded-[20px] border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
+      {/* COVER IMAGE — capped, responsive banner height so it never dominates the screen */}
+      <Container size="default">
+        <Reveal className="relative h-[220px] overflow-hidden rounded-[20px] border border-[var(--color-line)] bg-[var(--color-bg-soft)] sm:h-[320px] lg:h-[440px]">
           <Image
             src={post.cover || FALLBACK_COVER}
             alt={post.title}
             fill
-            sizes="(max-width: 1280px) 100vw, 1280px"
+            sizes="(max-width: 1320px) 100vw, 1320px"
             className="object-cover"
             priority
           />

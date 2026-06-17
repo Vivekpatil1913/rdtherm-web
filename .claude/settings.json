@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const l=require\\('lucide-react'\\); const names=['Box','Boxes','Gauge','CircleGauge','Layers','Palette','PaintBucket','Brush','Wrench','Settings','Settings2','Sliders','Hash','Ruler','Shield','ShieldCheck','Award','Factory','Download','FileText','FileBadge','Container','Cylinder','Wind','Droplets','Plus','Minus','ArrowRight','ArrowUpRight','Check','CheckCircle2','CircleCheck','Phone','Building2','User','Globe','MapPin','Send','X','ChevronDown','Cog','Disc','Disc3','PanelTop','Frame','Component','Anchor','Eye','Maximize2','Move','Headset','BadgeCheck','ClipboardCheck','Beaker','Pill','UtensilsCrossed','FlaskConical','Wind']; const missing=names.filter\\(n=>!l[n]\\); console.log\\('MISSING:', missing.join\\(', '\\)||'none'\\); console.log\\('total exports:', Object.keys\\(l\\).length\\);\")",
+      "Bash(node -e \"const l=require\\('lucide-react'\\); const names=['RefreshCw','TrendingUp','Zap','HeartPulse','Droplets','ShieldCheck','Wind','Factory','Pill','UtensilsCrossed','FlaskConical','BadgeCheck','Award','Headset','FileText','FileBadge','Ruler','BookOpen','Box','Gauge','Layers','Wrench','Palette','PaintBucket','Settings2','CircleGauge','Plus','Minus','X','Send','Loader2','User','Building2','Mail','Phone','Globe','MapPin','ChevronDown','Check','CheckCircle2','ArrowRight','Download','Sparkles','PenTool','Quote','ShieldCheck']; const missing=names.filter\\(n=>!l[n]\\); console.log\\('MISSING:', missing.join\\(', '\\)||'none'\\);\")",
+      "Bash(npx next *)",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"const l=require\\('lucide-react'\\); ['BadgePercent','Percent','Tag','ShieldCheck','Clock','Sparkles'].forEach\\(n=>console.log\\(n, !!l[n]\\)\\);\")"
+    ]
+  }
+}

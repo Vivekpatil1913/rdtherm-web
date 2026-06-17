@@ -30,6 +30,7 @@ export const getTeam = () => apiGet<ApiTeamMember[]>("/team", []);
 export const getFaqs = () => apiGet<ApiFaq[]>("/faqs", []);
 export const getCareers = () => apiGet<ApiJobOpening[]>("/careers", []);
 export const getCaseStudies = () => apiGet<ApiCaseStudy[]>("/case-studies", []);
+export const getCaseStudy = (slug: string) => apiGet<ApiCaseStudy | null>(`/case-studies/${slug}`, null);
 export const getSettings = () => apiGet<ApiSettings | null>("/settings", null);
 
 export const getLogos = () => apiGet<ApiLogo[]>("/logos", []);
@@ -56,3 +57,26 @@ export interface LeadInput {
 }
 
 export const submitLead = (input: LeadInput) => apiPost("/leads", input);
+
+/** A single label/value row of an attached product configuration. */
+export interface QuoteConfigLine {
+  label: string;
+  value: string;
+}
+
+export interface QuoteInput {
+  name: string;
+  company: string;
+  email: string;
+  mobile: string;
+  country: string;
+  city: string;
+  message?: string;
+  productName?: string;
+  quoteType?: "standard" | "custom";
+  configuration?: QuoteConfigLine[];
+  source?: string;
+}
+
+/** Air Receiver quote request — configurator (standard) & custom builder. */
+export const submitQuote = (input: QuoteInput) => apiPost("/quotes", input);

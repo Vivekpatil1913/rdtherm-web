@@ -107,6 +107,6 @@ export interface ApiSettings {
   address: string;
   phone: string;
   email: string;
-  social: { label: string; href: string }[];
+  social: { label: string; href: string; active?: boolean }[];
   hours: { label: string; value: string }[];
 }
