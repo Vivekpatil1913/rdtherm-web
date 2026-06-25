@@ -104,7 +104,8 @@ export const industries = {
 export const industryDecor = [
   { id: "top-left", className: "hidden lg:block absolute left-6 lg:left-10 top-10 lg:top-16 w-24 h-16 lg:w-28 lg:h-20 rounded-[10px]", tone: "assembly" },
   { id: "top-right", className: "hidden lg:block absolute right-6 lg:right-10 top-10 lg:top-16 w-24 h-16 lg:w-28 lg:h-20 rounded-[10px]", tone: "engine" },
-  { id: "bottom-left", className: "hidden lg:block absolute left-6 lg:left-10 bottom-10 lg:bottom-14 w-24 h-16 lg:w-28 lg:h-20 rounded-[10px]", tone: "discs" },
+  // bottom-left intentionally omitted: the industry tab list grows into this corner,
+  // so a decorative box here collides with the list's vertical rail as industries are added.
   { id: "bottom-right", className: "hidden lg:block absolute right-6 lg:right-10 bottom-10 lg:bottom-6 w-24 h-16 lg:w-28 lg:h-20 rounded-[10px]", tone: "turbine" },
 ];
 

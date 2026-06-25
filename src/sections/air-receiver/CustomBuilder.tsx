@@ -173,7 +173,7 @@ export function CustomBuilder() {
   };
 
   return (
-    <section ref={sectionRef} id="custom-quote" className="scroll-mt-24 bg-[var(--color-bg-soft)] py-16 lg:py-24">
+    <section ref={sectionRef} id="custom-quote" className="scroll-mt-24 bg-[var(--color-bg-soft)] pt-10 pb-16 lg:pt-12 lg:pb-24">
       <Container size="wide">
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce} className="max-w-[760px]">
           <SectionTag>Customise Your Air Receiver</SectionTag>

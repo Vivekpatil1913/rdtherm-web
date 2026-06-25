@@ -52,7 +52,9 @@ export function ProductGrid({ products = [] }: { products?: ApiProduct[] }) {
                     {product.title}
                   </h3>
                   <p className="text-[14px] leading-[1.6] text-[var(--color-ink-soft)]">
-                    {product.summary}
+                    {product.summary.length > 111
+                      ? `${product.summary.slice(0, 111).trimEnd()}…`
+                      : product.summary}
                   </p>
                 </div>
 

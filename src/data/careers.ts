@@ -8,7 +8,7 @@ export const careersHero = {
 export const benefits = [
   {
     title: "Real ownership",
-    body: "Every engineer here owns at least one project end-to-end — from drawing to despatch.",
+    body: "Every engineer here owns at least one project end-to-end — from drawing to dispatch.",
   },
   {
     title: "Continuous learning",

@@ -211,7 +211,7 @@ export function QuoteModal({
                   <span className="inline-flex size-16 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                     <CheckCircle2 className="size-8" />
                   </span>
-                  <h4 className="text-[22px] font-bold">Enquiry received</h4>
+                  <h4 className="text-[22px] font-bold">Enquiry submitted</h4>
                   <p className="max-w-[380px] text-[15px] leading-[1.6] text-[var(--color-ink-soft)]">
                     Thanks — your configuration and details are with our engineering team. We&apos;ll get back to you
                     within one business day.

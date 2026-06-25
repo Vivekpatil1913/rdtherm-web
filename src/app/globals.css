@@ -82,6 +82,12 @@ summary {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* Always-visible thin horizontal scrollbar — signals that a wide table scrolls. */
+.scroll-x-bar { scrollbar-width: thin; scrollbar-color: var(--color-line) transparent; -webkit-overflow-scrolling: touch; }
+.scroll-x-bar::-webkit-scrollbar { height: 8px; }
+.scroll-x-bar::-webkit-scrollbar-track { background: transparent; }
+.scroll-x-bar::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; }
+
 /* Smooth focus outline used by buttons / links */
 :where(button, a):focus-visible {
   outline: 2px solid var(--color-accent);

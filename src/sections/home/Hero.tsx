@@ -160,7 +160,7 @@ export function Hero() {
           <button
             type="button"
             onClick={togglePlay}
-            className="absolute bottom-5 right-5 z-20 inline-flex size-11 cursor-pointer items-center justify-center rounded-full bg-black/70 text-white backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] transition-all duration-200 hover:bg-black/90 hover:scale-105 active:scale-95"
+            className="absolute bottom-5 left-5 z-20 inline-flex size-11 cursor-pointer items-center justify-center rounded-full bg-black/70 text-white backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] transition-all duration-200 hover:bg-black/90 hover:scale-105 active:scale-95"
             aria-label={isPlaying ? "Pause video" : "Play video"}
           >
             {isPlaying ? (

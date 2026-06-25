@@ -43,7 +43,7 @@ export function CaseStudiesList({ items = [] }: { items?: ApiCaseStudy[] }) {
                 className="group relative block aspect-square overflow-hidden rounded-[14px] bg-[var(--color-bg-dark)]"
               >
                 <Image
-                  src={item.cover || FALLBACK_COVER}
+                  src={item.cardImage || item.cover || FALLBACK_COVER}
                   alt={item.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

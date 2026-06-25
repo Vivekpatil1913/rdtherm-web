@@ -25,7 +25,7 @@ export function ProcessSteps() {
               variants={fadeUp}
               className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
             >
-              From drawing to <span className="text-[var(--color-accent)]">despatch</span> — six controlled stages.
+              From drawing to <span className="text-[var(--color-accent)]">dispatch</span> — six controlled stages.
             </motion.h2>
           </div>
           <motion.p

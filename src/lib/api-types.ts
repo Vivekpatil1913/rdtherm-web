@@ -97,7 +97,10 @@ export interface ApiCaseStudy {
   client: string;
   industry: string;
   summary: string;
+  /** Wide 21:9 banner for the case-study detail page. */
   cover: string;
+  /** Square 1:1 thumbnail for the grid/related cards (falls back to cover). */
+  cardImage: string;
   metrics: { label: string; value: string }[];
 }
 

@@ -113,7 +113,7 @@ export function CompanyIntro() {
             <motion.div
               key={s.label}
               variants={fadeUp}
-              className="flex flex-col gap-1.5 bg-white p-6 lg:p-8"
+              className="flex flex-col items-center gap-1.5 bg-white p-6 text-center lg:p-8"
             >
               <dt
                 className={

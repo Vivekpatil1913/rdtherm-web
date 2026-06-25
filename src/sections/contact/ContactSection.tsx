@@ -49,6 +49,19 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
   const [captchaError, setCaptchaError] = useState("");
   const recaptchaRef = useRef<RecaptchaHandle>(null);
 
+  // Scroll to the form when arriving via "Enquire now" (#enquiry). Next.js App
+  // Router doesn't reliably auto-scroll to a hash on client navigation, so do it
+  // here on mount. Also strips any duplicated "#enquiry#enquiry" from the URL.
+  useEffect(() => {
+    if (window.location.hash.includes("enquiry")) {
+      window.history.replaceState(null, "", "/contact#enquiry");
+      const t = setTimeout(() => {
+        document.getElementById("enquiry")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
   const handleCaptcha = (token: string | null) => {
     setCaptchaToken(token);
     if (token) setCaptchaError("");
@@ -131,7 +144,7 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
     };
 
   return (
-    <section className="bg-[var(--color-bg-soft)] py-16 lg:py-20">
+    <section id="enquiry" className="scroll-mt-24 bg-[var(--color-bg-soft)] py-16 lg:py-20">
       <Container size="wide">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-10 gap-x-14">
           <motion.aside

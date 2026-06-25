@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Calendar, Clock, Tag, User } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Calendar, Tag, User } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { Reveal } from "@/components/ui/Reveal";
@@ -95,10 +95,6 @@ export default async function BlogDetailPage(
             <span className="inline-flex items-center gap-2">
               <Calendar className="size-4 text-[var(--color-accent)]" />
               {formatBlogDate(post.date)}
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <Clock className="size-4 text-[var(--color-accent)]" />
-              {post.readTime}
             </span>
             <span className="inline-flex items-center gap-2">
               <Tag className="size-4 text-[var(--color-accent)]" />

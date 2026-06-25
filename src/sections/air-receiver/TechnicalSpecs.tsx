@@ -7,7 +7,7 @@ const COLUMNS = ["Volume", "Pressure", "Material", "Diameter", "Height", "Weight
 
 export function TechnicalSpecs() {
   return (
-    <section className="bg-[var(--color-bg-soft)] py-16 lg:py-24">
+    <section className="bg-[var(--color-bg-soft)] pt-16 pb-10 lg:pt-24 lg:pb-12">
       <Container size="wide">
         <Reveal>
           <SectionTag>Technical Specifications</SectionTag>
@@ -21,7 +21,7 @@ export function TechnicalSpecs() {
         </Reveal>
 
         <Reveal as="div" className="mt-10 overflow-hidden rounded-[18px] border border-[var(--color-line)] bg-white">
-          <div className="overflow-x-auto">
+          <div className="scroll-x-bar overflow-x-auto">
             <table className="w-full min-w-[760px] border-collapse text-left">
               <thead>
                 <tr className="bg-[var(--color-bg-dark)] text-white">
@@ -54,6 +54,10 @@ export function TechnicalSpecs() {
             </table>
           </div>
         </Reveal>
+        {/* Mobile scroll affordance — native scrollbars don't show on touch devices. */}
+        <p className="mt-3 flex items-center justify-center gap-1.5 text-[12px] font-medium text-[var(--color-muted)] sm:hidden">
+          <span aria-hidden>←</span> Swipe to see all columns <span aria-hidden>→</span>
+        </p>
         <p className="mt-4 text-[12.5px] text-[var(--color-muted)]">
           * Weights and dimensions are indicative for MS construction and may vary with material, pressure rating and
           accessories. Refer to the GA drawing for certified dimensions.

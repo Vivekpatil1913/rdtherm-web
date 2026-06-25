@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -13,8 +13,20 @@ import { cn } from "@/lib/cn";
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  // Open the contact form directly. If already on /contact, just smooth-scroll
+  // to it (avoids the duplicated #enquiry#enquiry hash); otherwise navigate.
+  const goToEnquiry = () => {
+    setOpen(false);
+    if (pathname === "/contact") {
+      document.getElementById("enquiry")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      router.push("/contact#enquiry");
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -38,7 +50,7 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-colors duration-300",
+        "sticky top-0 z-[60] transition-colors duration-300",
         scrolled
           ? "bg-[var(--color-bg)]/85 backdrop-blur-md border-b border-[var(--color-line)]"
           : "bg-transparent",
@@ -88,7 +100,7 @@ export function Navbar() {
         </nav>
 
         <div className="hidden lg:block">
-          <Button href="/contact" variant="primary" size="md">
+          <Button onClick={goToEnquiry} variant="primary" size="md">
             Enquire now
           </Button>
         </div>
@@ -141,7 +153,7 @@ export function Navbar() {
                 );
               })}
               <div className="pt-6">
-                <Button href="/contact" variant="primary" size="lg" className="w-full justify-between">
+                <Button onClick={goToEnquiry} variant="primary" size="lg" className="w-full justify-between">
                   Enquire now
                 </Button>
               </div>

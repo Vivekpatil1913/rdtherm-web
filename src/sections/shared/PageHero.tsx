@@ -20,7 +20,7 @@ export function PageHero({ eyebrow, heading, description }: PageHeroProps) {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 lg:items-center"
         >
           <div className="lg:col-span-8">
             <motion.div variants={fadeUp}>
@@ -34,7 +34,7 @@ export function PageHero({ eyebrow, heading, description }: PageHeroProps) {
             </motion.h1>
           </div>
           {description ? (
-            <motion.div variants={fadeUp} className="lg:col-span-4 lg:pt-6">
+            <motion.div variants={fadeUp} className="lg:col-span-4">
               <p className="text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]">
                 {description}
               </p>

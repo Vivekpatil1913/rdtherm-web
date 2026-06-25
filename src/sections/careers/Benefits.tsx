@@ -17,7 +17,7 @@ const ICONS: LucideIcon[] = [Briefcase, GraduationCap, Building2, ShieldCheck];
 
 export function Benefits() {
   return (
-    <section className="relative overflow-hidden bg-[var(--color-bg-soft)] py-16 lg:py-20">
+    <section className="relative overflow-hidden border-t border-[var(--color-line)] bg-white py-16 lg:py-20">
       {/* Soft accent glow in the top-right for depth */}
       <span
         aria-hidden
@@ -67,7 +67,7 @@ export function Benefits() {
                   delay: 0.08 + (i % 4) * 0.08,
                   ease: EASE_OUT_SOFT,
                 }}
-                className="group relative flex flex-col gap-5 overflow-hidden rounded-[18px] border border-[var(--color-line)] bg-white p-6 lg:p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--color-accent)]/30 hover:shadow-[0_28px_70px_-30px_rgba(0,0,0,0.18)]"
+                className="group relative flex flex-col gap-5 overflow-hidden rounded-[18px] border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-6 lg:p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--color-accent)]/30 hover:shadow-[0_28px_70px_-30px_rgba(0,0,0,0.18)]"
               >
                 {/* Subtle radial highlight on hover */}
                 <span

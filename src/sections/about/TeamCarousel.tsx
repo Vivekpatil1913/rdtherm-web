@@ -34,7 +34,9 @@ function useVisibleCount() {
       const w = window.innerWidth;
       if (w >= BREAKPOINTS.desktop) setCount(4);
       else if (w >= BREAKPOINTS.tablet) setCount(2);
-      else setCount(1.2);
+      // Full-width single card on mobile — a peek would collide with the
+      // fixed floating action buttons on the right.
+      else setCount(1);
     };
     compute();
     window.addEventListener("resize", compute);
@@ -190,7 +192,7 @@ export function TeamCarousel({ members = [] }: { members?: ApiTeamMember[] }) {
 
         {/* Controls — only when total members exceed visible slot count */}
         {hasOverflow && (
-          <div className="mt-2 flex items-center justify-center gap-5 sm:mt-4 sm:gap-7">
+          <div className="mt-2 flex items-center justify-center gap-3 sm:mt-4 sm:gap-7">
             <ArrowButton
               ariaLabel="Previous"
               disabled={index === 0}
@@ -444,7 +446,7 @@ function ProgressBar({ progress }: { progress: number }) {
   const widthPct = useTransform(smooth, (v) => `${Math.max(8, Math.min(100, v * 100))}%`);
 
   return (
-    <div className="relative h-px w-40 overflow-hidden rounded-full bg-[var(--color-line)] sm:w-56 lg:w-72">
+    <div className="relative h-px w-24 overflow-hidden rounded-full bg-[var(--color-line)] sm:w-56 lg:w-72">
       <motion.div
         className="absolute inset-y-0 left-0 rounded-full"
         style={{

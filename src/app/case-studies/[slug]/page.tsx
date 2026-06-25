@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Building2, Factory } from "lucide-react";
+import { ArrowLeft, Building2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { Reveal } from "@/components/ui/Reveal";
@@ -84,12 +84,6 @@ export default async function CaseStudyDetailPage(
                 {item.client}
               </span>
             ) : null}
-            {item.industry ? (
-              <span className="inline-flex items-center gap-2">
-                <Factory className="size-4 text-[var(--color-accent)]" />
-                {item.industry}
-              </span>
-            ) : null}
           </Reveal>
         </Container>
       </section>
@@ -164,7 +158,7 @@ export default async function CaseStudyDetailPage(
                     className="group relative block aspect-square overflow-hidden rounded-[14px] bg-[var(--color-bg-dark)]"
                   >
                     <Image
-                      src={c.cover || FALLBACK_COVER}
+                      src={c.cardImage || c.cover || FALLBACK_COVER}
                       alt={c.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

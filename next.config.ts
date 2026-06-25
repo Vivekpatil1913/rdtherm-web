@@ -19,6 +19,16 @@ const nextConfig: NextConfig = {
       { protocol: "http", hostname: "localhost", port: "4000" },
     ],
   },
+  async redirects() {
+    return [
+      // Old British spelling slug → new "dispatch" slug (preserve existing links/SEO).
+      {
+        source: "/blog/from-drawing-to-despatch",
+        destination: "/blog/from-drawing-to-dispatch",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

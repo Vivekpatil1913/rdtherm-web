@@ -27,7 +27,7 @@ export const directorsSection = {
   eyebrow: "Board of Directors",
   heading: ["The people behind ", "R&D Therm"] as const,
   description:
-    "Three decades of process-equipment expertise distilled into a leadership team that signs every major drawing, weld procedure and despatch certificate.",
+    "Three decades of process-equipment expertise distilled into a leadership team that signs every major drawing, weld procedure and dispatch certificate.",
 };
 
 export const directors = [
@@ -55,7 +55,7 @@ export const directors = [
   {
     name: "Priya Iyer",
     role: "Director — Operations",
-    bio: "Owns shop-floor delivery, QC and despatch. Built our digital QC stack and the on-time delivery system customers count on.",
+    bio: "Owns shop-floor delivery, QC and dispatch. Built our digital QC stack and the on-time delivery system customers count on.",
     photo:
       "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80&auto=format&fit=crop",
   },

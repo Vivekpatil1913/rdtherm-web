@@ -67,7 +67,7 @@ export function Testimonials({ items = [] }: { items?: ApiTestimonial[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
             transition={{ duration: 0.6, ease: EASE_OUT_SOFT, delay: 0.1 }}
-            className="lg:col-span-4 flex flex-col gap-6 rounded-[18px] bg-[var(--color-bg-soft)] p-6 sm:p-8 lg:p-10 min-h-[420px]"
+            className="lg:col-span-4 flex flex-col gap-6 rounded-[18px] bg-[var(--color-bg-soft)] p-6 sm:p-8 lg:p-10 lg:min-h-[420px]"
           >
             <div className="flex items-center gap-1 text-[var(--color-accent)]">
               {Array.from({ length: active.rating }).map((_, i) => (
@@ -101,7 +101,7 @@ export function Testimonials({ items = [] }: { items?: ApiTestimonial[] }) {
             transition={{ duration: 0.6, ease: EASE_OUT_SOFT, delay: 0.15 }}
             className="lg:col-span-4 flex flex-col gap-4"
           >
-            <div className="relative overflow-hidden rounded-[18px] aspect-[16/10] min-h-[200px]">
+            <div className="relative overflow-hidden rounded-[18px] aspect-[16/10] min-h-[200px] lg:aspect-auto lg:flex-1">
               <div
                 aria-hidden
                 className="absolute inset-0 bg-[linear-gradient(135deg,#1f0a06_0%,#3f140c_30%,#7b1d12_55%,#400d08_80%,#1c0606_100%)]"
@@ -222,7 +222,7 @@ function AvatarColumn({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewportOnce}
       transition={{ duration: 0.6, ease: EASE_OUT_SOFT }}
-      className="lg:col-span-1 relative rounded-[20px] bg-[var(--color-bg-dark)] p-3 sm:p-4 lg:min-h-[420px]"
+      className="lg:col-span-1 relative rounded-[20px] bg-[var(--color-bg-dark)] p-3 sm:p-4 lg:px-1.5 lg:min-h-[420px]"
     >
       {/* Fade masks — top/bottom (desktop) or left/right (mobile) */}
       <span
@@ -311,7 +311,7 @@ function AvatarColumn({
               ref={(el) => {
                 slotRefs.current[t.id] = el;
               }}
-              className="snap-center shrink-0 px-5 py-2 lg:px-2"
+              className="snap-center shrink-0 px-5 py-2 lg:px-1"
             >
               <button
                 type="button"
@@ -320,7 +320,7 @@ function AvatarColumn({
                 aria-label={`Show testimonial from ${t.author}`}
                 className={cn(
                   "relative inline-flex items-center justify-center overflow-hidden rounded-full text-[15px] lg:text-[17px] font-semibold text-white transition-all duration-300",
-                  "size-12 sm:size-14 lg:size-[3.2rem]",
+                  "size-12 sm:size-14 lg:size-11",
                   "bg-gradient-to-br " + TONES[i % TONES.length],
                   isActive
                     ? "ring-2 ring-[var(--color-accent)] ring-offset-2 ring-offset-[var(--color-bg-dark)] shadow-[0_8px_24px_-6px_rgba(233,78,27,0.5)]"

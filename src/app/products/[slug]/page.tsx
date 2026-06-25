@@ -19,7 +19,7 @@ const COMMON_INCLUSIONS = [
   "Detailed mechanical design with FEA review.",
   "Mill-to-shop material traceability.",
   "Third-party inspection and code stamping.",
-  "QA dossier and as-built drawings on despatch.",
+  "QA dossier and as-built drawings on dispatch.",
 ];
 
 const COMMON_COMPLIANCE = ["ASME Section VIII", "ASME U-Stamp", "PED 2014/68/EU", "IBR", "ISO 9001:2015"];
@@ -68,7 +68,7 @@ export default async function ProductDetailPage(
   return (
     <>
       {/* HERO */}
-      <section className="pt-10 lg:pt-14 pb-10 lg:pb-12">
+      <section className="pt-10 lg:pt-14 pb-6 lg:pb-8">
         <Container size="wide">
           <Link
             href="/products"
@@ -85,14 +85,14 @@ export default async function ProductDetailPage(
             </SectionTag>
           </Reveal>
 
-          <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 items-start">
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 lg:items-center">
             <Reveal as="div" className="lg:col-span-8">
               <h1 className="text-[40px] leading-[1.05] tracking-[-0.02em] sm:text-[56px] lg:text-[72px] font-bold">
                 {product.title}
               </h1>
             </Reveal>
-            <Reveal as="div" className="lg:col-span-4 lg:pt-6">
-              <p className="text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]">
+            <Reveal as="div" className="lg:col-span-4">
+              <p className="line-clamp-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]">
                 {product.summary}
               </p>
               <div className="mt-6">
@@ -127,17 +127,17 @@ export default async function ProductDetailPage(
           <Container size="wide">
             <div className="flex flex-col gap-10">
               {chipGroups.map((group) => (
-                <Reveal as="div" key={group.label} className="grid grid-cols-1 lg:grid-cols-12 gap-y-4 gap-x-12 items-start">
-                  <div className="lg:col-span-4">
+                <Reveal as="div" key={group.label} className="grid grid-cols-1 lg:grid-cols-[190px_1fr] gap-y-4 gap-x-8 items-start">
+                  <div>
                     <SectionTag>{group.label}</SectionTag>
                   </div>
-                  <div className="lg:col-span-8 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-2">
+                  <div className="flex flex-col gap-2.5 lg:flex-row lg:flex-wrap lg:gap-2">
                     {group.items!.map((item) => (
                       <span
                         key={item}
-                        className="inline-flex items-start gap-2.5 rounded-[12px] border border-[var(--color-line)] bg-white px-4 py-2.5 text-[14px] font-medium text-[var(--color-ink)] sm:items-center sm:gap-2 sm:rounded-full sm:py-2"
+                        className="inline-flex items-start gap-2.5 rounded-[12px] border border-[var(--color-line)] bg-white px-4 py-2.5 text-[14px] font-medium text-[var(--color-ink)] lg:items-center lg:gap-2 lg:rounded-full lg:py-2"
                       >
-                        <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[var(--color-accent)] sm:mt-0" />
+                        <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[var(--color-accent)] lg:mt-0" />
                         <span>{item}</span>
                       </span>
                     ))}

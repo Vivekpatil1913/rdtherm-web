@@ -225,7 +225,7 @@ export const productList: Product[] = [
 
       <blockquote>"R&amp;D Therm delivered our 32 m vacuum column three weeks early and the commissioning team had zero punch-list items. That does not happen often." — Plant Manager, specialty chemicals EPC.</blockquote>
 
-      <h2>What you receive on despatch</h2>
+      <h2>What you receive on dispatch</h2>
       <p>Every column ships with the full QA dossier — mill test certificates, weld maps, radiography films, hydro reports, dimensional inspection records, and the U-Stamp data report. Everything traceable, every weld accounted for.</p>
     `,
     images: INDUSTRIAL_GALLERY,

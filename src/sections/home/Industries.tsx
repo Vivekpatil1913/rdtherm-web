@@ -82,10 +82,10 @@ export function Industries({ items = [] }: { items?: ApiIndustry[] }) {
                     type="button"
                     onClick={() => setActiveKey(item.key)}
                     className={cn(
-                      "group flex w-full cursor-pointer items-center justify-between gap-6 py-3 lg:py-3 pl-6 lg:pl-8 pr-2 text-left text-[22px] leading-[1.2] font-semibold transition-colors duration-300 sm:text-[26px] lg:text-[30px]",
+                      "group flex w-full cursor-pointer items-center justify-between gap-6 py-3 lg:py-3 pl-6 lg:pl-8 pr-2 text-left text-[19px] leading-[1.3] transition-colors duration-300 sm:text-[22px] lg:text-[25px]",
                       isActive
-                        ? "text-[var(--color-ink)]"
-                        : "text-[var(--color-ink)]/40 hover:text-[var(--color-ink)]/70",
+                        ? "font-semibold text-[var(--color-ink)]"
+                        : "font-medium text-[var(--color-ink)]/40 hover:text-[var(--color-ink)]/70",
                     )}
                   >
                     <span>{item.label}</span>

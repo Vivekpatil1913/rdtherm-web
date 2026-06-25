@@ -121,8 +121,8 @@ export const blogList: Post[] = [
 `,
   },
   {
-    slug: "from-drawing-to-despatch",
-    title: "From drawing to despatch: anatomy of a process skid",
+    slug: "from-drawing-to-dispatch",
+    title: "From drawing to dispatch: anatomy of a process skid",
     excerpt:
       "A walk through every stage of building a 12-tonne process skid for a multinational pharma client.",
     category: "Case Study",
@@ -131,7 +131,7 @@ export const blogList: Post[] = [
     cover:
       "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1600&q=80&auto=format&fit=crop",
     content: `
-<p>A 12-tonne process skid for a multinational pharma client looks finished in two photos. The reality between order and despatch is 18 weeks of disciplined engineering, fabrication, inspection and documentation. This is what every stage looks like.</p>
+<p>A 12-tonne process skid for a multinational pharma client looks finished in two photos. The reality between order and dispatch is 18 weeks of disciplined engineering, fabrication, inspection and documentation. This is what every stage looks like.</p>
 
 <h2>Week 1–4: Engineering</h2>
 <p>We start from P&amp;IDs, customer datasheets and a kick-off meeting. By week 4, we have approved mechanical drawings, instrumentation lists and a heat &amp; material balance the client engineer can sign off on.</p>
@@ -142,7 +142,7 @@ export const blogList: Post[] = [
 <h2>Week 11–14: Assembly &amp; test</h2>
 <p>Vessels, pumps, instruments and piping are assembled on the skid. Hydro-testing, loop testing and FAT happen in this window — with the client engineer present for witness points.</p>
 
-<h2>Week 15–18: Documentation &amp; despatch</h2>
+<h2>Week 15–18: Documentation &amp; dispatch</h2>
 <p>Final data books, MTCs, NDT reports and operation manuals are compiled. The skid is preserved, packed, lifted and shipped. Two of our engineers fly to site for erection support.</p>
 `,
   },

@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { Logo } from "@/components/ui/Logo";
 import { footerLinks, siteConfig } from "@/data/site";
 import type { ApiSettings } from "@/lib/api-types";
 import { cn } from "@/lib/cn";
@@ -24,7 +24,6 @@ function toExternalUrl(href: string): string | null {
 
 export function Footer({ settings }: { settings?: ApiSettings | null }) {
   const pathname = usePathname();
-  const [email, setEmail] = useState("");
 
   // Live contact details from the CMS, falling back to static config.
   const contact = {
@@ -37,11 +36,6 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
     (s) => (s as { active?: boolean }).active !== false,
   );
 
-  const onSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setEmail("");
-  };
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -61,32 +55,25 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
 
       <Container size="wide" className="relative z-10 pt-20 pb-10 lg:pt-24 lg:pb-12">
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14">
-          {/* Newsletter */}
-          <div className="flex flex-col gap-5">
-            <h3 className="text-[22px] font-semibold tracking-tight">Stay connected</h3>
-            <p className="max-w-[280px] text-[14px] leading-relaxed text-white/65">
-              Join our newsletter for tips, updates, and project highlights—only the good stuff.
+          {/* Brand */}
+          <div className="flex flex-col items-start gap-5">
+            {/* Colored navbar logo on a light chip — keeps the brand colours
+                crisp and intentional against the dark footer. */}
+            {/* -ml offsets the left padding so the logo lines up with the paragraph below. */}
+            <div className="inline-flex items-center rounded-[12px] bg-white px-2 py-1.5 shadow-[0_14px_34px_-16px_rgba(0,0,0,0.7)]">
+              <Logo className="[&_img]:h-[4.5rem]" />
+            </div>
+            <p className="max-w-[300px] text-[14px] leading-relaxed text-white/65">
+              Code-compliant pressure vessels, reactors and process equipment — engineered,
+              fabricated and delivered first-time right.
             </p>
-            <form
-              onSubmit={onSubscribe}
-              className="flex items-center gap-2 rounded-[10px] border border-white/10 bg-black/50 p-1.5 backdrop-blur"
+            <Link
+              href="/contact"
+              className="group inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-accent)] underline-offset-4 transition-all duration-300 hover:gap-3"
             >
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                required
-                placeholder="Enter your email"
-                className="flex-1 bg-transparent px-3 text-[14px] text-white placeholder:text-white/40 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="inline-flex size-9 items-center justify-center rounded-[6px] bg-white text-[var(--color-ink)] transition-transform duration-300 hover:translate-x-0.5"
-                aria-label="Subscribe"
-              >
-                <ArrowRight className="size-4" strokeWidth={2.2} />
-              </button>
-            </form>
+              Talk to an engineer
+              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </Link>
           </div>
 
           {/* Links — split into two sub-columns */}
@@ -116,7 +103,7 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
           {/* Contact info */}
           <FooterColumn title="Contact info">
             <ul className="flex flex-col gap-3 text-[14px] leading-relaxed text-white/70">
-              <li className="max-w-[230px]">{contact.address}</li>
+              <li className="sm:max-w-[230px]">{contact.address}</li>
               <li>
                 <a
                   href={`tel:${contact.phone.replace(/\s+/g, "")}`}
@@ -157,8 +144,8 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
           </FooterColumn>
         </div>
 
-        {/* Divider + bottom row */}
-        <div className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        {/* Divider + bottom row — social above the credit on mobile (reversed). */}
+        <div className="mt-16 flex flex-col-reverse gap-6 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[13px] text-white/60">
             Designed by{" "}
             <a

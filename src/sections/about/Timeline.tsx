@@ -31,6 +31,14 @@ export function Timeline() {
   });
   const railHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
+  // Separate scroll progress for the mobile rail (the desktop one is hidden on mobile).
+  const mobileRailRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress: mobileProgress } = useScroll({
+    target: mobileRailRef,
+    offset: ["start 80%", "end 55%"],
+  });
+  const mobileRailHeight = useTransform(mobileProgress, [0, 1], ["0%", "100%"]);
+
   return (
     <section className="relative bg-[var(--color-bg)] py-16 lg:py-20 overflow-hidden">
       {/* Subtle blueprint dots pattern */}
@@ -113,8 +121,8 @@ export function Timeline() {
                     viewport={viewportOnce}
                     transition={{ duration: 0.6, ease: EASE_OUT_SOFT }}
                     className={
-                      "group relative rounded-[14px] border border-[var(--color-line)] bg-white px-7 py-7 lg:px-8 lg:py-8 shadow-[0_2px_6px_-2px_rgba(0,0,0,0.06)] transition-all duration-500 hover:-translate-y-1 hover:border-[var(--color-ink)]/30 hover:shadow-[0_24px_50px_-24px_rgba(0,0,0,0.18)] " +
-                      (isLeft ? "text-right" : "col-start-2 text-left")
+                      "group relative w-full max-w-[460px] rounded-[14px] border border-[var(--color-line)] bg-white px-7 py-7 lg:px-8 lg:py-8 shadow-[0_2px_6px_-2px_rgba(0,0,0,0.06)] transition-all duration-500 hover:-translate-y-1 hover:border-[var(--color-ink)]/30 hover:shadow-[0_24px_50px_-24px_rgba(0,0,0,0.18)] " +
+                      (isLeft ? "justify-self-end text-right" : "col-start-2 justify-self-start text-left")
                     }
                   >
                     {/* Vertical accent bar on the rail-facing edge */}
@@ -166,10 +174,16 @@ export function Timeline() {
         </div>
 
         {/* Mobile / tablet stacked timeline */}
-        <div className="relative mt-12 lg:hidden">
+        <div ref={mobileRailRef} className="relative mt-12 lg:hidden">
           <span
             aria-hidden
             className="pointer-events-none absolute left-[15px] top-0 h-full w-px bg-[var(--color-line)]"
+          />
+          {/* Scroll-driven accent rail — fills top→down, connecting the dots. */}
+          <motion.span
+            aria-hidden
+            style={{ height: mobileRailHeight }}
+            className="pointer-events-none absolute left-[15px] top-0 w-px bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-accent-hover)]"
           />
           <ol className="flex flex-col gap-7">
             {timeline.map((item, i) => {
@@ -182,9 +196,14 @@ export function Timeline() {
                   transition={{ duration: 0.55, delay: i * 0.04, ease: EASE_OUT_SOFT }}
                   className="relative pl-12"
                 >
+                  {/* Horizontal connector from the rail dot to the card. */}
                   <span
                     aria-hidden
-                    className="absolute left-[9px] top-4 inline-flex size-4 items-center justify-center rounded-full bg-[var(--color-bg)] ring-1 ring-[var(--color-line)]"
+                    className="pointer-events-none absolute left-[15px] top-6 h-px w-[33px] bg-[var(--color-line)]"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute left-[7px] top-4 z-10 inline-flex size-4 items-center justify-center rounded-full bg-[var(--color-bg)] ring-1 ring-[var(--color-line)]"
                   >
                     <span className="size-2.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_0_4px_rgba(233,78,27,0.18)]" />
                   </span>

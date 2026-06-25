@@ -204,7 +204,7 @@ export const productInfo: { key: string; title: string; body: string }[] = [
   {
     key: "overview",
     title: "Overview",
-    body: "An air receiver is a pressure vessel that stores compressed air downstream of the compressor. By providing buffer storage it dampens pressure pulsations, prevents rapid compressor cycling and delivers a stable, dry air supply to the plant. R&D Therm has built air receivers since 1995 to ASME Section VIII Div 1, each unit hydro-tested and inspected before despatch.",
+    body: "An air receiver is a pressure vessel that stores compressed air downstream of the compressor. By providing buffer storage it dampens pressure pulsations, prevents rapid compressor cycling and delivers a stable, dry air supply to the plant. R&D Therm has built air receivers since 1995 to ASME Section VIII Div 1, each unit hydro-tested and inspected before dispatch.",
   },
   {
     key: "applications",

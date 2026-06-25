@@ -22,7 +22,7 @@ export function MachineShowcase() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-center"
         >
           <div className="lg:col-span-7">
             <motion.div variants={fadeUp}>

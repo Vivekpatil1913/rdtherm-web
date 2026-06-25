@@ -148,7 +148,7 @@ export function JoinTeam() {
             variants={fadeUp}
             className="lg:col-span-5 flex flex-col gap-7"
           >
-            <SectionTag>Apply now</SectionTag>
+            <SectionTag className="self-start">Apply now</SectionTag>
             <h2 className="text-[34px] leading-[1.05] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold">
               Join our <span className="text-[var(--color-accent)]">team</span>.
             </h2>

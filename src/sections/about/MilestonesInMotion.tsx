@@ -285,7 +285,9 @@ export function MilestonesInMotion() {
 
         {/* ── Desktop bottom: arrows + sliding-window year strip ───────── */}
         <div className="relative z-10 hidden shrink-0 pb-9 lg:block lg:pb-10">
-          <div className="mx-auto w-full max-w-[1280px] px-4 sm:px-8 lg:px-12">
+          {/* Extra right padding keeps the "next" arrow clear of the fixed
+              floating action buttons (WhatsApp / call / scroll-top). */}
+          <div className="mx-auto w-full max-w-[1280px] px-4 sm:px-8 lg:pl-12 lg:pr-24">
             <div className="flex items-center gap-3 sm:gap-4">
               <NavArrow
                 direction="left"

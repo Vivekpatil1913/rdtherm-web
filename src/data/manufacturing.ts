@@ -376,7 +376,7 @@ export const qualityMethods = [
   { title: "Poka-Yoke", body: "Defect-prevention jigs and fixtures designed into the process, not bolted on later." },
   { title: "Root Cause Analysis", body: "Every non-conformance triggers a 5-Why investigation and SOP update." },
   { title: "Supplier Qualification", body: "Audited material vendors with full mill test certificate traceability." },
-  { title: "Process Mapping", body: "Every job mapped from RA to despatch with built-in inspection hold points." },
+  { title: "Process Mapping", body: "Every job mapped from RA to dispatch with built-in inspection hold points." },
 ];
 
 export const weldingCerts = [

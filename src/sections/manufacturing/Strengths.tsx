@@ -36,7 +36,7 @@ export function Strengths() {
           </motion.p>
         </motion.div>
 
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--color-line)] rounded-[18px] overflow-hidden border border-[var(--color-line)]">
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {strengths.map((s, i) => (
             <motion.article
               key={s.title}
@@ -44,12 +44,12 @@ export function Strengths() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportOnce}
               transition={{ duration: 0.55, delay: 0.05 + (i % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative flex flex-col gap-4 bg-white p-7 transition-colors duration-300 hover:bg-[var(--color-bg-soft)]"
+              className="group flex flex-col gap-3 rounded-[16px] border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/40 hover:bg-white hover:shadow-[0_20px_45px_-25px_rgba(0,0,0,0.18)]"
             >
-              <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+              <span className="inline-flex size-11 items-center justify-center rounded-[12px] bg-[var(--color-accent)]/10 text-[15px] font-bold text-[var(--color-accent)] transition-colors duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-white">
                 {s.number}
-              </p>
-              <h3 className="text-[20px] font-semibold leading-tight">{s.title}</h3>
+              </span>
+              <h3 className="mt-2 text-[18px] font-semibold leading-snug text-[var(--color-ink)]">{s.title}</h3>
               <p className="text-[14px] leading-[1.6] text-[var(--color-ink-soft)]">{s.body}</p>
             </motion.article>
           ))}

@@ -17,9 +17,10 @@ export function Logo({ className }: LogoProps) {
       <Image
         src="/images/hero/rdtherm-logo.png"
         alt={siteConfig.name}
-        width={72}
-        height={72}
-        className="h-14 w-auto object-contain sm:h-16"
+        width={786}
+        height={317}
+        sizes="200px"
+        className="h-16 w-auto object-contain sm:h-[68px]"
         priority
       />
     </Link>
