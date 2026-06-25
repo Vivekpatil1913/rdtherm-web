@@ -33,6 +33,8 @@ const MOBILE_RE = /^[6-9]\d{9}$/;
 const sanitizeName = (v: string) => v.replace(/[^A-Za-z .'-]/g, "");
 /** Digits only, max 10 (Indian mobile). */
 const sanitizeMobile = (v: string) => v.replace(/\D/g, "").slice(0, 10);
+/** Company must not contain numbers. */
+const sanitizeCompany = (v: string) => v.replace(/\d/g, "");
 
 type FormState = {
   name: string;
@@ -99,6 +101,7 @@ export function QuoteModal({
     let value = e.target.value;
     if (k === "name") value = sanitizeName(value);
     else if (k === "mobile") value = sanitizeMobile(value);
+    else if (k === "company") value = sanitizeCompany(value);
     setForm((p) => ({ ...p, [k]: value }));
     setErrors((p) => (p[k] ? { ...p, [k]: undefined } : p));
   };
@@ -106,8 +109,10 @@ export function QuoteModal({
   const validate = () => {
     const next: Partial<Record<keyof FormState, string>> = {};
     if (!form.name.trim()) next.name = "Name is required.";
+    else if (form.name.trim().length < 2) next.name = "Name must be at least 2 characters.";
     else if (!NAME_RE.test(form.name.trim())) next.name = "Name can contain letters only.";
     if (!form.company.trim()) next.company = "Company is required.";
+    else if (/\d/.test(form.company)) next.company = "Company name can't contain numbers.";
     if (!EMAIL_RE.test(form.email.trim())) next.email = "Enter a valid email (e.g. abc@gmail.com).";
     if (!MOBILE_RE.test(form.mobile)) next.mobile = "Enter a 10-digit number starting 6, 7, 8 or 9.";
     if (!form.country.trim()) next.country = "Country is required.";
@@ -149,7 +154,13 @@ export function QuoteModal({
       setDone(true);
       setForm(EMPTY);
     } else {
-      setError(res.error || "Could not send your enquiry. Please try again.");
+      // Surface the backend's per-field validation errors on the matching fields.
+      if (res.fieldErrors && Object.keys(res.fieldErrors).length) {
+        setErrors(res.fieldErrors as Partial<Record<keyof FormState, string>>);
+        setError("Please correct the highlighted fields and try again.");
+      } else {
+        setError(res.error || "Could not send your enquiry. Please try again.");
+      }
     }
   };
 
@@ -173,7 +184,7 @@ export function QuoteModal({
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 24, opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex max-h-[92vh] w-full max-w-[760px] flex-col overflow-hidden rounded-t-[22px] border border-[var(--color-line)] bg-white shadow-2xl sm:rounded-[22px]"
+            className="relative z-10 flex max-h-[92vh] w-full max-w-[1000px] flex-col overflow-hidden rounded-t-[22px] border border-[var(--color-line)] bg-white shadow-2xl sm:rounded-[22px]"
           >
             {/* header */}
             <div className="flex items-start justify-between gap-4 border-b border-[var(--color-line)] px-6 py-5 sm:px-8">
@@ -236,7 +247,7 @@ export function QuoteModal({
                         rows={3}
                         maxLength={MESSAGE_LIMIT}
                         placeholder="Anything else we should know — timeline, certification, delivery location…"
-                        className="resize-y rounded-[10px] border border-[var(--color-line)] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition-colors focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)]"
+                        className="resize-y break-words rounded-[10px] border border-[var(--color-line)] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition-colors focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)]"
                       />
                       <span
                         className={

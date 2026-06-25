@@ -17,9 +17,13 @@ export function Faqs() {
         </Reveal>
 
         <div className="mt-10 flex flex-col gap-3">
-          {faqs.map((faq) => (
+          {faqs.map((faq, i) => (
             <details
               key={faq.question}
+              // Shared name = exclusive accordion (opening one closes the others).
+              // First item open by default.
+              name="air-receiver-faq"
+              open={i === 0}
               className="group rounded-[14px] border border-[var(--color-line)] bg-white px-5 py-4 transition-all duration-300 open:border-[var(--color-accent)]/40 open:shadow-[0_20px_50px_-30px_rgba(0,0,0,0.15)] lg:px-6 lg:py-5"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-[16px] font-semibold text-[var(--color-ink)] [&::-webkit-details-marker]:hidden sm:text-[18px]">

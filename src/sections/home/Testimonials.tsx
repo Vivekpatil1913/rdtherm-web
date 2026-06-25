@@ -301,7 +301,7 @@ function AvatarColumn({
 
       <div
         ref={scrollRef}
-        className="custom-scroll flex flex-row items-center lg:flex-col overflow-x-auto overflow-y-hidden lg:overflow-x-hidden lg:overflow-y-auto max-h-[380px] snap-x lg:snap-y snap-proximity scroll-py-2 scroll-px-2"
+        className="custom-scroll flex flex-row items-center lg:flex-col overflow-x-auto overflow-y-hidden lg:overflow-x-hidden lg:overflow-y-auto max-h-[380px] snap-x lg:snap-y snap-proximity scroll-py-2 scroll-px-2 max-lg:px-8 lg:py-8"
       >
         {items.map((t, i) => {
           const isActive = t.id === activeId;

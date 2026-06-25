@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Phone, Clock, Loader2 } from "lucide-react";
+import { Mail, MapPin, Phone, Clock, Loader2, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { fadeUp, stagger, viewportOnce } from "@/animations/motion";
 import { siteConfig } from "@/data/site";
 import type { ApiSettings } from "@/lib/api-types";
 import { submitLead } from "@/services/content";
+import { Recaptcha, type RecaptchaHandle } from "@/components/ui/Recaptcha";
 
 const MESSAGE_LIMIT = 250;
 
@@ -18,11 +19,15 @@ const sanitizeName = (v: string) => v.replace(/[^A-Za-z .'-]/g, "");
 // Company must not contain numbers.
 const sanitizeCompany = (v: string) => v.replace(/\d/g, "");
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+// Indian mobile: 10 digits starting 6–9.
+const MOBILE_RE = /^[6-9]\d{9}$/;
+const sanitizeMobile = (v: string) => v.replace(/\D/g, "").slice(0, 10);
 
 type FormState = {
   name: string;
   email: string;
   company: string;
+  phone: string;
   message: string;
 };
 
@@ -30,6 +35,7 @@ const INITIAL_STATE: FormState = {
   name: "",
   email: "",
   company: "",
+  phone: "",
   message: "",
 };
 
@@ -39,6 +45,21 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState("");
+  const recaptchaRef = useRef<RecaptchaHandle>(null);
+
+  const handleCaptcha = (token: string | null) => {
+    setCaptchaToken(token);
+    if (token) setCaptchaError("");
+  };
+
+  // Auto-dismiss the success message after a few seconds.
+  useEffect(() => {
+    if (!submitted) return;
+    const t = setTimeout(() => setSubmitted(false), 6000);
+    return () => clearTimeout(t);
+  }, [submitted]);
 
   const contact = {
     address: settings?.address || siteConfig.contact.address,
@@ -55,6 +76,8 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
       next.email = "Please enter a valid email address.";
     if (!form.company.trim()) next.company = "Please enter your company name.";
     else if (/\d/.test(form.company)) next.company = "Company name can't contain numbers.";
+    if (!form.phone.trim()) next.phone = "Please enter your phone number.";
+    else if (!MOBILE_RE.test(form.phone)) next.phone = "Enter a 10-digit number starting 6, 7, 8 or 9.";
     if (!form.message.trim()) next.message = "Please enter a short message.";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -63,18 +86,25 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submitting) return;
-    if (!validate()) return;
+    const ok = validate();
+    if (!captchaToken) setCaptchaError("Please confirm you're not a robot.");
+    if (!ok || !captchaToken) return;
     setSubmitting(true);
     setError(null);
     const res = await submitLead({
       name: form.name,
       email: form.email,
       company: form.company,
+      phone: form.phone,
       message: form.message,
       subject: "Website enquiry",
       source: "Website contact form",
+      recaptchaToken: captchaToken,
     });
     setSubmitting(false);
+    // reCAPTCHA tokens are single-use — reset for the next attempt.
+    recaptchaRef.current?.reset();
+    setCaptchaToken(null);
     if (res.ok) {
       setSubmitted(true);
       setForm(INITIAL_STATE);
@@ -94,6 +124,7 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
       let value = e.target.value;
       if (key === "name") value = sanitizeName(value);
       else if (key === "company") value = sanitizeCompany(value);
+      else if (key === "phone") value = sanitizeMobile(value);
       setForm((prev) => ({ ...prev, [key]: value }));
       // Clear this field's error as soon as the user edits it.
       setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev));
@@ -178,13 +209,23 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
                 required
               />
             </div>
-            <Field
-              label="Company"
-              value={form.company}
-              onChange={set("company")}
-              error={errors.company}
-              required
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <Field
+                label="Company"
+                value={form.company}
+                onChange={set("company")}
+                error={errors.company}
+                required
+              />
+              <Field
+                label="Phone"
+                type="tel"
+                value={form.phone}
+                onChange={set("phone")}
+                error={errors.phone}
+                required
+              />
+            </div>
             <TextareaField
               label="Message"
               value={form.message}
@@ -197,6 +238,13 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
               required
               maxLength={MESSAGE_LIMIT}
             />
+
+            <div className="mt-1">
+              <Recaptcha ref={recaptchaRef} onChange={handleCaptcha} />
+              {captchaError ? (
+                <span className="mt-1.5 block text-[12px] text-[var(--color-accent)]">{captchaError}</span>
+              ) : null}
+            </div>
 
             <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
               <p className="text-[13px] text-[var(--color-muted)]">
@@ -213,9 +261,17 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
             </div>
 
             {submitted ? (
-              <p className="rounded-[10px] bg-[var(--color-accent-soft)] px-4 py-3 text-[14px] text-[var(--color-accent)]">
-                Thanks — we&apos;ve received your enquiry and will reply within one business day.
-              </p>
+              <div className="flex items-start justify-between gap-3 rounded-[10px] bg-[var(--color-accent-soft)] px-4 py-3 text-[14px] text-[var(--color-accent)]">
+                <span>Thanks — we&apos;ve received your enquiry and will reply within one business day.</span>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  aria-label="Dismiss"
+                  className="mt-0.5 shrink-0 rounded-full p-0.5 text-[var(--color-accent)]/70 transition-colors hover:text-[var(--color-accent)]"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
             ) : null}
             {error ? (
               <p className="rounded-[10px] bg-red-50 px-4 py-3 text-[14px] text-red-600">{error}</p>
@@ -316,7 +372,7 @@ function TextareaField({
         maxLength={maxLength}
         rows={5}
         className={
-          "resize-y rounded-[10px] border bg-white px-4 py-3 text-[15px] text-[var(--color-ink)] outline-none transition-colors duration-200 focus:ring-2 focus:ring-[var(--color-accent-soft)] " +
+          "resize-y break-words rounded-[10px] border bg-white px-4 py-3 text-[15px] text-[var(--color-ink)] outline-none transition-colors duration-200 focus:ring-2 focus:ring-[var(--color-accent-soft)] " +
           (error
             ? "border-[var(--color-accent)] focus:border-[var(--color-accent)]"
             : "border-[var(--color-line)] focus:border-[var(--color-accent)]")

@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { PageHero } from "@/sections/shared/PageHero";
 import { BlogList } from "@/sections/blog/BlogList";
 import { blogHero } from "@/data/blog";
-import { getBlogs } from "@/services/content";
+import { getBlogsPage } from "@/services/content";
+
+const PAGE_SIZE = 6;
 
 const TITLE = "Blog — Engineering Notes & Case Studies";
 const DESCRIPTION =
@@ -30,7 +32,7 @@ export const metadata: Metadata = {
 
 export default async function BlogPage() {
   const [start, accent, end] = blogHero.heading;
-  const posts = await getBlogs();
+  const { items, total } = await getBlogsPage(1, PAGE_SIZE);
   return (
     <>
       <PageHero
@@ -44,7 +46,7 @@ export default async function BlogPage() {
         }
         description={blogHero.description}
       />
-      <BlogList posts={posts} />
+      <BlogList initialPosts={items} total={total} pageSize={PAGE_SIZE} />
     </>
   );
 }

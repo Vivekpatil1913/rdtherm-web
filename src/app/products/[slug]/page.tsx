@@ -131,13 +131,14 @@ export default async function ProductDetailPage(
                   <div className="lg:col-span-4">
                     <SectionTag>{group.label}</SectionTag>
                   </div>
-                  <div className="lg:col-span-8 flex flex-wrap gap-2">
+                  <div className="lg:col-span-8 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-2">
                     {group.items!.map((item) => (
                       <span
                         key={item}
-                        className="inline-flex items-center rounded-full border border-[var(--color-line)] bg-white px-4 py-2 text-[14px] font-medium text-[var(--color-ink)]"
+                        className="inline-flex items-start gap-2.5 rounded-[12px] border border-[var(--color-line)] bg-white px-4 py-2.5 text-[14px] font-medium text-[var(--color-ink)] sm:items-center sm:gap-2 sm:rounded-full sm:py-2"
                       >
-                        {item}
+                        <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[var(--color-accent)] sm:mt-0" />
+                        <span>{item}</span>
                       </span>
                     ))}
                   </div>

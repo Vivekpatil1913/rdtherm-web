@@ -56,7 +56,7 @@ export function LatestBlog({ posts = [] }: { posts?: ApiBlog[] }) {
                 className="group relative block aspect-square overflow-hidden rounded-[14px] bg-[var(--color-bg-dark)]"
               >
                 <Image
-                  src={post.cover || FALLBACK_COVER}
+                  src={post.cardImage || post.cover || FALLBACK_COVER}
                   alt={post.title}
                   fill
                   sizes="(max-width: 1024px) 100vw, 33vw"

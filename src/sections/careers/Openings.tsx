@@ -63,21 +63,21 @@ export function Openings({ roles = [] }: { roles?: ApiJobOpening[] }) {
             >
               <a
                 href="mailto:sales@rdtherm.com"
-                className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] items-center gap-4 sm:gap-8 py-6 sm:py-8 transition-colors duration-300 hover:bg-[var(--color-bg-soft)] -mx-5 px-5 sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12"
+                className="grid grid-cols-1 sm:grid-cols-[1fr_110px_170px_140px] items-center gap-4 sm:gap-6 py-6 sm:py-8 transition-colors duration-300 hover:bg-[var(--color-bg-soft)] -mx-5 px-5 sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12"
               >
-                <span className="text-[22px] sm:text-[26px] font-semibold leading-tight transition-colors duration-300 group-hover:text-[var(--color-accent)]">
+                <span className="min-w-0 break-words text-[22px] sm:text-[26px] font-semibold leading-tight transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                   {role.title}
                 </span>
                 <span className="hidden sm:inline-flex items-center gap-2 text-[14px] text-[var(--color-ink-soft)]">
                   {role.department}
                 </span>
                 <span className="hidden sm:inline-flex items-center gap-2 text-[14px] text-[var(--color-ink-soft)]">
-                  <MapPin className="size-4" strokeWidth={1.8} />
-                  {role.location}
+                  <MapPin className="size-4 shrink-0" strokeWidth={1.8} />
+                  <span className="truncate">{role.location}</span>
                 </span>
-                <span className="inline-flex h-9 items-center gap-2 rounded-full bg-[var(--color-bg-soft)] px-4 text-[13px] font-medium text-[var(--color-ink)] transition-colors duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-white">
+                <span className="inline-flex h-9 w-fit items-center gap-2 rounded-full bg-[var(--color-bg-soft)] px-4 text-[13px] font-medium text-[var(--color-ink)] transition-colors duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-white">
                   {role.type}
-                  <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight className="size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
               </a>
             </motion.li>

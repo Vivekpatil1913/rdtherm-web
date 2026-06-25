@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Minus, Plus, Eye, Maximize2, Ruler, BadgePercent, ShieldCheck } from "lucide-react";
+import { Minus, Plus, Eye, Maximize2, Ruler, BadgePercent, ShieldCheck, Box, Gauge, Layers, BadgeCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { fadeUp, viewportOnce } from "@/animations/motion";
@@ -56,16 +56,57 @@ export function Configurator() {
   return (
     <section id="configure" className="scroll-mt-24 bg-white py-16 lg:py-24">
       <Container size="wide">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
-          <SectionTag>Configure Your Air Receiver</SectionTag>
-          <h2 className="mt-6 max-w-[760px] text-[32px] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[40px] lg:text-[48px]">
-            Build your vessel and <span className="text-[var(--color-accent)]">see it update live</span>.
-          </h2>
-          <p className="mt-4 max-w-[620px] text-[16px] leading-[1.6] text-[var(--color-ink-soft)]">
-            Select your specification below — the preview, dimensions and quote summary update instantly. Every option
-            maps to a real, manufacturable configuration.
-          </p>
-        </motion.div>
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="lg:col-span-7"
+          >
+            <SectionTag>Configure Your Air Receiver</SectionTag>
+            <h2 className="mt-6 text-[32px] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[40px] lg:text-[48px]">
+              Build your vessel and <span className="text-[var(--color-accent)]">see it update live</span>.
+            </h2>
+            <p className="mt-4 max-w-[620px] text-[16px] leading-[1.6] text-[var(--color-ink-soft)]">
+              Select your specification below — the preview, dimensions and quote summary update instantly. Every option
+              maps to a real, manufacturable configuration.
+            </p>
+          </motion.div>
+
+          {/* At-a-glance highlights — fills the space and reinforces capability */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="lg:col-span-5"
+          >
+            <div className="rounded-[20px] border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-6 sm:p-7">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--color-muted)]">
+                At a glance
+              </p>
+              <div className="mt-5 grid grid-cols-2 gap-5">
+                {[
+                  { icon: Box, label: "Volume range", value: "0.25 – 90 m³" },
+                  { icon: Gauge, label: "Pressure", value: "6 – 75 Kgf/cm²" },
+                  { icon: Layers, label: "Materials", value: "MS · SS304 · SS316" },
+                  { icon: BadgeCheck, label: "Certified", value: "ASME U-Stamp" },
+                ].map((f) => (
+                  <div key={f.label} className="flex flex-col gap-2">
+                    <span className="inline-flex size-9 items-center justify-center rounded-[10px] bg-white text-[var(--color-accent)] ring-1 ring-[var(--color-line)]">
+                      <f.icon className="size-[18px]" strokeWidth={1.9} />
+                    </span>
+                    <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-muted)]">
+                      {f.label}
+                    </span>
+                    <span className="text-[15px] font-bold leading-tight text-[var(--color-ink)]">{f.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
 
         <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
           {/* ----- OPTIONS ----- */}

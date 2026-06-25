@@ -2,13 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Calendar, Clock, Tag } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Calendar, Clock, Tag, User } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { Reveal } from "@/components/ui/Reveal";
 import { getBlog, getBlogs } from "@/services/content";
 
 const FALLBACK_COVER = "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1200&q=80";
+
+/**
+ * Format an API date (always "YYYY-MM-DD") as "dd-mm-yyyy".
+ * Done with plain string ops — no `Date`/locale — so it renders identically
+ * on every device regardless of the visitor's system locale/timezone.
+ */
+function formatBlogDate(iso: string | null): string {
+  if (!iso) return "";
+  const [y, m, d] = iso.split("-");
+  return y && m && d ? `${d}-${m}-${y}` : iso;
+}
 
 export async function generateMetadata(
   props: PageProps<"/blog/[slug]">,
@@ -75,9 +86,15 @@ export default async function BlogDetailPage(
           </Reveal>
 
           <Reveal className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] font-medium text-[var(--color-ink-soft)] sm:text-[14px]">
+            {post.author ? (
+              <span className="inline-flex items-center gap-2">
+                <User className="size-4 text-[var(--color-accent)]" />
+                {post.author}
+              </span>
+            ) : null}
             <span className="inline-flex items-center gap-2">
               <Calendar className="size-4 text-[var(--color-accent)]" />
-              {post.date ?? ""}
+              {formatBlogDate(post.date)}
             </span>
             <span className="inline-flex items-center gap-2">
               <Clock className="size-4 text-[var(--color-accent)]" />
@@ -107,11 +124,11 @@ export default async function BlogDetailPage(
 
       {/* BODY — rich HTML produced by the admin text editor.
           Rendered exactly as authored. Styling comes from .prose-article. */}
-      <article className="bg-[var(--color-bg)] py-14 lg:py-20">
+      <article className="overflow-x-clip bg-[var(--color-bg)] py-14 lg:py-20">
         <Container size="narrow">
           <Reveal>
             <div
-              className="prose-article"
+              className="prose-article max-w-full overflow-x-clip"
               dangerouslySetInnerHTML={{ __html: post.content || "" }}
             />
           </Reveal>

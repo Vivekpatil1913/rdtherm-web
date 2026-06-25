@@ -35,7 +35,10 @@ export interface ApiBlog {
   author: string;
   date: string | null;
   readTime: string;
+  /** Wide 21:9 banner for the article detail page. */
   cover: string;
+  /** Square 1:1 thumbnail for the blog grid cards (falls back to cover). */
+  cardImage: string;
   content?: string;
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Mail, Phone, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/Button";
 import { fadeUp, stagger, viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
 import { openings } from "@/data/careers";
 import { siteConfig } from "@/data/site";
+import { submitApplication } from "@/services/content";
+import { Recaptcha, type RecaptchaHandle } from "@/components/ui/Recaptcha";
 
 type FormState = {
   name: string;
@@ -42,6 +44,15 @@ export function JoinTeam() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>(
     {},
   );
+  const [errorMsg, setErrorMsg] = useState("");
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState("");
+  const recaptchaRef = useRef<RecaptchaHandle>(null);
+
+  const handleCaptcha = (token: string | null) => {
+    setCaptchaToken(token);
+    if (token) setCaptchaError("");
+  };
 
   const validate = (): boolean => {
     const next: Partial<Record<keyof FormState, string>> = {};
@@ -53,21 +64,39 @@ export function JoinTeam() {
       next.phone = "Enter a 10-digit Indian mobile number starting 6–9.";
     if (!form.role) next.role = "Please select a role.";
     if (!form.resume) next.resume = "Please attach your resume (PDF / DOC).";
+    else if (!/\.(pdf|docx?|DOCX?|PDF)$/.test(form.resume.name))
+      next.resume = "Resume must be a PDF, DOC or DOCX file.";
+    else if (form.resume.size > 5 * 1024 * 1024) next.resume = "Resume must be under 5 MB.";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validate()) return;
+    const ok = validate();
+    if (!captchaToken) setCaptchaError("Please confirm you're not a robot.");
+    if (!ok || !form.resume || !captchaToken) return;
     setStatus("sending");
-    try {
-      // TODO: wire to /api/careers/apply (FormData) — backend handles email + storage.
-      await new Promise((r) => setTimeout(r, 900));
+    const res = await submitApplication({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      role: form.role,
+      portfolio: form.portfolio,
+      message: form.message,
+      resume: form.resume,
+      recaptchaToken: captchaToken,
+    });
+    // reCAPTCHA tokens are single-use — reset for the next attempt.
+    recaptchaRef.current?.reset();
+    setCaptchaToken(null);
+    if (res.ok) {
       setStatus("sent");
       setForm(INITIAL);
-    } catch {
+    } else {
       setStatus("error");
+      setErrorMsg(res.error || "");
+      if (res.fieldErrors) setErrors(res.fieldErrors as Partial<Record<keyof FormState, string>>);
     }
   };
 
@@ -296,7 +325,7 @@ export function JoinTeam() {
                       }
                       maxLength={200}
                       placeholder="A short paragraph about your experience, why you want to join R&D Therm, and what you're great at."
-                      className={INPUT_CLS + " resize-y min-h-[110px]"}
+                      className={INPUT_CLS + " resize-y min-h-[110px] break-words"}
                     />
                     <span
                       className={
@@ -344,7 +373,14 @@ export function JoinTeam() {
               />
             </div>
 
-            <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-6">
+              <Recaptcha ref={recaptchaRef} onChange={handleCaptcha} />
+              {captchaError ? (
+                <span className="mt-1.5 block text-[12.5px] text-[var(--color-accent)]">{captchaError}</span>
+              ) : null}
+            </div>
+
+            <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-[12.5px] leading-[1.55] text-[var(--color-muted)] max-w-[420px]">
                 By submitting, you agree to our processing of your details for
                 recruitment purposes only.
@@ -356,8 +392,7 @@ export function JoinTeam() {
 
             {status === "error" ? (
               <p className="mt-4 text-[13px] font-medium text-[var(--color-accent)]">
-                Something went wrong. Please retry or email
-                sales@rdtherm.com.
+                {errorMsg || "Something went wrong. Please retry or email sales@rdtherm.com."}
               </p>
             ) : null}
           </motion.form>

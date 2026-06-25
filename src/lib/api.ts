@@ -69,4 +69,31 @@ export async function apiPost<T = unknown>(path: string, body: unknown): Promise
   }
 }
 
+/** POST multipart/form-data to a public endpoint (e.g. a file upload). */
+export async function apiPostForm<T = unknown>(path: string, form: FormData): Promise<PostResult<T>> {
+  try {
+    const res = await fetch(`${API_URL}/api/public${path}`, {
+      method: "POST",
+      headers: { Accept: "application/json" }, // let the browser set the multipart boundary
+      body: form,
+      signal: AbortSignal.timeout(TIMEOUT_MS * 3), // files take longer
+    });
+    const json = (await res.json().catch(() => ({}))) as {
+      success?: boolean;
+      data?: T;
+      error?: { message?: string; details?: Record<string, string> };
+    };
+    if (!res.ok || json.success === false) {
+      return {
+        ok: false,
+        error: json.error?.message || "Something went wrong. Please try again.",
+        fieldErrors: json.error?.details,
+      };
+    }
+    return { ok: true, data: json.data };
+  } catch {
+    return { ok: false, error: "Network error. Please check your connection and try again." };
+  }
+}
+
 export { API_URL };

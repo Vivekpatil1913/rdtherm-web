@@ -150,10 +150,13 @@ export function TeamCarousel({ members = [] }: { members?: ApiTeamMember[] }) {
           </motion.p>
         </div>
 
-        <div className="relative mt-14 lg:mt-16">
+        <div className="relative mt-6 lg:mt-8">
           <div
             ref={wrapRef}
-            className="relative overflow-visible select-none"
+            // Clip horizontally so cards beyond the visible count don't spill into
+            // the page margin / floating buttons. Vertical padding keeps the card
+            // glow, hover-lift and shadow from being clipped at the top/bottom.
+            className="relative overflow-hidden select-none py-10"
             style={{ touchAction: "pan-y" }}
           >
             <motion.div
@@ -187,7 +190,7 @@ export function TeamCarousel({ members = [] }: { members?: ApiTeamMember[] }) {
 
         {/* Controls — only when total members exceed visible slot count */}
         {hasOverflow && (
-          <div className="mt-10 flex items-center justify-center gap-5 sm:mt-12 sm:gap-7">
+          <div className="mt-2 flex items-center justify-center gap-5 sm:mt-4 sm:gap-7">
             <ArrowButton
               ariaLabel="Previous"
               disabled={index === 0}
@@ -223,7 +226,16 @@ type TeamCardProps = {
 
 function TeamCard({ member, isHovered, onHoverStart, onHoverEnd }: TeamCardProps) {
   const [tapped, setTapped] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const active = isHovered || tapped;
+
+  // Initials fallback so a missing/broken photo never renders an empty black card.
+  const initials = member.name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("");
 
   return (
     <motion.article
@@ -266,13 +278,20 @@ function TeamCard({ member, isHovered, onHoverStart, onHoverEnd }: TeamCardProps
       >
         {/* Portrait — always sharp, no fade or wash */}
         <div className="absolute inset-0">
-          <Image
-            src={member.photo}
-            alt={member.name}
-            fill
-            sizes="(max-width: 720px) 80vw, (max-width: 1100px) 45vw, 25vw"
-            className="object-cover object-top"
-          />
+          {member.photo && !imgError ? (
+            <Image
+              src={member.photo}
+              alt={member.name}
+              fill
+              sizes="(max-width: 720px) 80vw, (max-width: 1100px) 45vw, 25vw"
+              className="object-cover object-top"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(120%_120%_at_50%_0%,#3a3a3a_0%,var(--color-bg-dark)_100%)]">
+              <span className="text-[72px] font-bold tracking-tight text-white/15">{initials}</span>
+            </div>
+          )}
           {/* Minimal bottom legibility shade — only behind the default footer */}
           <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
         </div>

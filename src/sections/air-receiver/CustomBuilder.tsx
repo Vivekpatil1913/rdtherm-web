@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2, CheckCircle2, Sparkles, PenTool } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -25,6 +25,26 @@ const sanitizeName = (v: string) => v.replace(/[^A-Za-z .'-]/g, "");
 /** Digits only, max 10 (Indian mobile). */
 const sanitizeMobile = (v: string) => v.replace(/\D/g, "").slice(0, 10);
 
+/** Decimal input: digits + a single dot, no leading zeros, length-capped. */
+const cleanDecimal = (raw: string): string => {
+  let v = raw.replace(/[^\d.]/g, "");
+  const dot = v.indexOf(".");
+  if (dot !== -1) v = v.slice(0, dot + 1) + v.slice(dot + 1).replace(/\./g, "");
+  v = v.replace(/^0+(?=\d)/, ""); // drop leading zeros, keep "0."
+  return v.slice(0, 9);
+};
+/** Whole-number input: digits only, no leading zeros, length-capped. */
+const cleanInteger = (raw: string): string =>
+  raw.replace(/\D/g, "").replace(/^0+(?=\d)/, "").slice(0, 5);
+// Sensible upper bounds so absurd values are rejected on submit.
+const SPEC_MAX: Record<keyof Spec, number> = {
+  volume: 100000,
+  pressure: 1000,
+  diameter: 100000,
+  height: 100000,
+  quantity: 99999,
+};
+
 type Spec = { volume: string; pressure: string; diameter: string; height: string; quantity: string };
 type Drops = Record<(typeof customDropdownKeys)[number], string>;
 type Customer = { name: string; company: string; email: string; mobile: string; city: string; country: string };
@@ -33,6 +53,7 @@ const SPEC0: Spec = { volume: "", pressure: "", diameter: "", height: "", quanti
 const CUST0: Customer = { name: "", company: "", email: "", mobile: "", city: "", country: "" };
 
 export function CustomBuilder() {
+  const sectionRef = useRef<HTMLElement>(null);
   const [spec, setSpec] = useState<Spec>(SPEC0);
   const [drops, setDrops] = useState<Drops>(
     () => customDropdownKeys.reduce((a, k) => ({ ...a, [k]: field(k).default }), {} as Drops),
@@ -47,8 +68,7 @@ export function CustomBuilder() {
 
   const setS = (k: keyof Spec) => (e: React.ChangeEvent<HTMLInputElement>) => {
     // Numeric only — quantity is whole numbers, dimensions allow decimals.
-    const raw = e.target.value;
-    const value = k === "quantity" ? raw.replace(/\D/g, "") : raw.replace(/[^\d.]/g, "");
+    const value = k === "quantity" ? cleanInteger(e.target.value) : cleanDecimal(e.target.value);
     setSpec((p) => ({ ...p, [k]: value }));
     setSpecErrors((p) => (p[k] ? { ...p, [k]: undefined } : p));
   };
@@ -56,6 +76,7 @@ export function CustomBuilder() {
     let value = e.target.value;
     if (k === "name") value = sanitizeName(value);
     else if (k === "mobile") value = sanitizeMobile(value);
+    else if (k === "company") value = value.replace(/\d/g, "");
     setCust((p) => ({ ...p, [k]: value }));
     setErrors((p) => (p[k] ? { ...p, [k]: undefined } : p));
   };
@@ -63,26 +84,30 @@ export function CustomBuilder() {
   const validate = () => {
     const n: Partial<Record<keyof Customer, string>> = {};
     if (!cust.name.trim()) n.name = "Name is required.";
+    else if (cust.name.trim().length < 2) n.name = "Name must be at least 2 characters.";
     else if (!NAME_RE.test(cust.name.trim())) n.name = "Name can contain letters only.";
     if (!cust.company.trim()) n.company = "Company is required.";
+    else if (/\d/.test(cust.company)) n.company = "Company name can't contain numbers.";
     if (!EMAIL_RE.test(cust.email.trim())) n.email = "Enter a valid email (e.g. abc@gmail.com).";
     if (!MOBILE_RE.test(cust.mobile)) n.mobile = "Enter a 10-digit number starting 6, 7, 8 or 9.";
     if (!cust.city.trim()) n.city = "City is required.";
     if (!cust.country.trim()) n.country = "Country is required.";
 
-    // Required dimensions + quantity — must be positive numbers.
+    // Required dimensions + quantity — must be positive numbers within range.
     const s: Partial<Record<keyof Spec, string>> = {};
-    const positive = (v: string) => v.trim() !== "" && !Number.isNaN(Number(v)) && Number(v) > 0;
-    if (!spec.volume.trim()) s.volume = "Volume is required.";
-    else if (!positive(spec.volume)) s.volume = "Enter a valid number.";
-    if (!spec.pressure.trim()) s.pressure = "Pressure is required.";
-    else if (!positive(spec.pressure)) s.pressure = "Enter a valid number.";
-    if (!spec.diameter.trim()) s.diameter = "Diameter is required.";
-    else if (!positive(spec.diameter)) s.diameter = "Enter a valid number.";
-    if (!spec.height.trim()) s.height = "Height is required.";
-    else if (!positive(spec.height)) s.height = "Enter a valid number.";
-    if (!spec.quantity.trim()) s.quantity = "Quantity is required.";
-    else if (!positive(spec.quantity)) s.quantity = "Enter a valid quantity.";
+    const checkNum = (key: keyof Spec, label: string) => {
+      const v = spec[key];
+      if (!v.trim()) return `${label} is required.`;
+      const n = Number(v);
+      if (Number.isNaN(n) || n <= 0) return "Enter a valid number.";
+      if (n > SPEC_MAX[key]) return `Value can't exceed ${SPEC_MAX[key].toLocaleString()}.`;
+      return null;
+    };
+    (["volume", "pressure", "diameter", "height", "quantity"] as (keyof Spec)[]).forEach((key) => {
+      const label = key === "quantity" ? "Quantity" : key[0].toUpperCase() + key.slice(1);
+      const err = checkNum(key, label);
+      if (err) s[key] = err;
+    });
 
     setErrors(n);
     setSpecErrors(s);
@@ -131,13 +156,24 @@ export function CustomBuilder() {
       setRequirements("");
       setCust(CUST0);
       setSpecErrors({});
+      // The tall form collapses into the short success message, which would
+      // shift later sections into view — scroll the success card back into view.
+      requestAnimationFrame(() =>
+        sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      );
     } else {
-      setError(res.error || "Could not send your request. Please try again.");
+      // Surface the backend's per-field validation errors on the matching fields.
+      if (res.fieldErrors && Object.keys(res.fieldErrors).length) {
+        setErrors(res.fieldErrors as Partial<Record<keyof Customer, string>>);
+        setError("Please correct the highlighted fields and try again.");
+      } else {
+        setError(res.error || "Could not send your request. Please try again.");
+      }
     }
   };
 
   return (
-    <section id="custom-quote" className="scroll-mt-24 bg-[var(--color-bg-soft)] py-16 lg:py-24">
+    <section ref={sectionRef} id="custom-quote" className="scroll-mt-24 bg-[var(--color-bg-soft)] py-16 lg:py-24">
       <Container size="wide">
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce} className="max-w-[760px]">
           <SectionTag>Customise Your Air Receiver</SectionTag>
@@ -168,7 +204,7 @@ export function CustomBuilder() {
           </div>
 
           {done ? (
-            <div className="flex flex-col items-center justify-center gap-4 px-8 py-20 text-center">
+            <div className="flex flex-col items-center justify-center gap-4 px-8 pt-10 pb-16 text-center">
               <span className="inline-flex size-16 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                 <CheckCircle2 className="size-8" />
               </span>
@@ -192,10 +228,10 @@ export function CustomBuilder() {
                 Required Dimensions
               </p>
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <UnitField label="Volume" unit="m³" value={spec.volume} onChange={setS("volume")} placeholder="e.g. 7.5" required error={specErrors.volume} />
-                <UnitField label="Pressure" unit="Bar" value={spec.pressure} onChange={setS("pressure")} placeholder="e.g. 14" required error={specErrors.pressure} />
-                <UnitField label="Diameter" unit="mm" value={spec.diameter} onChange={setS("diameter")} placeholder="e.g. 1500" required error={specErrors.diameter} />
-                <UnitField label="Height" unit="mm" value={spec.height} onChange={setS("height")} placeholder="e.g. 4200" required error={specErrors.height} />
+                <UnitField label="Volume" unit="m³" value={spec.volume} onChange={setS("volume")} placeholder="e.g. 7.5" required error={specErrors.volume} maxLength={9} />
+                <UnitField label="Pressure" unit="Bar" value={spec.pressure} onChange={setS("pressure")} placeholder="e.g. 14" required error={specErrors.pressure} maxLength={9} />
+                <UnitField label="Diameter" unit="mm" value={spec.diameter} onChange={setS("diameter")} placeholder="e.g. 1500" required error={specErrors.diameter} maxLength={9} />
+                <UnitField label="Height" unit="mm" value={spec.height} onChange={setS("height")} placeholder="e.g. 4200" required error={specErrors.height} maxLength={9} />
               </div>
 
               {/* construction dropdowns */}
@@ -217,7 +253,7 @@ export function CustomBuilder() {
                     />
                   );
                 })}
-                <UnitField label="Quantity" unit="nos" value={spec.quantity} onChange={setS("quantity")} placeholder="1" required error={specErrors.quantity} />
+                <UnitField label="Quantity" unit="nos" value={spec.quantity} onChange={setS("quantity")} placeholder="1" required error={specErrors.quantity} maxLength={5} />
               </div>
 
               {/* requirements */}
@@ -231,7 +267,7 @@ export function CustomBuilder() {
                   rows={4}
                   maxLength={REQUIREMENTS_LIMIT}
                   placeholder="Please mention any custom nozzle requirements, dimensions, certifications, mounting requirements, or special requests."
-                  className="resize-y rounded-[12px] border border-[var(--color-line)] bg-white px-4 py-3 text-[15px] outline-none transition-colors focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)]"
+                  className="resize-y break-words rounded-[12px] border border-[var(--color-line)] bg-white px-4 py-3 text-[15px] outline-none transition-colors focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)]"
                 />
                 <span
                   className={
@@ -294,6 +330,7 @@ function UnitField({
   placeholder,
   required,
   error,
+  maxLength,
 }: {
   label: string;
   unit: string;
@@ -302,6 +339,7 @@ function UnitField({
   placeholder?: string;
   required?: boolean;
   error?: string;
+  maxLength?: number;
 }) {
   return (
     <label className="flex flex-col gap-1.5">
@@ -314,6 +352,7 @@ function UnitField({
           value={value}
           onChange={onChange}
           inputMode="decimal"
+          maxLength={maxLength}
           placeholder={placeholder}
           aria-invalid={!!error}
           className={

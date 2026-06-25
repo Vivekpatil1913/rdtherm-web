@@ -4,7 +4,7 @@
  * can render empty/not-found states without try/catch.
  */
 
-import { apiGet, apiPost } from "@/lib/api";
+import { apiGet, apiPost, apiPostForm } from "@/lib/api";
 import type {
   ApiBlog,
   ApiCaseStudy,
@@ -21,7 +21,26 @@ import type {
 export const getProducts = () => apiGet<ApiProduct[]>("/products", []);
 export const getProduct = (slug: string) => apiGet<ApiProduct | null>(`/products/${slug}`, null);
 
-export const getBlogs = () => apiGet<ApiBlog[]>("/blogs", []);
+export type BlogsPage = {
+  items: ApiBlog[];
+  total: number;
+  page: number;
+  limit: number;
+  hasMore: boolean;
+};
+
+/** Server-side paginated blog list. Used for the blog page's lazy "load more". */
+export const getBlogsPage = (page = 1, limit = 6) =>
+  apiGet<BlogsPage>(`/blogs?page=${page}&limit=${limit}`, {
+    items: [],
+    total: 0,
+    page,
+    limit,
+    hasMore: false,
+  });
+
+/** Convenience: latest N posts as a flat array (home page "Latest" section). */
+export const getBlogs = async (limit = 6): Promise<ApiBlog[]> => (await getBlogsPage(1, limit)).items;
 export const getBlog = (slug: string) => apiGet<ApiBlog | null>(`/blogs/${slug}`, null);
 
 export const getTestimonials = () => apiGet<ApiTestimonial[]>("/testimonials", []);
@@ -54,6 +73,7 @@ export interface LeadInput {
   subject?: string;
   message: string;
   source?: string;
+  recaptchaToken?: string | null;
 }
 
 export const submitLead = (input: LeadInput) => apiPost("/leads", input);
@@ -80,3 +100,28 @@ export interface QuoteInput {
 
 /** Air Receiver quote request — configurator (standard) & custom builder. */
 export const submitQuote = (input: QuoteInput) => apiPost("/quotes", input);
+
+export interface ApplicationInput {
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  portfolio?: string;
+  message?: string;
+  resume: File;
+  recaptchaToken?: string | null;
+}
+
+/** Careers job application — multipart (fields + resume file). */
+export const submitApplication = (input: ApplicationInput) => {
+  const form = new FormData();
+  form.append("name", input.name);
+  form.append("email", input.email);
+  form.append("phone", input.phone);
+  form.append("recaptchaToken", input.recaptchaToken ?? "");
+  form.append("role", input.role);
+  form.append("portfolio", input.portfolio ?? "");
+  form.append("message", input.message ?? "");
+  form.append("resume", input.resume);
+  return apiPostForm("/careers/apply", form);
+};

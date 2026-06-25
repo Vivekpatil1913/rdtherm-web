@@ -9,6 +9,19 @@ import { footerLinks, siteConfig } from "@/data/site";
 import type { ApiSettings } from "@/lib/api-types";
 import { cn } from "@/lib/cn";
 
+/**
+ * Turn an admin-entered social URL into a safe absolute link. Values like
+ * "www.facebook.com" (no protocol) would otherwise be treated as a relative
+ * path. Returns null for empty / placeholder ("#") values so we don't render a
+ * dead link.
+ */
+function toExternalUrl(href: string): string | null {
+  const v = (href || "").trim();
+  if (!v || v === "#") return null;
+  if (/^(https?:)?\/\//i.test(v) || /^(mailto:|tel:)/i.test(v)) return v;
+  return `https://${v}`;
+}
+
 export function Footer({ settings }: { settings?: ApiSettings | null }) {
   const pathname = usePathname();
   const [email, setEmail] = useState("");
@@ -148,7 +161,14 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
         <div className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[13px] text-white/60">
             Designed by{" "}
-            <span className="text-white">Sumago Infotech Pvt Ltd</span>
+            <a
+              href="https://sumagoinfotech.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
+            >
+              Sumago Infotech Pvt Ltd
+            </a>
             {", "}Powered by{" "}
             <span className="text-white">Innovation</span>
           </p>
@@ -156,10 +176,13 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
             {social.map((s) => {
               const Icon = SOCIAL_ICONS[s.label as keyof typeof SOCIAL_ICONS];
               const brand = SOCIAL_BRAND[s.label as keyof typeof SOCIAL_BRAND];
+              const url = toExternalUrl(s.href);
               return (
                 <a
                   key={s.label}
-                  href={s.href}
+                  href={url ?? "#"}
+                  target={url ? "_blank" : undefined}
+                  rel={url ? "noopener noreferrer" : undefined}
                   className={cn(
                     "group inline-flex items-center gap-2 text-white/70 transition-colors",
                     brand?.text,

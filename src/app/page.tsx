@@ -42,11 +42,16 @@ export default async function HomePage() {
     getTestimonials(),
   ]);
 
-  const homeProducts = products.slice(0, 8).map((p) => ({
-    label: p.title,
-    slug: p.slug,
-    image: p.cover,
-  }));
+  // Only products with "Show on homepage grid" (featured) enabled in the admin.
+  // Fall back to the first few products if none are flagged yet.
+  const featured = products.filter((p) => p.featured);
+  const homeProducts = (featured.length ? featured : products)
+    .slice(0, 8)
+    .map((p) => ({
+      label: p.title,
+      slug: p.slug,
+      image: p.cover,
+    }));
 
   return (
     <>
