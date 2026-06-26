@@ -129,7 +129,7 @@ export default async function ProductDetailPage(
               {chipGroups.map((group) => (
                 <Reveal as="div" key={group.label} className="grid grid-cols-1 lg:grid-cols-[190px_1fr] gap-y-4 gap-x-8 items-start">
                   <div>
-                    <SectionTag>{group.label}</SectionTag>
+                    <SectionTag variant="accent">{group.label}</SectionTag>
                   </div>
                   <div className="flex flex-col gap-2.5 lg:flex-row lg:flex-wrap lg:gap-2">
                     {group.items!.map((item) => (

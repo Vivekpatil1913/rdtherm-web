@@ -115,20 +115,21 @@ export function CompanyIntro() {
               variants={fadeUp}
               className="flex flex-col items-center gap-1.5 bg-white p-6 text-center lg:p-8"
             >
-              <dt
-                className={
-                  "font-bold tracking-[-0.02em] text-[var(--color-ink)] " +
-                  (s.small
-                    ? "text-[18px] sm:text-[20px] lg:text-[22px]"
-                    : "text-[28px] sm:text-[34px] lg:text-[40px]")
-                }
-              >
-                {s.value}
-                {s.suffix ? (
-                  <span className="text-[14px] font-semibold text-[var(--color-muted)] lg:text-[16px]">
-                    {s.suffix}
-                  </span>
-                ) : null}
+              <dt className="flex min-h-[2.5rem] items-center justify-center font-bold tracking-[-0.02em] text-[var(--color-ink)] lg:min-h-[3rem]">
+                <span
+                  className={
+                    s.small
+                      ? "text-[18px] sm:text-[20px] lg:text-[22px]"
+                      : "text-[28px] sm:text-[34px] lg:text-[40px]"
+                  }
+                >
+                  {s.value}
+                  {s.suffix ? (
+                    <span className="text-[14px] font-semibold text-[var(--color-muted)] lg:text-[16px]">
+                      {s.suffix}
+                    </span>
+                  ) : null}
+                </span>
               </dt>
               <dd className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-muted)]">
                 {s.label}

@@ -129,8 +129,9 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
                   <li key={h.label}>
                     {isRange ? (
                       <>
-                        <span className="block">{h.label}:</span>
-                        <span className="block">{h.value}</span>
+                        {/* Inline on mobile (full-width column); stacked on desktop (narrow column). */}
+                        <span className="lg:block">{h.label}:</span>{" "}
+                        <span className="lg:block">{h.value}</span>
                       </>
                     ) : (
                       <span>
