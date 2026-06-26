@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Building2 } from "lucide-react";
+import { ArrowLeft, UserRound } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { Reveal } from "@/components/ui/Reveal";
@@ -80,7 +80,7 @@ export default async function CaseStudyDetailPage(
           <Reveal className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] font-medium text-[var(--color-ink-soft)] sm:text-[14px]">
             {item.client ? (
               <span className="inline-flex items-center gap-2">
-                <Building2 className="size-4 text-[var(--color-accent)]" />
+                <UserRound className="size-4 text-[var(--color-accent)]" />
                 {item.client}
               </span>
             ) : null}
