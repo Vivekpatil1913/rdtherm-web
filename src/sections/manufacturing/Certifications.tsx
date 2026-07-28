@@ -16,22 +16,20 @@ export function Certifications() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-7">
-            <motion.div variants={fadeUp}>
-              <SectionTag>Certifications</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
-            >
-              Built to the codes <span className="text-[var(--color-accent)]">your market demands</span>.
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>Certifications</SectionTag>
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
+          >
+            Built to the codes <span className="text-[var(--color-accent)]">your market demands</span>.
+          </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="lg:col-span-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]"
+            className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]"
           >
             Our equipment ships to customers in 20+ countries — designed and certified to the codes that matter for each destination.
           </motion.p>

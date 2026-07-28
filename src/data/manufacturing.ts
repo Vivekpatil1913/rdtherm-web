@@ -55,11 +55,15 @@ export const capabilitiesStats = [
   { value: "25+", label: "Export countries" },
 ];
 
-// Top-level shop floor breakdown — three dedicated bays
+// Top-level shop floor breakdown — dedicated bays
 export const facility = [
   {
     id: "cs-shop",
     title: "Carbon Steel Workshop",
+    // Swap for a real shop-floor photo when available — the section falls back to
+    // a branded placeholder frame if the image ever fails to load.
+    image:
+      "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1400&q=80&auto=format&fit=crop",
     bays: [
       { label: "Under shed", value: "50,000 sq ft" },
       { label: "Open yard", value: "35,000 sq ft" },
@@ -71,6 +75,8 @@ export const facility = [
   {
     id: "ss-shop",
     title: "Stainless Steel Workshop",
+    image:
+      "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1400&q=80&auto=format&fit=crop",
     bays: [
       { label: "Under shed", value: "25,000 sq ft" },
       { label: "Atmosphere", value: "Controlled" },
@@ -79,35 +85,7 @@ export const facility = [
     body:
       "Dedicated SS bay with controlled atmosphere — segregated tooling, consumables and grinding stations to prevent cross-contamination.",
   },
-  {
-    id: "pv-shop",
-    title: "Pressure Vessel Shop",
-    bays: [
-      { label: "Vessel range", value: "1 L – 500 L" },
-      { label: "Sanitary", value: "ASME BPE" },
-    ],
-    cranes: ["5 T × 2"],
-    body:
-      "Specialist bay for small-batch and pharma pressure vessels — electropolish-ready surfaces, sanitary fittings and BPE compliance.",
-  },
 ];
-
-// Featured flagship machine
-export const flagshipMachine = {
-  badge: "Flagship Equipment",
-  name: "TruLaser 3060",
-  type: "CNC Fibre Laser Cutting System",
-  description:
-    "Our 4 kW fibre-laser cutting bay handles the day-one cut on most of our pressure parts. Tight tolerances, repeatable kerfs, and a 6-metre bed mean we can cut shell course plates, tube-sheet outlines and intricate flange profiles without a single secondary setup.",
-  specs: [
-    { label: "Laser power", value: "4,000 W" },
-    { label: "Cutting bed", value: "2,500 × 6,000 mm" },
-    { label: "Mild steel", value: "up to 25 mm" },
-    { label: "Stainless steel", value: "up to 20 mm" },
-    { label: "Aluminium", value: "up to 20 mm" },
-    { label: "Brass / Copper", value: "up to 8 mm" },
-  ],
-};
 
 // Categorised machine inventory — used by the interactive MachineShowcase
 export const machineCategories = [

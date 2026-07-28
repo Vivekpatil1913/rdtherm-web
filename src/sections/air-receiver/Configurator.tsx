@@ -68,7 +68,7 @@ export function Configurator() {
             <h2 className="mt-6 text-[32px] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[40px] lg:text-[48px]">
               Build your vessel and <span className="text-[var(--color-accent)]">see it update live</span>.
             </h2>
-            <p className="mt-4 max-w-[620px] text-[16px] leading-[1.6] text-[var(--color-ink-soft)]">
+            <p className="mt-4 max-w-[620px] text-[18px] leading-[1.6] text-[var(--color-ink-soft)]">
               Select your specification below — the preview, dimensions and quote summary update instantly. Every option
               maps to a real, manufacturable configuration.
             </p>

@@ -15,23 +15,21 @@ export function QualityMetrics() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-7">
-            <motion.div variants={fadeUp}>
-              <SectionTag>Quality & Excellence</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
-            >
-              We measure what we ship —{" "}
-              <span className="text-[var(--color-accent)]">honestly</span>.
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>Quality & Excellence</SectionTag>
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
+          >
+            We measure what we ship —{" "}
+            <span className="text-[var(--color-accent)]">honestly</span>.
+          </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="lg:col-span-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
+            className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
           >
             Numbers below are tracked monthly and audited every year. They&apos;re the same metrics our customers receive in their quarterly business reviews.
           </motion.p>
@@ -70,7 +68,7 @@ export function QualityMetrics() {
               transition={{ duration: 0.5, delay: 0.04 * i, ease: EASE_OUT_SOFT }}
               className="flex flex-col gap-2 rounded-[14px] border border-[var(--color-line)] bg-white p-5 lg:p-6"
             >
-              <p className="text-[16px] font-semibold leading-tight">{m.title}</p>
+              <p className="text-[18px] font-semibold leading-tight">{m.title}</p>
               <p className="text-[13px] leading-[1.55] text-[var(--color-ink-soft)]">{m.body}</p>
             </motion.div>
           ))}

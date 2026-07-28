@@ -92,7 +92,7 @@ export default async function ProductDetailPage(
               </h1>
             </Reveal>
             <Reveal as="div" className="lg:col-span-4">
-              <p className="line-clamp-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]">
+              <p className="line-clamp-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]">
                 {product.summary}
               </p>
               <div className="mt-6">
@@ -110,11 +110,13 @@ export default async function ProductDetailPage(
         <ProductGalleryLightbox title={product.title} images={product.images} />
       ) : null}
 
-      {/* RICH CONTENT (from the admin editor) */}
+      {/* RICH CONTENT (from the admin editor). The gallery above shares this
+          background and already supplies the top gap, so the article only needs
+          bottom padding. */}
       {product.content ? (
-        <section className="bg-[var(--color-bg-soft)] py-14 lg:py-20">
+        <section className="bg-[var(--color-bg-soft)] pb-14 pt-2 lg:pb-20 lg:pt-4">
           <Container size="narrow">
-            <Reveal>
+            <Reveal amount="some">
               <div className="prose-article" dangerouslySetInnerHTML={{ __html: product.content }} />
             </Reveal>
           </Container>
@@ -262,14 +264,14 @@ export default async function ProductDetailPage(
       {related.length > 0 ? (
         <section className="bg-[var(--color-bg-soft)] py-16 lg:py-20">
           <Container size="wide">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start">
               <Reveal as="div" className="lg:col-span-8">
                 <SectionTag>Explore More</SectionTag>
                 <h2 className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[40px] lg:text-[48px] font-bold">
                   Related R&amp;D Therm <span className="text-[var(--color-accent)]">products</span>.
                 </h2>
               </Reveal>
-              <Reveal as="div" className="lg:col-span-4 lg:flex lg:justify-end lg:pb-3">
+              <Reveal as="div" className="lg:col-span-4 lg:flex lg:justify-end">
                 <Button href="/products" variant="dark">
                   View all products
                 </Button>

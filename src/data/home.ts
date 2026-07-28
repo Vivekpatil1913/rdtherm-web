@@ -42,7 +42,13 @@ export const whyRdtherm = {
 // so the home grid pulls images and links straight from the catalogue.
 export const products = {
   eyebrow: "Our Products",
-  heading: ["From ", "Pressure Vessels to Process Skids", " — We Build It All."],
+  heading: {
+    line1: "Engineered Solutions.",
+    line2: "Built to ",
+    accent: "Perform.",
+  },
+  description:
+    "High-quality engineered equipment designed for efficiency, durability & performance.",
   cta: { label: "Explore all products", href: "/products" },
   items: [
     { label: "Pressure Vessel", slug: "pressure-vessel" },
@@ -98,15 +104,29 @@ export const industries = {
   ],
 };
 
-// Decorative floating images placed at the corners of the Industries section.
-// Sized + positioned conservatively so they never overflow the viewport
-// or peek out from behind the content card.
+// Corner motifs for the Industries section — three different fabrication-drawing
+// details (a nozzle flange, a vessel elevation, a pressure gauge), all drawn in
+// the site's hairline + accent language so they read as texture behind the
+// headline rather than as decoration competing with it.
 export const industryDecor = [
-  { id: "top-left", className: "hidden lg:block absolute left-6 lg:left-10 top-10 lg:top-16 w-24 h-16 lg:w-28 lg:h-20 rounded-[10px]", tone: "assembly" },
-  { id: "top-right", className: "hidden lg:block absolute right-6 lg:right-10 top-10 lg:top-16 w-24 h-16 lg:w-28 lg:h-20 rounded-[10px]", tone: "engine" },
+  {
+    id: "top-left",
+    motif: "flange",
+    className: "hidden lg:block absolute left-6 lg:left-12 top-10 lg:top-14 size-24 lg:size-28",
+  },
+  {
+    id: "top-right",
+    motif: "vessel",
+    className:
+      "hidden lg:block absolute right-6 lg:right-10 top-12 lg:top-16 w-28 lg:w-32 aspect-[3/2]",
+  },
   // bottom-left intentionally omitted: the industry tab list grows into this corner,
-  // so a decorative box here collides with the list's vertical rail as industries are added.
-  { id: "bottom-right", className: "hidden lg:block absolute right-6 lg:right-10 bottom-10 lg:bottom-6 w-24 h-16 lg:w-28 lg:h-20 rounded-[10px]", tone: "turbine" },
+  // so a decorative element here collides with the list's vertical rail as industries are added.
+  {
+    id: "bottom-right",
+    motif: "gauge",
+    className: "hidden lg:block absolute right-6 lg:right-10 bottom-10 lg:bottom-8 size-20 lg:size-24",
+  },
 ];
 
 export const trustedLogos = [

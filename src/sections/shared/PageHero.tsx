@@ -20,22 +20,22 @@ export function PageHero({ eyebrow, heading, description }: PageHeroProps) {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 lg:items-center"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-8">
-            <motion.div variants={fadeUp}>
-              <SectionTag>{eyebrow}</SectionTag>
-            </motion.div>
-            <motion.h1
-              variants={fadeUp}
-              className="mt-6 text-[40px] leading-[1.05] tracking-[-0.02em] sm:text-[56px] lg:text-[68px] font-bold"
-            >
-              {heading}
-            </motion.h1>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>{eyebrow}</SectionTag>
+          </motion.div>
+          <motion.h1
+            variants={fadeUp}
+            className="lg:col-span-9 text-[40px] leading-[1.05] tracking-[-0.02em] sm:text-[56px] lg:text-[68px] font-bold"
+          >
+            {heading}
+          </motion.h1>
+          {/* Own row under the heading — sitting it alongside left the sub-line
+              floating mid-air against a heading three times its size. */}
           {description ? (
-            <motion.div variants={fadeUp} className="lg:col-span-4">
-              <p className="text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]">
+            <motion.div variants={fadeUp} className="lg:col-span-12">
+              <p className="text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[640px]">
                 {description}
               </p>
             </motion.div>

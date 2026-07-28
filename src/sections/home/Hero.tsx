@@ -11,7 +11,7 @@ import { fadeUp, stagger, viewportOnce, EASE_OUT_SOFT } from "@/animations/motio
 import { siteConfig } from "@/data/site";
 import { heroQuote } from "@/data/home";
 
-const VIDEO_SOURCES = ["/videos/hero/rdthern.mp4"];
+const VIDEO_SOURCES = ["/videos/hero/website_banner_v2_web.mp4"];
 
 const POSTER_IMG =
   "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1920&q=80";
@@ -101,7 +101,7 @@ export function Hero() {
             </motion.p>
             <motion.p
               variants={fadeUp}
-              className="mt-5 max-w-[420px] text-[16px] leading-[1.55] text-[var(--color-ink-soft)]"
+              className="mt-5 max-w-[420px] text-[18px] leading-[1.55] text-[var(--color-ink-soft)]"
             >
               {siteConfig.description}
             </motion.p>
@@ -188,7 +188,7 @@ function FounderCard() {
         />
       </div>
       <div className="px-2 pt-3 pb-2 text-center text-white">
-        <p className="text-[16px] font-semibold leading-tight">{heroQuote.author}</p>
+        <p className="text-[18px] font-semibold leading-tight">{heroQuote.author}</p>
         <p className="mt-1 text-[12px] text-white/55">{heroQuote.role}</p>
       </div>
     </div>

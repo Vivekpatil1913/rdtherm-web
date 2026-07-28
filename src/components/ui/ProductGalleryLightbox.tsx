@@ -44,7 +44,7 @@ export function ProductGalleryLightbox({ title, images }: Props) {
 
   return (
     <>
-      <section className="bg-[var(--color-bg-soft)] pb-14 lg:pb-16">
+      <section className="bg-[var(--color-bg-soft)] pb-8 lg:pb-10">
         <Container size="wide">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5">
             <GalleryTile

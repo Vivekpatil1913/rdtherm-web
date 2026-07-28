@@ -180,7 +180,7 @@ export function CustomBuilder() {
           <h2 className="mt-6 text-[32px] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[40px] lg:text-[48px]">
             Need something <span className="text-[var(--color-accent)]">built to spec</span>?
           </h2>
-          <p className="mt-4 text-[16px] leading-[1.6] text-[var(--color-ink-soft)]">
+          <p className="mt-4 text-[18px] leading-[1.6] text-[var(--color-ink-soft)]">
             For non-standard volumes, pressures, dimensions, nozzle schedules or certifications, send us your exact
             requirement. Custom projects are handled directly by our engineering team.
           </p>

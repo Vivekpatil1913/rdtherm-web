@@ -152,10 +152,9 @@ export function JoinTeam() {
             <h2 className="text-[34px] leading-[1.05] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold">
               Join our <span className="text-[var(--color-accent)]">team</span>.
             </h2>
-            <p className="max-w-[460px] text-[16px] leading-[1.65] text-[var(--color-ink-soft)]">
+            <p className="max-w-[460px] text-[18px] leading-[1.65] text-[var(--color-ink-soft)]">
               Send us your details and a recent resume — our hiring team will
-              review your profile and reach out within 3 – 5 working days. All
-              roles are based at our Nashik facility.
+              review your profile and reach out within 3 – 5 working days.
             </p>
 
             <ul className="mt-2 flex flex-col gap-4 text-[14.5px]">
@@ -165,8 +164,8 @@ export function JoinTeam() {
                 </span>
                 <span>{siteConfig.contact.address}</span>
               </li>
-              <li className="flex items-start gap-3 text-[var(--color-ink)]">
-                <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[var(--color-accent)] ring-1 ring-[var(--color-line)]">
+              <li className="flex items-center gap-3 text-[var(--color-ink)]">
+                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[var(--color-accent)] ring-1 ring-[var(--color-line)]">
                   <Mail className="size-4" />
                 </span>
                 <a
@@ -176,8 +175,8 @@ export function JoinTeam() {
                   sales@rdtherm.com
                 </a>
               </li>
-              <li className="flex items-start gap-3 text-[var(--color-ink)]">
-                <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[var(--color-accent)] ring-1 ring-[var(--color-line)]">
+              <li className="flex items-center gap-3 text-[var(--color-ink)]">
+                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[var(--color-accent)] ring-1 ring-[var(--color-line)]">
                   <Phone className="size-4" />
                 </span>
                 <a

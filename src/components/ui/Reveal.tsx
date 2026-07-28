@@ -10,6 +10,12 @@ type RevealProps = {
   variants?: Variants;
   delay?: number;
   as?: "div" | "section" | "article" | "li" | "span";
+  /**
+   * How much of the element must be visible before it reveals. The default
+   * (0.25) never resolves for blocks taller than four viewports — a long article
+   * would stay hidden forever — so pass "some" for tall content.
+   */
+  amount?: number | "some" | "all";
 };
 
 export function Reveal({
@@ -18,6 +24,7 @@ export function Reveal({
   variants = fadeUp,
   delay = 0,
   as = "div",
+  amount,
 }: RevealProps) {
   const Component = motion[as] as typeof motion.div;
   return (
@@ -26,7 +33,7 @@ export function Reveal({
       variants={variants}
       initial="hidden"
       whileInView="visible"
-      viewport={viewportOnce}
+      viewport={amount === undefined ? viewportOnce : { once: true, amount }}
       transition={{ delay }}
     >
       {children}

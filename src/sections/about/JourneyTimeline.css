@@ -1,0 +1,544 @@
+/* =====================================================================
+   JourneyTimeline — auto-advancing milestone story. Everything is scoped
+   under `.jt`, so nothing here leaks into the rest of the site.
+
+   Written as plain CSS rather than utilities: the layout is driven almost
+   entirely by viewport units and clamp() ramps, and keeping them in one
+   place is what makes the stage hold its proportions from 320px up to a
+   1440px container.
+
+   No scroll runway — the section is one viewport tall and the milestones
+   swap on a timer, so it is a single-screen block.
+   ===================================================================== */
+
+.jt {
+  --jt-ink: var(--color-ink, #111111);
+  --jt-soft: var(--color-ink-soft, #2a2a2a);
+  --jt-muted: var(--color-muted, #6b6b6b);
+  --jt-accent: var(--color-accent, #e94e1b);
+  --jt-line: var(--color-line, #d9d9d6);
+
+  position: relative;
+  background: #ffffff;
+  color: var(--jt-ink);
+}
+
+.jt * {
+  box-sizing: border-box;
+}
+
+.jt-stage {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* -------------------------------------------------------------- heading */
+
+/* Static by design. Nothing here is a motion component: the heading holds
+   its position for the entire section while the milestones swap below it. */
+.jt-head {
+  flex: none;
+  padding: clamp(44px, 6vh, 88px) 0 0;
+  text-align: center;
+}
+
+.jt-eyebrow {
+  margin-bottom: 18px;
+}
+
+/* Matches the site's section-heading ramp — 32 / 44 / 54px, bold, -0.02em —
+   so this stage sits in the same type system as Core Values, Directors and
+   Vision & Mission rather than inventing its own scale. */
+.jt-heading {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.jt-heading-accent {
+  color: var(--jt-accent);
+}
+
+/* Breakpoints mirror Tailwind's sm/lg, which is where the rest of the site
+   steps its section headings. */
+@media (min-width: 640px) {
+  .jt-heading {
+    font-size: 44px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .jt-heading {
+    font-size: 54px;
+  }
+}
+
+.jt-sub {
+  margin: 16px auto 0;
+  max-width: 640px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--jt-soft);
+}
+
+/* Phone-only year picker — see the ≤640px block for the visible styling. */
+.jt-chips {
+  display: none;
+}
+
+/* ----------------------------------------------------------------- grid */
+
+.jt-grid {
+  position: relative;
+  /* Takes whatever the fixed heading leaves; the milestones centre in it. */
+  flex: 1;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  /* The stage is height-locked, so the breathing room under the heading has
+     to be bought from the panel height below — see .jt-panels. */
+  padding: clamp(20px, 4vh, 52px) 48px clamp(20px, 4vh, 48px);
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  gap: clamp(20px, 3vw, 48px);
+}
+
+/* ----------------------------------------------------------------- rail */
+
+.jt-rail {
+  position: relative;
+  height: 46vh;
+  display: grid;
+  grid-template-columns: 12px 1fr;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.jt-rail-track {
+  position: relative;
+  width: 2px;
+  justify-self: center;
+  height: 100%;
+  background: var(--jt-line);
+  border-radius: 2px;
+}
+
+/* Drawn from the top down — one uninterrupted stroke that lands on the
+   active milestone. */
+.jt-rail-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--jt-accent);
+  border-radius: 2px;
+  transform-origin: top center;
+}
+
+.jt-glider {
+  position: absolute;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--jt-accent) 14%, transparent);
+}
+
+.jt-glider::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  background: var(--jt-accent);
+}
+
+.jt-ticks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.jt-tick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 0;
+}
+
+/* Each tick is a jump-to-milestone button. It inherits the row's zero height
+   so the ticks stay evenly spread down the rail — the dot and year simply
+   overflow either side of the line. */
+.jt-tick-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Zero-height rows leave almost nothing to aim at, so the hit area is an
+   invisible strip stretched over the dot and the year label. */
+.jt-tick-btn::after {
+  content: "";
+  position: absolute;
+  top: -13px;
+  bottom: -13px;
+  left: -32px;
+  right: -10px;
+}
+
+.jt-tick-btn:hover .jt-tick-year,
+.jt-tick-btn:focus-visible .jt-tick-year {
+  opacity: 1 !important;
+  color: var(--jt-ink) !important;
+}
+
+.jt-tick-btn:hover .jt-dot,
+.jt-tick-btn:focus-visible .jt-dot {
+  box-shadow:
+    0 0 0 5px #ffffff,
+    0 0 0 7px color-mix(in srgb, var(--jt-accent) 28%, transparent);
+}
+
+.jt-tick-btn:focus {
+  outline: none;
+}
+
+.jt-tick-btn:focus-visible .jt-dot {
+  box-shadow:
+    0 0 0 5px #ffffff,
+    0 0 0 8px color-mix(in srgb, var(--jt-accent) 55%, transparent);
+}
+
+.jt-dot {
+  /* Sits on the track: the tick column starts 26px in (12px rail column +
+     14px gap), so pulling the dot back by exactly that centres its 12px
+     body on the 2px line. */
+  margin-left: -26px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--jt-line);
+  box-shadow: 0 0 0 5px #ffffff;
+  flex: none;
+  /* Only the hover/focus ring is CSS-driven; scale and fill stay with
+     framer-motion. Neutralised in the reduced-motion block below. */
+  transition: box-shadow 0.25s ease;
+}
+
+.jt-tick-year {
+  margin-left: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------- panels */
+
+/* Trimmed from 62vh: the eyebrow pill and the two-line description made the
+   header taller than the reference's, and on a locked 100vh stage that came
+   straight out of the gap above the panel. */
+.jt-panels {
+  position: relative;
+  height: 56vh;
+}
+
+/* Panels are stacked, not laid out in flow, so the outgoing one can still
+   be travelling while the next is already on screen. */
+.jt-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(280px, 34%) 1fr;
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  will-change: transform, opacity;
+}
+
+.jt-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.jt-year {
+  font-size: clamp(56px, 7.4vw, 124px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+  color: var(--jt-ink);
+}
+
+.jt-title {
+  margin: 22px 0 0;
+  font-size: clamp(22px, 2.1vw, 36px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.jt-title::before {
+  /* Short rule instead of a bullet — keeps the column quiet. */
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-bottom: 18px;
+  border-radius: 3px;
+  background: var(--jt-accent);
+}
+
+.jt-text {
+  margin: 16px 0 0;
+  max-width: 34ch;
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.7;
+  color: var(--jt-soft);
+}
+
+/* The photograph is the screen's subject, not a card on it: it takes the
+   full height of the panel and the majority of its width. */
+.jt-art {
+  position: relative;
+  height: 100%;
+  max-height: 56vh;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--color-bg-soft, #f1f1ef);
+  box-shadow: 0 30px 60px rgba(20, 32, 44, 0.14);
+}
+
+.jt-art img {
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------ responsive */
+
+@media (max-width: 1280px) {
+  .jt-grid {
+    padding-inline: 32px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .jt-grid {
+    grid-template-columns: 76px 1fr;
+  }
+  .jt-panel {
+    grid-template-columns: minmax(220px, 38%) 1fr;
+  }
+  .jt-text {
+    max-width: 30ch;
+  }
+}
+
+/* Below 900px the panel stacks: copy on top, photograph beneath. The rail
+   stays, narrowed to dots only, so the sense of position is never lost. */
+@media (max-width: 899px) {
+  .jt-head {
+    padding-top: clamp(24px, 5vh, 48px);
+  }
+  .jt-eyebrow {
+    margin-bottom: 14px;
+  }
+  .jt-sub {
+    margin-top: 12px;
+    font-size: 16px;
+  }
+
+  .jt-grid {
+    grid-template-columns: 34px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding-inline: 24px;
+  }
+
+  .jt-rail {
+    grid-template-columns: 12px;
+    height: 50vh;
+  }
+  .jt-ticks {
+    display: none;
+  }
+
+  .jt-panels {
+    height: 60vh;
+  }
+
+  .jt-panel {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    align-content: center;
+    gap: 20px;
+  }
+
+  .jt-year {
+    font-size: clamp(46px, 15vw, 84px);
+  }
+  .jt-title {
+    margin-top: 14px;
+    font-size: clamp(20px, 5vw, 28px);
+  }
+  .jt-title::before {
+    margin-bottom: 12px;
+    width: 36px;
+  }
+  .jt-text {
+    margin-top: 10px;
+    max-width: 46ch;
+    font-size: 15px;
+  }
+  .jt-art {
+    max-height: 38vh;
+    border-radius: 22px;
+  }
+}
+
+/* --------------------------------------------------------------- phones */
+
+/* A 34px rail column with no year labels is dead space on a phone, and a
+   locked 100vh stage clips the photograph once the copy wraps. So below
+   640px the rail is dropped for the chip row in the header, and the stage
+   is allowed to size to its content — the panel comes out of the absolute
+   stack to do it, which is safe because AnimatePresence runs in `wait` mode
+   and never has two panels mounted at once. */
+@media (max-width: 640px) {
+  .jt-stage {
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+  }
+
+  .jt-head {
+    padding: clamp(28px, 5vh, 44px) 20px 0;
+  }
+
+  .jt-heading {
+    font-size: clamp(26px, 7.5vw, 32px);
+  }
+  .jt-eyebrow {
+    margin-bottom: 12px;
+  }
+  .jt-sub {
+    margin-top: 10px;
+    font-size: 15px;
+  }
+
+  .jt-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 18px 0 0;
+  }
+
+  .jt-chip {
+    margin: 0;
+    padding: 7px 12px;
+    border: 1px solid var(--jt-line);
+    border-radius: 999px;
+    background: #ffffff;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--jt-muted);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  .jt-chip[aria-current="true"] {
+    border-color: var(--jt-accent);
+    background: var(--jt-accent);
+    color: #ffffff;
+  }
+
+  .jt-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px clamp(48px, 8vh, 72px);
+    gap: 0;
+    align-items: start;
+  }
+
+  .jt-rail {
+    display: none;
+  }
+
+  /* Content-height now. The fixed-ratio art below keeps the swing between
+     milestones down to a line or two of copy. */
+  .jt-panels {
+    height: auto;
+    margin-top: clamp(28px, 5vh, 44px);
+  }
+
+  .jt-panel {
+    position: relative;
+    inset: auto;
+    grid-template-rows: auto auto;
+    gap: 24px;
+  }
+
+  .jt-year {
+    font-size: clamp(52px, 16vw, 72px);
+  }
+  .jt-title {
+    margin-top: 16px;
+    font-size: 20px;
+  }
+  .jt-text {
+    margin-top: 12px;
+    max-width: none;
+    font-size: 15px;
+  }
+
+  /* A fixed ratio keeps every milestone photo the same size, so the chip
+     row and the copy above it never shift between steps. */
+  .jt-art {
+    height: auto;
+    max-height: none;
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    box-shadow: 0 18px 36px rgba(20, 32, 44, 0.16);
+  }
+}
+
+@media (max-width: 380px) {
+  .jt-chip {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .jt-year {
+    font-size: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jt-dot,
+  .jt-tick-year,
+  .jt-chip {
+    transition: none !important;
+  }
+}

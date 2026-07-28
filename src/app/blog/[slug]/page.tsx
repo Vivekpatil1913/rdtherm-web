@@ -122,7 +122,7 @@ export default async function BlogDetailPage(
           Rendered exactly as authored. Styling comes from .prose-article. */}
       <article className="overflow-x-clip bg-[var(--color-bg)] py-14 lg:py-20">
         <Container size="narrow">
-          <Reveal>
+          <Reveal amount="some">
             <div
               className="prose-article max-w-full overflow-x-clip"
               dangerouslySetInnerHTML={{ __html: post.content || "" }}

@@ -15,22 +15,20 @@ export function Strengths() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-7">
-            <motion.div variants={fadeUp}>
-              <SectionTag>What Sets Us Apart</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
-            >
-              Eight strengths that show up in every <span className="text-[var(--color-accent)]">delivered</span> equipment.
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>What Sets Us Apart</SectionTag>
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
+          >
+            Eight strengths that show up in every <span className="text-[var(--color-accent)]">delivered</span> equipment.
+          </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="lg:col-span-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]"
+            className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]"
           >
             Engineering depth and a real, working shop floor — the two pillars behind every R&D Therm project.
           </motion.p>

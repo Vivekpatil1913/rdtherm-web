@@ -58,22 +58,20 @@ export function Timeline() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-7">
-            <motion.div variants={fadeUp}>
-              <SectionTag>Our Journey</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
-            >
-              From <span className="text-[var(--color-accent)]">1998 to 2026</span> — three decades of process equipment.
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>Our Journey</SectionTag>
+          </motion.div>
+          {/* <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
+          >
+            From <span className="text-[var(--color-accent)]">1998 to 2026</span> — three decades of process equipment.
+          </motion.h2> */}
           <motion.p
             variants={fadeUp}
-            className="lg:col-span-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
+            className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
           >
             Key milestones in the R&D Therm story — from a 1,100 sq ft Nashik shop in 1998 to a global supplier of code-compliant process equipment.
           </motion.p>

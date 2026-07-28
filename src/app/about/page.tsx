@@ -3,10 +3,11 @@ import { PageHero } from "@/sections/shared/PageHero";
 import { CompanyIntro } from "@/sections/about/CompanyIntro";
 import { VisionMission } from "@/sections/about/VisionMission";
 import { Directors } from "@/sections/about/Directors";
-import { TeamCarousel } from "@/sections/about/TeamCarousel";
 import { CoreValues } from "@/sections/about/CoreValues";
-import { Timeline } from "@/sections/about/Timeline";
-import { MilestonesInMotion } from "@/sections/about/MilestonesInMotion";
+// import { Timeline } from "@/sections/about/Timeline";
+import { JourneyTimeline } from "@/sections/about/JourneyTimeline";
+import { GlobalPresence } from "@/sections/about/GlobalPresence";
+// import { MilestonesInMotion } from "@/sections/about/MilestonesInMotion";
 import { aboutIntro } from "@/data/about";
 import { getTeamByGroup } from "@/services/content";
 
@@ -35,10 +36,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [directors, team] = await Promise.all([
-    getTeamByGroup("director"),
-    getTeamByGroup("team"),
-  ]);
+  const directors = await getTeamByGroup("director");
   return (
     <>
       <PageHero
@@ -54,10 +52,11 @@ export default async function AboutPage() {
       <CompanyIntro />
       <VisionMission />
       <Directors members={directors} />
-      <TeamCarousel members={team} />
       <CoreValues />
-      <Timeline />
-      <MilestonesInMotion />
+      {/* <Timeline /> */}
+      <JourneyTimeline />
+      <GlobalPresence />
+      {/* <MilestonesInMotion /> */}
     </>
   );
 }

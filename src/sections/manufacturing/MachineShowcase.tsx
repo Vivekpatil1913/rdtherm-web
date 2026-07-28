@@ -22,23 +22,21 @@ export function MachineShowcase() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-center"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-7">
-            <motion.div variants={fadeUp}>
-              <SectionTag>Machinery</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[60px] font-bold"
-            >
-              Every machine you&apos;d expect to find in a{" "}
-              <span className="text-[var(--color-accent)]">code shop</span>.
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>Machinery</SectionTag>
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[60px] font-bold"
+          >
+            Every machine you&apos;d expect to find in a{" "}
+            <span className="text-[var(--color-accent)]">code shop</span>.
+          </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="lg:col-span-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
+            className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
           >
             From a 4 kW fibre laser to a 300-tonne press brake, hydro-test bays at 500 bar, and a 6-axis welding robot — explore the kit on our shop floor.
           </motion.p>
@@ -86,7 +84,7 @@ export function MachineShowcase() {
             transition={{ duration: 0.4, ease: EASE_OUT_SOFT }}
             className="mt-10"
           >
-            <p className="text-[15px] sm:text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[600px]">
+            <p className="text-[15px] sm:text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[600px]">
               {active.subtitle}
             </p>
 

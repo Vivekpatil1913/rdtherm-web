@@ -105,7 +105,7 @@ export default async function CaseStudyDetailPage(
       {/* BODY — rich HTML produced by the admin text editor. */}
       <article className="bg-[var(--color-bg)] pt-2 pb-8 lg:pt-4 lg:pb-10">
         <Container size="narrow">
-          <Reveal>
+          <Reveal amount="some">
             <div
               className="prose-article"
               dangerouslySetInnerHTML={{ __html: item.summary || "" }}
@@ -127,7 +127,7 @@ export default async function CaseStudyDetailPage(
                 <h3 className="mt-3 text-[26px] font-bold leading-[1.1] tracking-[-0.01em] sm:text-[32px] lg:text-[38px]">
                   Tell us your specification — we&apos;ll engineer it.
                 </h3>
-                <p className="mt-4 text-[15px] leading-[1.6] text-white/85 sm:text-[16px]">
+                <p className="mt-4 text-[15px] leading-[1.6] text-white/85 sm:text-[18px]">
                   From concept to certified delivery, our design and fabrication teams handle the full scope. Get a budgetary quote within one business day.
                 </p>
               </div>

@@ -30,23 +30,21 @@ export function Benefits() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-7">
-            <motion.div variants={fadeUp}>
-              <SectionTag>Why R&D Therm</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[32px] leading-[1.05] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
-            >
-              A place to build a real{" "}
-              <span className="text-[var(--color-accent)]">engineering career</span>.
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>Why R&D Therm</SectionTag>
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-7 text-[32px] leading-[1.05] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
+          >
+            A place to build a real{" "}
+            <span className="text-[var(--color-accent)]">engineering career</span>.
+          </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="lg:col-span-5 max-w-[440px] text-[16px] leading-[1.65] text-[var(--color-ink-soft)]"
+            className="lg:col-span-5 max-w-[440px] text-[18px] leading-[1.65] text-[var(--color-ink-soft)]"
           >
             We invest in people first. Real ownership, modern facilities and a
             safety-first culture you can feel the moment you walk in.

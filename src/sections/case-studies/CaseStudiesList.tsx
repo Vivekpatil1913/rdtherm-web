@@ -15,7 +15,7 @@ export function CaseStudiesList({ items = [] }: { items?: ApiCaseStudy[] }) {
     return (
       <section className="bg-white py-16 lg:py-20">
         <Container size="wide">
-          <p className="py-12 text-center text-[16px] text-[var(--color-muted)]">
+          <p className="py-12 text-center text-[18px] text-[var(--color-muted)]">
             No case studies have been published yet. Please check back soon.
           </p>
         </Container>

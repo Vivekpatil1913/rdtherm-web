@@ -5,7 +5,30 @@
       "Bash(node -e \"const l=require\\('lucide-react'\\); const names=['RefreshCw','TrendingUp','Zap','HeartPulse','Droplets','ShieldCheck','Wind','Factory','Pill','UtensilsCrossed','FlaskConical','BadgeCheck','Award','Headset','FileText','FileBadge','Ruler','BookOpen','Box','Gauge','Layers','Wrench','Palette','PaintBucket','Settings2','CircleGauge','Plus','Minus','X','Send','Loader2','User','Building2','Mail','Phone','Globe','MapPin','ChevronDown','Check','CheckCircle2','ArrowRight','Download','Sparkles','PenTool','Quote','ShieldCheck']; const missing=names.filter\\(n=>!l[n]\\); console.log\\('MISSING:', missing.join\\(', '\\)||'none'\\);\")",
       "Bash(npx next *)",
       "Bash(node -e ' *)",
-      "Bash(node -e \"const l=require\\('lucide-react'\\); ['BadgePercent','Percent','Tag','ShieldCheck','Clock','Sparkles'].forEach\\(n=>console.log\\(n, !!l[n]\\)\\);\")"
+      "Bash(node -e \"const l=require\\('lucide-react'\\); ['BadgePercent','Percent','Tag','ShieldCheck','Clock','Sparkles'].forEach\\(n=>console.log\\(n, !!l[n]\\)\\);\")",
+      "Bash(sort -t'[' -k2 -n)",
+      "Bash(sed -i '34s/items-end/items-start/' src/sections/about/CoreValues.tsx)",
+      "Bash(sed -i '36s/items-end/items-start/' src/sections/about/Directors.tsx)",
+      "Bash(sed -i '61s/items-end/items-start/' src/sections/about/Timeline.tsx)",
+      "Bash(sed -i '33s/items-end/items-start/' src/sections/careers/Benefits.tsx)",
+      "Bash(sed -i '19s/items-end/items-start/' src/sections/careers/Openings.tsx)",
+      "Bash(echo \"eslint_exit=$?\")",
+      "PowerShell(npx tsc --noEmit -p tsconfig.json)",
+      "PowerShell(npx next lint --file src/components/layout/Navbar.tsx --file src/app/layout.tsx 2>&1)",
+      "PowerShell(npx eslint src/components/layout/Navbar.tsx src/app/layout.tsx 2>&1)",
+      "PowerShell($p='d:\\\\rdtherm-web\\\\src\\\\components\\\\layout\\\\Navbar.tsx'; $l=Get-Content $p; $keep = $l[0..301] + $l[391..\\($l.Count-1\\)]; Set-Content $p -Value $keep -Encoding utf8; $l[302]; '---'; $l[388..392])",
+      "PowerShell(npx eslint src/sections/careers/CareersHero.tsx src/app/careers/page.tsx src/data/careers.ts)",
+      "Bash(node -e \"const l=require\\('lucide-react'\\);const names=['CalendarCheck','Target','PencilRuler','Globe','Handshake','MessagesSquare','ShieldCheck','Timer','Gauge'];names.forEach\\(n=>console.log\\(n, typeof l[n]\\)\\)\")",
+      "PowerShell(npx eslint src/sections/home/WhyRdtherm.tsx)",
+      "PowerShell(npx eslint src/sections/home/Industries.tsx src/data/home.ts)",
+      "Bash(npx @tailwindcss/cli -i src/app/globals.css -o /dev/null)",
+      "Bash(curl -s http://localhost:3100/about)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3100/about)",
+      "Bash(curl -s \"http://localhost:3100/_next/static/chunks/src_sections_about_JourneyTimeline_0nate~c.css\")",
+      "PowerShell(if \\(Get-Process -Id 14792 -ErrorAction SilentlyContinue\\) { Stop-Process -Id 14792 -Force; Start-Sleep -Milliseconds 800 }; if \\(Get-Process -Id 14792 -ErrorAction SilentlyContinue\\) { \"PID 14792 STILL RUNNING\" } else { \"PID 14792 stopped\" }; $c = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { \"port 3000 still held by PID\\(s\\): \" + \\($c.OwningProcess -join ', '\\) } else { \"port 3000 free\" })",
+      "PowerShell(Get-CimInstance Win32_Process -Filter \"Name='node.exe'\" | Select-Object ProcessId, @{n='Cmd';e={$_.CommandLine}} | Format-Table -AutoSize -Wrap; \"--- listeners 3000-3010 ---\"; Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -ge 3000 -and $_.LocalPort -le 3010 } | Select-Object LocalPort, OwningProcess | Format-Table -AutoSize)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} \" \"https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1400&q=80&auto=format&fit=crop\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1400&q=80&auto=format&fit=crop\")"
     ]
   }
 }

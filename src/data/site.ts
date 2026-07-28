@@ -25,6 +25,7 @@ export const siteConfig = {
 } as const;
 
 export const mainNav = [
+  { label: "Home", href: "/" },
   { label: "Who We Are", href: "/about" },
   { label: "Products", href: "/products" },
   { label: "Air Receiver", href: "/air-receiver" },
@@ -47,6 +48,5 @@ export const footerLinks = {
     { label: "Case Studies", href: "/case-studies" },
     { label: "Contact", href: "/contact" },
     { label: "Privacy Policy", href: "/privacy-policy" },
-    { label: "Error 404", href: "/404" },
   ],
 };

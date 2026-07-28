@@ -1,6 +1,12 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  type TargetAndTransition,
+  type Transition,
+} from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { Container } from "@/components/ui/Container";
@@ -10,45 +16,162 @@ import { industries, industryDecor } from "@/data/home";
 import type { ApiIndustry } from "@/lib/api-types";
 import { cn } from "@/lib/cn";
 
-const DECOR_TONES: Record<string, string> = {
-  assembly:
-    "bg-[linear-gradient(135deg,#d97b3a_0%,#b85a25_50%,#7d3b12_100%)]",
-  ct:
-    "bg-[linear-gradient(135deg,#dde4ee_0%,#aab5c6_50%,#6c7a8f_100%)]",
-  engine:
-    "bg-[linear-gradient(135deg,#5b6470_0%,#3a414b_50%,#1c2128_100%)]",
-  discs:
-    "bg-[linear-gradient(135deg,#c63a2a_0%,#8e2818_50%,#4f130a_100%)]",
-  turbine:
-    "bg-[linear-gradient(135deg,#dadcde_0%,#9aa0a8_50%,#5b6066_100%)]",
+/* ---------------------------------------------------------------------------
+   Corner motifs — three different details lifted from a fabrication drawing.
+   One shared language keeps them a set: the object in hairline ink at 18%, the
+   drawing annotations (centrelines, dimensions, pointers) in accent at 40%.
+   Same stroke weight throughout, matching the section's hairline rules.
+--------------------------------------------------------------------------- */
+
+const INK = { stroke: "currentColor", strokeOpacity: 0.18, strokeWidth: 0.9 } as const;
+const NOTE = {
+  stroke: "var(--color-accent)",
+  strokeOpacity: 0.4,
+  strokeWidth: 0.9,
+  strokeLinecap: "round",
+} as const;
+
+// Point on a circle, angle in degrees clockwise from 3 o'clock (SVG y grows down).
+const polar = (cx: number, cy: number, r: number, deg: number) => {
+  const rad = (deg * Math.PI) / 180;
+  return { x: cx + Math.cos(rad) * r, y: cy + Math.sin(rad) * r };
+};
+
+// 1 — Nozzle flange, viewed on-face. Eight bolts on the pitch circle.
+const BOLT_HOLES = Array.from({ length: 8 }, (_, i) => polar(50, 50, 34, i * 45));
+
+function FlangeMotif() {
+  return (
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden className="size-full">
+      <g {...INK}>
+        <circle cx="50" cy="50" r="47" />
+        <circle cx="50" cy="50" r="17" />
+        {BOLT_HOLES.map((h, i) => (
+          <circle key={i} cx={h.x} cy={h.y} r="3.4" />
+        ))}
+      </g>
+      <g {...NOTE}>
+        <circle cx="50" cy="50" r="34" strokeDasharray="3 5" />
+        <path d="M50 4v12M50 84v12M4 50h12M84 50h12" />
+      </g>
+    </svg>
+  );
+}
+
+// 2 — Horizontal vessel in elevation: dished heads, a nozzle, saddle supports,
+// with the centreline and an overall dimension called out.
+function VesselMotif() {
+  return (
+    <svg viewBox="0 0 120 80" fill="none" aria-hidden className="size-full">
+      <g {...INK}>
+        {/* Shell with 2:1 dished ends */}
+        <path d="M36 20 H84 C97 20 97 56 84 56 H36 C23 56 23 20 36 20 Z" />
+        {/* Head-to-shell weld seams */}
+        <path d="M36 20 V56 M84 20 V56" />
+        {/* Top nozzle with flange */}
+        <path d="M52 20 V11 M62 20 V11 M49 11 H65" />
+        {/* Saddle supports on a foundation line */}
+        <path d="M40 56 L36 65 H56 L52 56 M76 56 L72 65 H92 L88 56 M30 65 H98" />
+      </g>
+      <g {...NOTE}>
+        <path d="M8 38 H112" strokeDasharray="8 4 2 4" />
+        {/* Overall-length dimension, the way it's tagged on the drawing */}
+        <path d="M23 72 H97 M23 68 v8 M97 68 v8" />
+      </g>
+    </svg>
+  );
+}
+
+// 3 — Pressure gauge: 240° scale, needle live on the dial.
+const GAUGE_TICKS = Array.from({ length: 9 }, (_, i) => {
+  const deg = 150 + i * 30;
+  const outer = polar(50, 50, 34, deg);
+  const inner = polar(50, 50, i % 2 === 0 ? 26 : 29, deg);
+  return `M${outer.x.toFixed(2)} ${outer.y.toFixed(2)} L${inner.x.toFixed(2)} ${inner.y.toFixed(2)}`;
+}).join("");
+
+function GaugeMotif({ animate }: { animate: boolean }) {
+  return (
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden className="size-full">
+      <g {...INK}>
+        <circle cx="50" cy="50" r="47" />
+        <circle cx="50" cy="50" r="40" />
+        <path d={GAUGE_TICKS} />
+      </g>
+      <motion.g
+        {...NOTE}
+        // Pivot on the dial centre, in viewBox units.
+        style={{ transformBox: "view-box", transformOrigin: "50px 50px" }}
+        initial={{ rotate: -46 }}
+        animate={animate ? { rotate: [-46, 34, -12, 46, -46] } : undefined}
+        transition={{ duration: 14, ease: "easeInOut", repeat: Infinity }}
+      >
+        <path d="M50 50 V21" strokeWidth="1.4" />
+      </motion.g>
+      <circle cx="50" cy="50" r="3" fill="var(--color-accent)" fillOpacity="0.4" />
+    </svg>
+  );
+}
+
+const MOTIFS: Record<string, (props: { animate: boolean }) => React.ReactElement> = {
+  flange: FlangeMotif,
+  vessel: VesselMotif,
+  gauge: GaugeMotif,
+};
+
+// Idle motion applied to the whole motif. The gauge is absent on purpose: its
+// needle animates inside the SVG, so the dial itself must stay put.
+const IDLE_MOTION: Record<
+  string,
+  { animate: TargetAndTransition; transition: Transition }
+> = {
+  flange: {
+    animate: { rotate: 360 },
+    transition: { duration: 110, ease: "linear", repeat: Infinity },
+  },
+  vessel: {
+    animate: { y: [0, -5, 0] },
+    transition: { duration: 9, ease: "easeInOut", repeat: Infinity },
+  },
 };
 
 export function Industries({ items = [] }: { items?: ApiIndustry[] }) {
   const [activeKey, setActiveKey] = useState(items[0]?.key ?? "");
+  const reduceMotion = useReducedMotion();
   const [headStart, accent, headEnd] = industries.heading;
   if (items.length === 0) return null;
   const active = items.find((i) => i.key === activeKey) ?? items[0];
 
   return (
     <section className="relative bg-[var(--color-bg-soft)] pt-16 lg:pt-20 pb-24 lg:pb-32 overflow-hidden">
-      {industryDecor.map((d) => (
-        <motion.div
-          key={d.id}
-          initial={{ opacity: 0, scale: 0.85 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={viewportOnce}
-          transition={{ duration: 0.9, ease: EASE_OUT_SOFT }}
-          className={cn(
-            d.className,
-            "overflow-hidden ring-1 ring-black/5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.25)]",
-          )}
-          aria-hidden
-        >
-          <div className={cn("h-full w-full", DECOR_TONES[d.tone] ?? DECOR_TONES.assembly)}>
-            <div className="h-full w-full bg-[radial-gradient(70%_70%_at_30%_30%,rgba(255,255,255,0.25),transparent_70%)]" />
-          </div>
-        </motion.div>
-      ))}
+      {industryDecor.map((d) => {
+        const Motif = MOTIFS[d.motif] ?? FlangeMotif;
+        const idle = IDLE_MOTION[d.motif];
+        return (
+          <motion.div
+            key={d.id}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 0.9, ease: EASE_OUT_SOFT }}
+            className={cn(
+              d.className,
+              "pointer-events-none select-none text-[var(--color-ink)]",
+            )}
+            aria-hidden
+          >
+            {/* Each motif idles differently — the flange turns, the vessel
+                drifts, the gauge holds still and lets its needle move. */}
+            <motion.div
+              className="size-full"
+              animate={reduceMotion ? undefined : idle?.animate}
+              transition={idle?.transition}
+            >
+              <Motif animate={!reduceMotion} />
+            </motion.div>
+          </motion.div>
+        );
+      })}
 
       <Container size="wide" className="relative z-10">
         <motion.div
@@ -131,7 +254,7 @@ export function Industries({ items = [] }: { items?: ApiIndustry[] }) {
                   <h3 className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold leading-[1.15] tracking-[-0.01em]">
                     {active.label}
                   </h3>
-                  <p className="text-[15px] sm:text-[16px] leading-[1.6] text-[var(--color-ink-soft)]">
+                  <p className="text-[15px] sm:text-[18px] leading-[1.6] text-[var(--color-ink-soft)]">
                     {active.description}
                   </p>
                 </div>

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/sections/shared/PageHero";
-import { CapabilitiesStats } from "@/sections/manufacturing/CapabilitiesStats";
 import { Facility } from "@/sections/manufacturing/Facility";
-import { FlagshipMachine } from "@/sections/manufacturing/FlagshipMachine";
 import { MachineShowcase } from "@/sections/manufacturing/MachineShowcase";
 import { Materials } from "@/sections/manufacturing/Materials";
 import { Strengths } from "@/sections/manufacturing/Strengths";
@@ -54,9 +52,7 @@ export default async function ManufacturingPage() {
         }
         description={manufacturingHero.description}
       />
-      <CapabilitiesStats />
       <Facility />
-      <FlagshipMachine />
       <MachineShowcase />
       <Materials />
       <DesignSoftware />

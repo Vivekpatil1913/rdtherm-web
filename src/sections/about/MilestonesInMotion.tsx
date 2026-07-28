@@ -174,10 +174,10 @@ export function MilestonesInMotion() {
           }}
         />
 
-        {/* ── Header band ────────────────────────────────────────────────── */}
+        {/* ── Header band (commented out — keep for later) ─────────────────
         <header className="relative z-10 shrink-0 pt-6 sm:pt-10 lg:pt-24">
           <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-10 lg:px-16">
-            {/* Pill tag — bullet + label, matching the site's section-tag pattern */}
+            Pill tag — bullet + label, matching the site's section-tag pattern
             <div className="group inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 transition-all duration-500 hover:border-[var(--color-accent)]/50 hover:bg-[var(--color-accent)]/[0.06] hover:shadow-[0_0_28px_rgba(233,78,27,0.18)]">
               <span
                 aria-hidden
@@ -188,13 +188,14 @@ export function MilestonesInMotion() {
               </span>
             </div>
 
-            {/* Single-line headline with accent last word */}
+            Single-line headline with accent last word
             <h2 className="mt-4 sm:mt-5 lg:mt-7 leading-[1.05] tracking-[-0.03em] font-bold text-white text-[clamp(24px,9vh,32px)] sm:text-[clamp(24px,9vh,46px)] lg:text-[clamp(24px,9vh,60px)] xl:text-[clamp(24px,9vh,76px)]">
               Three Decades of{" "}
               <span className="text-[var(--color-accent)]">Engineering</span>
             </h2>
           </div>
         </header>
+        ──────────────────────────────────────────────────────────────────── */}
 
         {/* ── Center stage: year + content. On mobile the middle has natural
               height so heading → year → bullets pack tightly at the top.
@@ -233,7 +234,7 @@ export function MilestonesInMotion() {
                           ease: EASE,
                           delay: 0.18 + i * 0.08,
                         }}
-                        className="relative flex w-full items-start gap-3 pl-1 text-[16px] sm:text-[18px] lg:text-[20px] leading-[1.5] text-white/85"
+                        className="relative flex w-full items-start gap-3 pl-1 text-[18px] sm:text-[18px] lg:text-[20px] leading-[1.5] text-white/85"
                       >
                         <span
                           aria-hidden

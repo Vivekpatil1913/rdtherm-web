@@ -31,7 +31,7 @@ export function Materials() {
             </motion.h2>
             <motion.p
               variants={fadeUp}
-              className="mt-6 text-[16px] leading-[1.65] text-white/65 max-w-[440px]"
+              className="mt-6 text-[18px] leading-[1.65] text-white/65 max-w-[440px]"
             >
               200+ qualified WPS / PQR procedures cover almost every material you&apos;re likely to specify for process service. Every welder is qualified to ASME Section IX, with re-qualification audits every six months.
             </motion.p>

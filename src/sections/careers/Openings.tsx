@@ -9,29 +9,27 @@ import type { ApiJobOpening } from "@/lib/api-types";
 
 export function Openings({ roles = [] }: { roles?: ApiJobOpening[] }) {
   return (
-    <section className="bg-[var(--color-bg)] py-16 lg:py-20">
+    <section id="openings" className="scroll-mt-[78px] bg-[var(--color-bg)] py-16 lg:py-20">
       <Container size="wide">
         <motion.div
           variants={stagger(0.05, 0.1)}
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-7">
-            <motion.div variants={fadeUp}>
-              <SectionTag>Open Roles</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
-            >
-              We&apos;re <span className="text-[var(--color-accent)]">hiring</span> across engineering, fabrication and projects.
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>Open Roles</SectionTag>
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
+          >
+            We&apos;re <span className="text-[var(--color-accent)]">hiring</span> across engineering, fabrication and projects.
+          </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="lg:col-span-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]"
+            className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]"
           >
             All roles are based at our Nashik facility. Send your resume to{" "}
             <a className="font-semibold text-[var(--color-ink)] underline underline-offset-4" href="mailto:sales@rdtherm.com">

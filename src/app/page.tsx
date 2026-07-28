@@ -51,6 +51,7 @@ export default async function HomePage() {
       label: p.title,
       slug: p.slug,
       image: p.cover,
+      summary: p.summary,
     }));
 
   return (

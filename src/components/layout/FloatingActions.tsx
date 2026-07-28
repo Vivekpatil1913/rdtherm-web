@@ -27,7 +27,7 @@ export function FloatingActions() {
   };
 
   return (
-    <div className="pointer-events-none fixed bottom-5 right-5 z-[55] flex flex-col items-center gap-3.5 sm:bottom-7 sm:right-7">
+    <div className="pointer-events-none fixed bottom-5 right-5 z-[55] flex flex-col items-center gap-3 sm:bottom-7 sm:right-7">
       {/* WHATSAPP — pulse ring offset by half a cycle so it alternates with the Call ring */}
       <motion.a
         href={whatsappHref}
@@ -39,7 +39,7 @@ export function FloatingActions() {
         transition={{ duration: 0.5, ease: EASE_OUT_SOFT, delay: 0.1 }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        className="pointer-events-auto group relative inline-flex size-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_10px_28px_-6px_rgba(37,211,102,0.6)] transition-shadow duration-300 hover:shadow-[0_14px_36px_-6px_rgba(37,211,102,0.75)] sm:size-14"
+        className="pointer-events-auto group relative inline-flex size-10 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_10px_28px_-6px_rgba(37,211,102,0.6)] transition-shadow duration-300 hover:shadow-[0_14px_36px_-6px_rgba(37,211,102,0.75)] sm:size-11"
       >
         <span
           aria-hidden
@@ -50,7 +50,7 @@ export function FloatingActions() {
           aria-hidden
           className="absolute -inset-1.5 -z-10 rounded-full border border-[#25D366]/35"
         />
-        <WhatsAppIcon className="size-6 sm:size-7" />
+        <WhatsAppIcon className="size-5 sm:size-[22px]" />
       </motion.a>
 
       {/* CALL — with pulsing ring */}
@@ -62,7 +62,7 @@ export function FloatingActions() {
         transition={{ duration: 0.5, ease: EASE_OUT_SOFT, delay: 0.18 }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        className="pointer-events-auto group relative inline-flex size-12 items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-[0_10px_28px_-6px_rgba(233,78,27,0.6)] transition-shadow duration-300 hover:shadow-[0_14px_36px_-6px_rgba(233,78,27,0.8)] sm:size-14"
+        className="pointer-events-auto group relative inline-flex size-10 items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-[0_10px_28px_-6px_rgba(233,78,27,0.6)] transition-shadow duration-300 hover:shadow-[0_14px_36px_-6px_rgba(233,78,27,0.8)] sm:size-11"
       >
         {/* Pulse rings */}
         <span
@@ -74,7 +74,7 @@ export function FloatingActions() {
           aria-hidden
           className="absolute -inset-1.5 -z-10 rounded-full border border-[var(--color-accent)]/35"
         />
-        <Phone className="size-5 sm:size-6" strokeWidth={2.2} />
+        <Phone className="size-[18px] sm:size-5" strokeWidth={2.2} />
       </motion.a>
 
       {/* SCROLL TO TOP — appears after the user scrolls down */}
@@ -91,9 +91,9 @@ export function FloatingActions() {
             transition={{ duration: 0.45, ease: EASE_OUT_SOFT }}
             whileHover={{ scale: 1.08, y: -2 }}
             whileTap={{ scale: 0.94 }}
-            className="pointer-events-auto inline-flex size-11 cursor-pointer items-center justify-center rounded-full border border-[var(--color-line)] bg-white text-[var(--color-ink)] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.25)] transition-colors duration-300 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:size-12"
+            className="pointer-events-auto inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-[var(--color-line)] bg-white text-[var(--color-ink)] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.25)] transition-colors duration-300 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:size-10"
           >
-            <ArrowUp className="size-4 sm:size-5" strokeWidth={2.2} />
+            <ArrowUp className="size-4" strokeWidth={2.2} />
           </motion.button>
         ) : null}
       </AnimatePresence>

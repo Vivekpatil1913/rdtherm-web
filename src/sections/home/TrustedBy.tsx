@@ -43,17 +43,22 @@ export function TrustedBy({ logos = [] }: { logos?: ApiLogo[] }) {
           {marqueeLogos.map((logo, i) => (
             <div
               key={`${logo.id}-${i}`}
-              className="marquee-item group/logo flex size-28 lg:size-32 shrink-0 items-center justify-center rounded-[14px] bg-[var(--color-bg-soft)] p-5 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:ring-1 hover:ring-[var(--color-line)]"
+              className="marquee-item group/logo flex w-32 lg:w-40 shrink-0 flex-col items-center justify-center gap-2 p-3 transition-transform duration-300 hover:-translate-y-1"
             >
               {logo.imageUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={logo.imageUrl}
-                  alt={logo.name}
-                  className="size-full object-contain"
-                />
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={logo.imageUrl}
+                    alt={logo.name}
+                    className="h-20 lg:h-24 w-full object-contain"
+                  />
+                  <span className="line-clamp-2 text-center text-[13px] lg:text-[14px] font-semibold leading-snug tracking-tight text-[var(--color-ink)]">
+                    {logo.name}
+                  </span>
+                </>
               ) : (
-                <span className="text-center text-[16px] lg:text-[18px] font-semibold leading-tight tracking-tight text-[var(--color-ink)]">
+                <span className="flex h-20 lg:h-24 items-center text-center text-[16px] lg:text-[18px] font-semibold leading-tight tracking-tight text-[var(--color-ink)]">
                   {logo.name}
                 </span>
               )}

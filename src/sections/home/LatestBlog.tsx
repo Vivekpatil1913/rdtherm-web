@@ -21,21 +21,19 @@ export function LatestBlog({ posts = [] }: { posts?: ApiBlog[] }) {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-8">
-            <motion.div variants={fadeUp}>
-              <SectionTag>Insights & Article</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[36px] leading-[1.05] tracking-[-0.02em] sm:text-[52px] lg:text-[72px] font-bold"
-            >
-              Latest from our <span className="text-[var(--color-accent)]">blog</span>
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>Insights & Article</SectionTag>
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-8 text-[36px] leading-[1.05] tracking-[-0.02em] sm:text-[52px] lg:text-[72px] font-bold"
+          >
+            Latest from our <span className="text-[var(--color-accent)]">blog</span>
+          </motion.h2>
 
-          <motion.div variants={fadeUp} className="lg:col-span-4 lg:flex lg:justify-end lg:pb-3">
+          <motion.div variants={fadeUp} className="lg:col-span-4 lg:flex lg:justify-end">
             <Button href="/blog" variant="dark">
               View all blogs
             </Button>

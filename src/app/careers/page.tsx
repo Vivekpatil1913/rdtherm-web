@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/sections/shared/PageHero";
+import { CareersHero } from "@/sections/careers/CareersHero";
 import { Benefits } from "@/sections/careers/Benefits";
 import { Openings } from "@/sections/careers/Openings";
 import { JoinTeam } from "@/sections/careers/JoinTeam";
-import { careersHero } from "@/data/careers";
 import { getCareers } from "@/services/content";
 
 const TITLE = "Careers — Build with R&D Therm";
@@ -32,20 +31,10 @@ export const metadata: Metadata = {
 };
 
 export default async function CareersPage() {
-  const [start, accent] = careersHero.heading;
   const roles = await getCareers();
   return (
     <>
-      <PageHero
-        eyebrow={careersHero.eyebrow}
-        heading={
-          <>
-            {start}
-            <span className="text-[var(--color-accent)]">{accent}</span>
-          </>
-        }
-        description={careersHero.description}
-      />
+      <CareersHero />
       <Benefits />
       <Openings roles={roles} />
       <JoinTeam />

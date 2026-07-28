@@ -1,4 +1,8 @@
 @import "tailwindcss";
+/* Section stylesheets. These have to be pulled in through the single Tailwind
+   entry — imported directly from a component, @tailwindcss/postcss treats the
+   file as its own Tailwind root and the rules get dropped in dev. */
+@import "../sections/about/JourneyTimeline.css";
 
 @theme {
   /* Brand palette — sampled from R&D Therm reference */
@@ -15,6 +19,9 @@
   --color-accent: #e94e1b;
   --color-accent-hover: #d44513;
   --color-accent-soft: #fde4d8;
+
+  /* Brand blue — sampled from the logo "R". Used for footer headings / icons. */
+  --color-brand-blue: #1b5fa8;
 
   /* Typography */
   --font-sans: var(--font-mona-sans), "Mona Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

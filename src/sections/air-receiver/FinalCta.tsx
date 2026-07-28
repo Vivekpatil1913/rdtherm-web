@@ -16,7 +16,7 @@ export function FinalCta() {
               <h2 className="mt-3 text-[30px] font-bold leading-[1.08] tracking-[-0.01em] sm:text-[40px] lg:text-[48px]">
                 Need a Custom Air Receiver Solution?
               </h2>
-              <p className="mt-4 max-w-[560px] text-[16px] leading-[1.6] text-white/85">
+              <p className="mt-4 max-w-[560px] text-[18px] leading-[1.6] text-white/85">
                 Our engineering team can design and manufacture air receivers according to your exact requirements —
                 volume, pressure, material, certification and delivery.
               </p>

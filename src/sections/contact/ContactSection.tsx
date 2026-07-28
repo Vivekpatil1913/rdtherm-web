@@ -166,7 +166,7 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
             </motion.h2>
             <motion.p
               variants={fadeUp}
-              className="text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
+              className="text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
             >
               Whether you have a P&ID, a datasheet, or just a process problem to solve — we&apos;ll put you in front of the right engineer fast.
             </motion.p>
@@ -175,7 +175,7 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
               variants={fadeUp}
               className="mt-2 flex flex-col gap-5 text-[15px] text-[var(--color-ink-soft)]"
             >
-              <Item icon={<MapPin className="size-5" strokeWidth={1.8} />}>
+              <Item icon={<MapPin className="size-5" strokeWidth={1.8} />} align="start">
                 {contact.address}
               </Item>
               <Item icon={<Phone className="size-5" strokeWidth={1.8} />}>
@@ -296,10 +296,24 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
   );
 }
 
-function Item({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+function Item({
+  icon,
+  children,
+  align = "center",
+}: {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  /** "center" vertically centres the icon with single-line text; "start" suits multi-line (e.g. address). */
+  align?: "center" | "start";
+}) {
   return (
-    <li className="flex items-start gap-3">
-      <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[var(--color-accent)] border border-[var(--color-line)]">
+    <li className={align === "center" ? "flex items-center gap-3" : "flex items-start gap-3"}>
+      <span
+        className={
+          (align === "center" ? "" : "mt-0.5 ") +
+          "inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[var(--color-accent)] border border-[var(--color-line)]"
+        }
+      >
         {icon}
       </span>
       <span className="leading-[1.5]">{children}</span>

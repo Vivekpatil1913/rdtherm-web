@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronRight, MapPin, Phone, Mail, Clock, Calendar } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { footerLinks, siteConfig } from "@/data/site";
@@ -41,29 +41,19 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <footer className="relative isolate overflow-hidden bg-[#0d0d0d] text-white">
-      {/* Soft vertical grid lines (matches reference) */}
+    <footer className="relative isolate overflow-hidden bg-[var(--color-bg)] text-[var(--color-ink)]">
+      {/* Faint dotted texture, bottom-left (matches reference) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-grid-lines-dark opacity-60"
-      />
-      {/* Twin orange glows: top-right and bottom-left, dark in the middle */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_92%_15%,rgba(233,78,27,0.65),transparent_60%),radial-gradient(70%_65%_at_8%_95%,rgba(233,78,27,0.6),transparent_60%)]"
+        className="pointer-events-none absolute bottom-0 left-0 h-56 w-72 opacity-[0.5] [background-image:radial-gradient(rgba(27,95,168,0.25)_1.2px,transparent_1.2px)] [background-size:14px_14px] [mask-image:linear-gradient(to_top_right,black,transparent_70%)]"
       />
 
-      <Container size="wide" className="relative z-10 pt-20 pb-10 lg:pt-24 lg:pb-12">
+      <Container size="wide" className="relative z-10 pt-16 pb-8 lg:pt-20 lg:pb-10">
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14">
           {/* Brand */}
           <div className="flex flex-col items-start gap-5">
-            {/* Colored navbar logo on a light chip — keeps the brand colours
-                crisp and intentional against the dark footer. */}
-            {/* -ml offsets the left padding so the logo lines up with the paragraph below. */}
-            <div className="inline-flex items-center rounded-[12px] bg-white px-2 py-1.5 shadow-[0_14px_34px_-16px_rgba(0,0,0,0.7)]">
-              <Logo className="[&_img]:h-[4.5rem]" />
-            </div>
-            <p className="max-w-[300px] text-[14px] leading-relaxed text-white/65">
+            <Logo className="[&_img]:h-[4.5rem]" />
+            <p className="max-w-[300px] text-[14px] leading-relaxed text-[var(--color-ink-soft)]">
               Code-compliant pressure vessels, reactors and process equipment — engineered,
               fabricated and delivered first-time right.
             </p>
@@ -101,44 +91,51 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
           </FooterColumn>
 
           {/* Contact info */}
-          <FooterColumn title="Contact info">
-            <ul className="flex flex-col gap-3 text-[14px] leading-relaxed text-white/70">
-              <li className="sm:max-w-[230px]">{contact.address}</li>
-              <li>
+          <FooterColumn title="Contact Info">
+            <ul className="flex flex-col gap-4 text-[14px] leading-relaxed text-[var(--color-ink-soft)]">
+              <ContactRow icon={<MapPin className="size-4" />} align="start">
+                <span className="sm:max-w-[230px]">{contact.address}</span>
+              </ContactRow>
+              <ContactRow icon={<Phone className="size-4" />}>
                 <a
                   href={`tel:${contact.phone.replace(/\s+/g, "")}`}
-                  className="transition-colors hover:text-white"
+                  className="transition-colors hover:text-[var(--color-accent)]"
                 >
                   {contact.phone}
                 </a>
-              </li>
-              <li>
-                <a href={`mailto:${contact.email}`} className="transition-colors hover:text-white">
+              </ContactRow>
+              <ContactRow icon={<Mail className="size-4" />}>
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="transition-colors hover:text-[var(--color-accent)]"
+                >
                   {contact.email}
                 </a>
-              </li>
+              </ContactRow>
             </ul>
           </FooterColumn>
 
           {/* Working hours */}
-          <FooterColumn title="Working hours">
-            <ul className="flex flex-col gap-4 text-[14px] leading-[1.55] text-white/70">
+          <FooterColumn title="Working Hours">
+            <ul className="flex flex-col gap-4 text-[14px] leading-[1.5] text-[var(--color-ink-soft)]">
               {hours.map((h) => {
                 const isRange = h.value.includes("-");
                 return (
-                  <li key={h.label}>
+                  <ContactRow
+                    key={h.label}
+                    icon={isRange ? <Clock className="size-4" /> : <Calendar className="size-4" />}
+                  >
                     {isRange ? (
-                      <>
-                        {/* Inline on mobile (full-width column); stacked on desktop (narrow column). */}
-                        <span className="lg:block">{h.label}:</span>{" "}
-                        <span className="lg:block">{h.value}</span>
-                      </>
+                      <span className="flex flex-col">
+                        <span className="text-[var(--color-ink)]">{h.label}:</span>
+                        <span>{h.value}</span>
+                      </span>
                     ) : (
                       <span>
                         {h.label}: {h.value}
                       </span>
                     )}
-                  </li>
+                  </ContactRow>
                 );
               })}
             </ul>
@@ -146,19 +143,19 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
         </div>
 
         {/* Divider + bottom row — social above the credit on mobile (reversed). */}
-        <div className="mt-16 flex flex-col-reverse gap-6 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[13px] text-white/60">
+        <div className="mt-14 flex flex-col-reverse gap-6 border-t border-[var(--color-line)] pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[13px] text-[var(--color-muted)]">
             Designed by{" "}
             <a
               href="https://sumagoinfotech.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
+              className="font-medium text-[var(--color-ink)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
             >
               Sumago Infotech Pvt Ltd
             </a>
             {", "}Powered by{" "}
-            <span className="text-white">Innovation</span>
+            <span className="font-medium text-[var(--color-ink)]">Innovation</span>
           </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px]">
             {social.map((s) => {
@@ -172,14 +169,14 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
                   target={url ? "_blank" : undefined}
                   rel={url ? "noopener noreferrer" : undefined}
                   className={cn(
-                    "group inline-flex items-center gap-2 text-white/70 transition-colors",
+                    "group inline-flex items-center gap-2 text-[var(--color-ink-soft)] transition-colors",
                     brand?.text,
                   )}
                   aria-label={s.label}
                 >
                   <span
                     className={cn(
-                      "inline-flex size-6 items-center justify-center rounded-[6px] bg-white/[0.08] text-white transition-colors",
+                      "inline-flex size-6 items-center justify-center rounded-[6px] bg-black/[0.06] text-[var(--color-ink)] transition-colors",
                       brand?.chip,
                     )}
                   >
@@ -191,17 +188,39 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
             })}
           </div>
         </div>
-
-        {/* Giant faded watermark */}
-        <div
-          aria-hidden
-          className="pointer-events-none mt-6 select-none whitespace-nowrap overflow-hidden text-center font-extrabold uppercase leading-[0.85] tracking-tight text-white/[0.04] text-[28vw] sm:text-[22vw] lg:text-[18vw]"
-        >
-          RDTHERM
-          <sup className="align-top text-[0.2em] text-white/[0.04]">®</sup>
-        </div>
       </Container>
+
+      {/* Orange gradient bottom line */}
+      <div
+        aria-hidden
+        className="h-[3px] w-full bg-[linear-gradient(90deg,transparent,var(--color-accent),transparent)]"
+      />
     </footer>
+  );
+}
+
+/** Contact / hours row — circular blue-outline icon + text (matches the logo blue). */
+function ContactRow({
+  icon,
+  children,
+  align = "center",
+}: {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  align?: "center" | "start";
+}) {
+  return (
+    <li className={align === "center" ? "flex items-center gap-3" : "flex items-start gap-3"}>
+      <span
+        className={cn(
+          "inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand-blue)]/40 text-[var(--color-brand-blue)]",
+          align === "start" && "mt-0.5",
+        )}
+      >
+        {icon}
+      </span>
+      <span className="leading-[1.5]">{children}</span>
+    </li>
   );
 }
 
@@ -214,7 +233,10 @@ function FooterColumn({
 }) {
   return (
     <div className="flex flex-col gap-5">
-      <h3 className="text-[22px] font-semibold tracking-tight">{title}</h3>
+      <div>
+        <h3 className="text-[22px] font-bold tracking-tight text-[var(--color-brand-blue)]">{title}</h3>
+        <span aria-hidden className="mt-2.5 block h-[3px] w-9 rounded-full bg-[var(--color-accent)]" />
+      </div>
       {children}
     </div>
   );
@@ -233,12 +255,11 @@ function FooterLink({
     <Link
       href={href}
       className={cn(
-        "text-[14px] transition-colors",
-        active
-          ? "text-[var(--color-accent)]"
-          : "text-white/70 hover:text-white",
+        "group inline-flex items-center gap-2 text-[14px] transition-colors",
+        active ? "text-[var(--color-accent)]" : "text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]",
       )}
     >
+      <ChevronRight className="size-3.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2.5} />
       {children}
     </Link>
   );

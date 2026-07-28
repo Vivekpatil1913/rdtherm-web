@@ -7,7 +7,7 @@ import { FloatingActions } from "@/components/layout/FloatingActions";
 import { ScrollManager } from "@/components/utility/ScrollManager";
 import { LenisProvider } from "@/components/utility/LenisProvider";
 import { siteConfig } from "@/data/site";
-import { getSettings } from "@/services/content";
+import { getSettings, getProducts } from "@/services/content";
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -139,7 +139,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const settings = await getSettings();
+  // Products power the navbar's "Products" mega-menu (list + live preview card).
+  const [settings, products] = await Promise.all([getSettings(), getProducts()]);
+  const navProducts = products.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    summary: p.summary,
+    cover: p.cover || p.images?.[0]?.url || "",
+    specs: (p.specs ?? []).slice(0, 3),
+  }));
   return (
     <html lang="en" className={`${monaSans.variable}`}>
       <head>
@@ -157,7 +165,7 @@ export default async function RootLayout({
       <body className="min-h-screen flex flex-col bg-white text-[var(--color-ink)] font-sans">
         <ScrollManager />
         <LenisProvider />
-        <Navbar />
+        <Navbar products={navProducts} />
         <main className="flex-1">{children}</main>
         <Footer settings={settings} />
         <FloatingActions />

@@ -16,23 +16,21 @@ export function DesignSoftware() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
-          <div className="lg:col-span-7">
-            <motion.div variants={fadeUp}>
-              <SectionTag>Design & Engineering Tools</SectionTag>
-            </motion.div>
-            <motion.h2
-              variants={fadeUp}
-              className="mt-6 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
-            >
-              The software our engineers use{" "}
-              <span className="text-[var(--color-accent)]">every day</span>.
-            </motion.h2>
-          </div>
+          <motion.div variants={fadeUp} className="lg:col-span-12">
+            <SectionTag>Design & Engineering Tools</SectionTag>
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
+          >
+            The software our engineers use{" "}
+            <span className="text-[var(--color-accent)]">every day</span>.
+          </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="lg:col-span-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
+            className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
           >
             Industry-standard tools for thermal design, pressure-vessel calculation, 3D modelling, FEA and pipe stress analysis — all in-house, all licensed, all current.
           </motion.p>
@@ -52,7 +50,7 @@ export function DesignSoftware() {
                 <Cpu className="size-5" strokeWidth={1.8} />
               </span>
               <div className="flex flex-col gap-1">
-                <p className="text-[16px] font-semibold leading-tight">{s.name}</p>
+                <p className="text-[18px] font-semibold leading-tight">{s.name}</p>
                 <p className="text-[13px] leading-[1.5] text-[var(--color-ink-soft)]">{s.role}</p>
               </div>
             </motion.div>
