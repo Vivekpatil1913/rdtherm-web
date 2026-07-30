@@ -143,8 +143,9 @@ export function Hero() {
             className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-black/15 to-black/45"
           />
 
-          {/* Center column: founder card + quote, stacked and centered over the video */}
-          <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-7 px-6 text-center">
+          {/* Center column: founder card + quote, stacked and centered over the video.
+              Hidden for now — uncomment to bring the overlay back. */}
+          {/* <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-7 px-6 text-center">
             <FounderCard />
             <motion.p
               initial={{ opacity: 0, y: 14 }}
@@ -155,7 +156,7 @@ export function Hero() {
             >
               {heroQuote.text}
             </motion.p>
-          </div>
+          </div> */}
 
           <button
             type="button"
