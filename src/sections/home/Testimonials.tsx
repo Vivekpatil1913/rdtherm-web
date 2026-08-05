@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useAnimationControls } from "framer-motion";
-import { Star, ArrowLeft, ArrowRight, MessageSquareMore } from "lucide-react";
+import { Star, ArrowLeft, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { SectionTag } from "@/components/ui/SectionTag";
 import { fadeUp, stagger, viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
 import type { ApiTestimonial } from "@/lib/api-types";
 import { cn } from "@/lib/cn";
@@ -148,13 +149,9 @@ export function Testimonials({ items = [] }: { items?: ApiTestimonial[] }) {
           viewport={viewportOnce}
           className="flex flex-col items-center text-center"
         >
-          <motion.span
-            variants={fadeUp}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)]/35 bg-white px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)] sm:text-[13px]"
-          >
-            <MessageSquareMore className="size-4" strokeWidth={2} aria-hidden />
-            Testimonials
-          </motion.span>
+          <motion.div variants={fadeUp}>
+            <SectionTag>Testimonials</SectionTag>
+          </motion.div>
           <motion.h2
             variants={fadeUp}
             className="mt-4 max-w-[900px] text-[32px] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px]"

@@ -103,7 +103,7 @@ function DirectorCard({ member, index }: { member: ApiTeamMember; index: number 
           {name}
         </h3>
         <span aria-hidden className="mt-4 h-px w-12 bg-gradient-to-r from-[var(--color-accent)] to-transparent" />
-        <p className="mt-4 whitespace-pre-line text-[14px] leading-[1.65] text-[var(--color-ink-soft)]">
+        <p className="mt-4 whitespace-pre-line text-[16px] leading-[1.65] text-[var(--color-ink-soft)]">
           {bio}
         </p>
       </div>

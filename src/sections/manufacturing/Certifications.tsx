@@ -15,7 +15,7 @@ export function Certifications() {
           variants={stagger(0.05, 0.1)}
           initial="hidden"
           whileInView="visible"
-          viewport={viewportOnce}
+          viewport={viewportOnce} 
           className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-start"
         >
           <motion.div variants={fadeUp} className="lg:col-span-12">

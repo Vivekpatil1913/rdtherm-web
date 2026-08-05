@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
 import type { ApiProduct } from "@/lib/api-types";
@@ -41,41 +41,30 @@ function ProductCard({ product, index }: { product: ApiProduct; index: number })
     >
       <Link
         href={`/products/${product.slug}`}
-        className="group flex h-full flex-col overflow-hidden rounded-[16px] bg-white shadow-[0_18px_44px_-26px_rgba(0,0,0,0.22)] ring-1 ring-black/[0.04] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_70px_-30px_rgba(0,0,0,0.28)]"
+        className="group flex h-full flex-col"
       >
-        {/* Image */}
-        <div className="relative h-40 w-full overflow-hidden bg-[var(--color-bg-soft)] sm:h-44">
+        {/* The photo is the card — no chrome competing with the product */}
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[18px] sm:aspect-square bg-[var(--color-bg-soft)] shadow-[0_20px_46px_-26px_rgba(0,0,0,0.3)] ring-1 ring-black/[0.05] transition-all duration-500 group-hover:-translate-y-1.5 group-hover:ring-[var(--color-accent)]/35 group-hover:shadow-[0_32px_70px_-28px_rgba(233,78,27,0.5)]">
           <Image
             src={product.cover || product.images?.[0]?.url || FALLBACK_IMAGE}
             alt={product.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+            className="object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07]"
           />
+          {/* Accent corner flag, revealed on hover */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-0 top-0 size-0 border-l-[52px] border-t-[52px] border-l-transparent border-t-[var(--color-accent)] opacity-0 transition-opacity duration-400 group-hover:opacity-100"
+          />
+          <span className="pointer-events-none absolute right-2.5 top-2.5 text-white opacity-0 transition-opacity duration-400 group-hover:opacity-100">
+            <ArrowUpRight className="size-4" strokeWidth={2.5} />
+          </span>
         </div>
 
-        {/* Body */}
-        <div className="flex flex-1 flex-col gap-2.5 p-5">
-          <div className="flex flex-col gap-1.5">
-            <span aria-hidden className="h-[3px] w-8 rounded-full bg-[var(--color-accent)]" />
-            <span className="text-[13px] font-bold tabular-nums text-[var(--color-accent)]">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-          </div>
-
-          <h3 className="text-[19px] font-bold leading-tight tracking-[-0.01em] text-[var(--color-ink)]">
-            {product.title}
-          </h3>
-
-          <div className="mt-auto flex items-end justify-between gap-4">
-            <p className="text-[14px] leading-[1.55] text-[var(--color-ink-soft)] line-clamp-2">
-              {product.summary}
-            </p>
-            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-[0_8px_20px_-6px_rgba(233,78,27,0.6)] transition-all duration-300 group-hover:bg-[var(--color-accent-hover)] group-hover:translate-x-0.5">
-              <ArrowRight className="size-4" />
-            </span>
-          </div>
-        </div>
+        <h3 className="mt-4 text-center text-[17px] font-semibold leading-[1.35] tracking-[-0.01em] text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)] sm:text-[18px]">
+          {product.title}
+        </h3>
       </Link>
     </motion.article>
   );

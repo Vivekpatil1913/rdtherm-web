@@ -28,7 +28,14 @@
       "PowerShell(if \\(Get-Process -Id 14792 -ErrorAction SilentlyContinue\\) { Stop-Process -Id 14792 -Force; Start-Sleep -Milliseconds 800 }; if \\(Get-Process -Id 14792 -ErrorAction SilentlyContinue\\) { \"PID 14792 STILL RUNNING\" } else { \"PID 14792 stopped\" }; $c = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { \"port 3000 still held by PID\\(s\\): \" + \\($c.OwningProcess -join ', '\\) } else { \"port 3000 free\" })",
       "PowerShell(Get-CimInstance Win32_Process -Filter \"Name='node.exe'\" | Select-Object ProcessId, @{n='Cmd';e={$_.CommandLine}} | Format-Table -AutoSize -Wrap; \"--- listeners 3000-3010 ---\"; Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -ge 3000 -and $_.LocalPort -le 3010 } | Select-Object LocalPort, OwningProcess | Format-Table -AutoSize)",
       "Bash(curl -s -o /dev/null -w \"%{http_code} \" \"https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1400&q=80&auto=format&fit=crop\")",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1400&q=80&auto=format&fit=crop\")"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1400&q=80&auto=format&fit=crop\")",
+      "Bash(sed -i 's|lg:grid-cols-3 lg:gap-6|lg:grid-cols-4 lg:gap-6|; s|rounded-\\\\[18px\\\\] sm:aspect-square lg:aspect-\\\\[4/3\\\\]|rounded-[18px] sm:aspect-square|; s|\\(max-width: 1024px\\) 50vw, 33vw|\\(max-width: 1024px\\) 50vw, 25vw|' src/sections/products/ProductGrid.tsx src/sections/home/Products.tsx)",
+      "Bash(sed -i 's|{/\\\\* Six keeps the 3-up grid to two even rows; the CTA covers the rest. \\\\*/}||; s|items.slice\\(0, 6\\)|items.slice\\(0, 8\\)|' src/sections/home/Products.tsx)",
+      "Bash(sed -i 's|<div className=\"mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5\">|<div className=\"mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6\">|' \"src/app/products/[slug]/page.tsx\" && npx tsc --noEmit 2>&1 | head -5; npx eslint \"src/app/products/[slug]/page.tsx\" 2>&1 | tail -5)",
+      "Bash(python -)"
+    ],
+    "additionalDirectories": [
+      "D:\\rdtherm-web\\src\\app\\products\\[slug]"
     ]
   }
 }

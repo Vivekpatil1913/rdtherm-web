@@ -52,7 +52,7 @@ export function WhyRdtherm() {
   const features = whyRdtherm.features;
 
   return (
-    <section className="bg-[var(--color-bg-soft)] py-16 lg:py-20">
+    <section className="bg-[var(--color-bg-soft)] pt-16 pb-6 lg:pt-20 lg:pb-8">
       <Container size="wide">
         <motion.div
           variants={stagger(0.05, 0.1)}
@@ -138,10 +138,10 @@ function FeatureCol({
       <span className="inline-flex size-11 items-center justify-center rounded-[12px] bg-[var(--color-accent)]/10 text-[var(--color-accent)] transition-all duration-500 group-hover:bg-[var(--color-accent)] group-hover:text-white group-hover:shadow-[0_12px_28px_-12px_rgba(233,78,27,0.55)]">
         <Icon className="size-5" strokeWidth={1.8} />
       </span>
-      <h3 className="mt-3 text-[20px] font-semibold leading-[1.25] text-[var(--color-ink)]">
+      <h3 className="mt-3 text-[20px] font-bold leading-[1.25] text-[var(--color-ink)]">
         {title}
       </h3>
-      <p className="text-[15px] leading-[1.6] text-[var(--color-ink-soft)]">{body}</p>
+      <p className="text-[17px] leading-[1.6] text-[var(--color-ink-soft)]">{body}</p>
     </motion.div>
   );
 }

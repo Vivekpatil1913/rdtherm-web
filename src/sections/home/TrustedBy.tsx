@@ -36,32 +36,39 @@ export function TrustedBy({ logos = [] }: { logos?: ApiLogo[] }) {
           className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-white to-transparent"
         />
 
+        {/* items-start + fixed-height logo box keeps every name on the same
+            baseline no matter how tall or short the logo art is. */}
         <div
-          className="marquee-track flex w-max items-center gap-4 lg:gap-5 px-4 lg:px-5"
+          className="marquee-track flex w-max items-start gap-4 lg:gap-5 px-4 lg:px-5"
           aria-label="Companies that trust R&D Therm"
         >
           {marqueeLogos.map((logo, i) => (
             <div
               key={`${logo.id}-${i}`}
-              className="marquee-item group/logo flex w-32 lg:w-40 shrink-0 flex-col items-center justify-center gap-2 p-3 transition-transform duration-300 hover:-translate-y-1"
+              className="marquee-item group/logo flex w-32 lg:w-40 shrink-0 flex-col items-center gap-2 p-3 transition-transform duration-300 hover:-translate-y-1"
             >
-              {logo.imageUrl ? (
-                <>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+              <span className="flex h-20 lg:h-24 w-full items-center justify-center">
+                {logo.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={logo.imageUrl}
                     alt={logo.name}
-                    className="h-20 lg:h-24 w-full object-contain"
+                    className="max-h-full max-w-full object-contain"
                   />
-                  <span className="line-clamp-2 text-center text-[13px] lg:text-[14px] font-semibold leading-snug tracking-tight text-[var(--color-ink)]">
+                ) : (
+                  <span className="text-center text-[16px] lg:text-[18px] font-semibold leading-tight tracking-tight text-[var(--color-ink)]">
                     {logo.name}
                   </span>
-                </>
-              ) : (
-                <span className="flex h-20 lg:h-24 items-center text-center text-[16px] lg:text-[18px] font-semibold leading-tight tracking-tight text-[var(--color-ink)]">
+                )}
+              </span>
+              {logo.imageUrl ? (
+                <span
+                  title={logo.name}
+                  className="block w-full truncate text-center text-[13px] lg:text-[14px] font-semibold leading-snug tracking-tight text-[var(--color-ink)]"
+                >
                   {logo.name}
                 </span>
-              )}
+              ) : null}
             </div>
           ))}
         </div>
