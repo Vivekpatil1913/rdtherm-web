@@ -73,13 +73,15 @@ function ProductCard({ item, index }: { item: HomeProduct; index: number }) {
         className="group flex h-full flex-col"
       >
         {/* The photo is the card — no chrome competing with the product */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[18px] sm:aspect-square bg-[var(--color-bg-soft)] shadow-[0_20px_46px_-26px_rgba(0,0,0,0.3)] ring-1 ring-black/[0.05] transition-all duration-500 group-hover:-translate-y-1.5 group-hover:ring-[var(--color-accent)]/35 group-hover:shadow-[0_32px_70px_-28px_rgba(233,78,27,0.5)]">
+        {/* 4:3 matches how most product photos are shot, so object-cover fills the
+            frame edge to edge with only a sliver trimmed off any upload. */}
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[18px] bg-[var(--color-bg-soft)] shadow-[0_20px_46px_-26px_rgba(0,0,0,0.3)] ring-1 ring-black/[0.05] transition-all duration-500 group-hover:-translate-y-1.5 group-hover:ring-[var(--color-accent)]/35 group-hover:shadow-[0_32px_70px_-28px_rgba(233,78,27,0.5)]">
           <Image
             src={item.image || FALLBACK_IMAGE}
             alt={item.label}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07]"
+            className="object-cover object-center transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07]"
           />
           {/* Accent corner flag, revealed on hover */}
           <span
