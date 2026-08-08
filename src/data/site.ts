@@ -28,7 +28,8 @@ export const mainNav = [
   { label: "Home", href: "/" },
   { label: "Who We Are", href: "/about" },
   { label: "Products", href: "/products" },
-  { label: "Air Receiver", href: "/air-receiver" },
+  // Hidden for now — uncomment to bring the Air Receiver menu item back.
+  // { label: "Air Receiver", href: "/air-receiver" },
   { label: "Manufacturing", href: "/manufacturing" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/careers" },

@@ -13,8 +13,6 @@ import { heroQuote } from "@/data/home";
 
 const VIDEO_SOURCES = ["/videos/hero/website_banner_v2_web.mp4"];
 
-const POSTER_IMG =
-  "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1920&q=80";
 const PORTRAIT_IMG =
   "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&q=80";
 
@@ -125,12 +123,13 @@ export function Hero() {
           <video
             ref={videoRef}
             className="absolute inset-0 h-full w-full object-cover"
-            poster={POSTER_IMG}
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            // No poster — the video itself is the first thing shown, so fetch it
+            // eagerly rather than waiting on metadata only.
+            preload="auto"
           >
             {VIDEO_SOURCES.map((src) => (
               <source key={src} src={src} type="video/mp4" />

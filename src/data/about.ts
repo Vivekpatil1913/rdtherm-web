@@ -271,16 +271,23 @@ export const journeyMilestones = JOURNEY_YEARS.map((year) => {
   return milestone;
 });
 
-// "Worldwide Impact" band — centred statement over the global-presence map.
-// Both the heading and the sub-line break exactly where the approved artwork
-// breaks them, so the two lines stay balanced instead of rewrapping.
+// "Worldwide Impact" band. The artwork carries the map on its right side and
+// leaves the left third empty by design, so the copy sits in that space.
+// Heading and sub-line break exactly where the approved artwork breaks them.
 export const globalPresence = {
+  eyebrow: "Global Presence",
   heading: ["Engineering Excellence.", "Worldwide Impact."] as const,
   description: [
     "Delivering reliable solutions across continents,",
     "building partnerships that power progress.",
   ] as const,
-  image: "/images/about/map.webp",
+  image: "/images/about/newmap.webp",
   imageAlt:
     "World map marking the countries R&D Therm has supplied process equipment to across six continents",
-};
+  stats: [
+    { icon: "globe", value: "6+", label: "Continents" },
+    { icon: "pin", value: "25+", label: "Countries" },
+    { icon: "handshake", value: "100+", label: "Global Clients" },
+    { icon: "users", value: "500+", label: "Projects Delivered" },
+  ],
+} as const;
