@@ -3,7 +3,7 @@ export const careersHero = {
   heading: ["Build the equipment that builds ", "the world's process plants."],
   description:
     "We're hiring engineers, welders, QC inspectors and project managers who take pride in their craft. If you want your work to matter, this is your home.",
-  image: "/images/careers/careers-hero-img.webp",
+  image: "/images/careers/careers-hero-img.jpeg",
   imageAlt:
     "R&D Therm fabrication shop floor — engineers working alongside a stainless steel pressure vessel, with a branded safety helmet on the drawing table",
 };
