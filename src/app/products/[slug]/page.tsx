@@ -14,7 +14,21 @@ import { getProduct, getProducts, getFaqs } from "@/services/content";
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&q=80&auto=format&fit=crop";
 
+/** Plain-text excerpt from the rich detail content, for meta descriptions. */
+const excerpt = (html: string, max = 160) => {
+  const text = (html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
+};
+
 const COMMON_COMPLIANCE = ["ASME Section VIII", "ASME U-Stamp", "PED 2014/68/EU", "IBR", "ISO 9001:2015"];
+
+/**
+ * Products photographed vertically (tall vessel, narrow frame). Their gallery
+ * switches to a portrait grid so the shot is never cropped into a wide tile.
+ * Admin upload guidance for these: portrait 9:16 — 1080 x 1920 px (minimum
+ * 900 x 1600), WebP/JPG under 500 KB, vessel centred with even side margins.
+ */
+const PORTRAIT_GALLERY_SLUGS = new Set(["air-receiver"]);
 
 export async function generateMetadata(
   props: PageProps<"/products/[slug]">,
@@ -24,18 +38,20 @@ export async function generateMetadata(
   if (!product) return { title: "Product not found", robots: { index: false } };
   const url = `/products/${slug}`;
   const cover = product.cover || product.images?.[0]?.url;
+  const description =
+    excerpt(product.content) || `${product.title} — engineered and fabricated by R&D Therm.`;
   return {
     title: product.title,
-    description: product.summary,
+    description,
     alternates: { canonical: url },
     openGraph: {
       title: product.title,
-      description: product.summary,
+      description,
       url,
       type: "website",
       images: cover ? [{ url: cover, alt: product.title }] : undefined,
     },
-    twitter: { title: product.title, description: product.summary, images: cover ? [cover] : undefined },
+    twitter: { title: product.title, description, images: cover ? [cover] : undefined },
   };
 }
 
@@ -84,14 +100,9 @@ export default async function ProductDetailPage(
               </h1>
             </Reveal>
             <Reveal as="div" className="lg:col-span-4">
-              <p className="line-clamp-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[420px]">
-                {product.summary}
-              </p>
-              <div className="mt-6">
-                <Button href="/contact" variant="primary">
-                  Request a quote
-                </Button>
-              </div>
+              <Button href="/contact" variant="primary">
+                Request a quote
+              </Button>
             </Reveal>
           </div>
         </Container>
@@ -99,7 +110,11 @@ export default async function ProductDetailPage(
 
       {/* IMAGE GALLERY */}
       {product.images && product.images.length > 0 ? (
-        <ProductGalleryLightbox title={product.title} images={product.images} />
+        <ProductGalleryLightbox
+          title={product.title}
+          images={product.images}
+          orientation={PORTRAIT_GALLERY_SLUGS.has(slug) ? "portrait" : "landscape"}
+        />
       ) : null}
 
       {/* RICH CONTENT (from the admin editor). The gallery above shares this

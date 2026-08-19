@@ -9,7 +9,7 @@ import { designSoftware } from "@/data/manufacturing";
 
 export function DesignSoftware() {
   return (
-    <section className="bg-[var(--color-bg-soft)] py-16 lg:py-20">
+    <section className="bg-white py-16 lg:py-20">
       <Container size="wide">
         <motion.div
           variants={stagger(0.05, 0.1)}
@@ -25,14 +25,14 @@ export function DesignSoftware() {
             variants={fadeUp}
             className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[54px] font-bold"
           >
-            The software our engineers use{" "}
-            <span className="text-[var(--color-accent)]">every day</span>.
+            The softwares our{" "}
+            <span className="text-[var(--color-accent)]">team uses</span>!
           </motion.h2>
           <motion.p
             variants={fadeUp}
             className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
           >
-            Industry-standard tools for thermal design, pressure-vessel calculation, 3D modelling, FEA and pipe stress analysis — all in-house, all licensed, all current.
+            Industry-standard tools for thermal design, mechanical design, 3D modelling, FEA and pipe stress analysis.
           </motion.p>
         </motion.div>
 
@@ -51,7 +51,9 @@ export function DesignSoftware() {
               </span>
               <div className="flex flex-col gap-1">
                 <p className="text-[18px] font-semibold leading-tight">{s.name}</p>
-                <p className="text-[13px] leading-[1.5] text-[var(--color-ink-soft)]">{s.role}</p>
+                {s.role ? (
+                  <p className="text-[13px] leading-[1.5] text-[var(--color-ink-soft)]">{s.role}</p>
+                ) : null}
               </div>
             </motion.div>
           ))}

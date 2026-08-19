@@ -12,7 +12,7 @@ import { products } from "@/data/home";
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&q=80&auto=format&fit=crop";
 
-export type HomeProduct = { label: string; slug: string; image: string; summary?: string };
+export type HomeProduct = { label: string; slug: string; image: string };
 
 export function Products({ items = [] }: { items?: HomeProduct[] }) {
   if (items.length === 0) return null;

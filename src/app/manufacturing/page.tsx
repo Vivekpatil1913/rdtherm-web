@@ -5,8 +5,8 @@ import { MachineShowcase } from "@/sections/manufacturing/MachineShowcase";
 import { Materials } from "@/sections/manufacturing/Materials";
 import { Strengths } from "@/sections/manufacturing/Strengths";
 import { DesignSoftware } from "@/sections/manufacturing/DesignSoftware";
-import { QualityMetrics } from "@/sections/manufacturing/QualityMetrics";
-import { ProcessSteps } from "@/sections/manufacturing/ProcessSteps";
+// import { QualityMetrics } from "@/sections/manufacturing/QualityMetrics";
+// import { ProcessSteps } from "@/sections/manufacturing/ProcessSteps";
 import { Certifications } from "@/sections/manufacturing/Certifications";
 import { manufacturingHero } from "@/data/manufacturing";
 
@@ -57,8 +57,8 @@ export default async function ManufacturingPage() {
       <Materials />
       <DesignSoftware />
       <Strengths />
-      <QualityMetrics />
-      <ProcessSteps />
+      {/* <QualityMetrics /> */}
+      {/* <ProcessSteps /> */}
       <Certifications />
     </>
   );

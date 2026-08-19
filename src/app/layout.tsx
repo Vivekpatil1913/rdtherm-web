@@ -144,7 +144,6 @@ export default async function RootLayout({
   const navProducts = products.map((p) => ({
     slug: p.slug,
     title: p.title,
-    summary: p.summary,
     cover: p.cover || p.images?.[0]?.url || "",
     specs: (p.specs ?? []).slice(0, 3),
   }));

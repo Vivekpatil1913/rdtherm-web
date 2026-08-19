@@ -15,7 +15,6 @@ import { cn } from "@/lib/cn";
 export type NavProduct = {
   slug: string;
   title: string;
-  summary?: string;
   cover?: string;
   specs?: string[];
 };
@@ -288,14 +287,6 @@ export function Navbar({ products = [] }: { products?: NavProduct[] }) {
                                   ) : null}
                                   <span
                                     className={cn(
-                                      "w-6 shrink-0 text-[11px] font-bold tabular-nums tracking-[0.08em] transition-colors duration-300",
-                                      active ? "text-[var(--color-accent)]" : "text-[var(--color-muted)]",
-                                    )}
-                                  >
-                                    {String(i + 1).padStart(2, "0")}
-                                  </span>
-                                  <span
-                                    className={cn(
                                       "whitespace-nowrap text-[15px] leading-[1.3] transition-colors duration-300",
                                       active
                                         ? "font-semibold text-[var(--color-accent)]"
@@ -397,7 +388,7 @@ export function Navbar({ products = [] }: { products?: NavProduct[] }) {
                           className="overflow-hidden"
                         >
                           <div className="flex flex-col gap-1.5 pb-4">
-                            {products.map((p, i) => (
+                            {products.map((p) => (
                               <Link
                                 key={p.slug}
                                 href={`${PRODUCTS_HREF}/${p.slug}`}
@@ -418,9 +409,6 @@ export function Navbar({ products = [] }: { products?: NavProduct[] }) {
                                   />
                                 </span>
                                 <span className="min-w-0 flex-1">
-                                  <span className="block text-[10px] font-bold tabular-nums tracking-[0.1em] text-[var(--color-muted)]">
-                                    {String(i + 1).padStart(2, "0")}
-                                  </span>
                                   <span className="block truncate text-[15px] font-semibold text-[var(--color-ink)]">
                                     {p.title}
                                   </span>

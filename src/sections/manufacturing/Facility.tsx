@@ -23,19 +23,6 @@ function splitValue(value: string) {
   return { figure: match[1], unit: match[2], numeric: true };
 }
 
-/** "25 T × 1" … → "25 T max lift · 12 units". Returns null if the format changes. */
-function craneSummary(cranes: string[]) {
-  let units = 0;
-  let max = 0;
-  for (const crane of cranes) {
-    const match = crane.match(/([\d.]+)\s*T\s*[×x]\s*(\d+)/i);
-    if (!match) continue;
-    max = Math.max(max, parseFloat(match[1]));
-    units += parseInt(match[2], 10);
-  }
-  return units ? `${max} T max lift · ${units} units` : null;
-}
-
 export function Facility() {
   return (
     <section className="bg-white py-16 lg:py-20">
@@ -57,12 +44,6 @@ export function Facility() {
             Two dedicated bays.{" "}
             <span className="text-[var(--color-accent)]">One quality system.</span>
           </motion.h2>
-          <motion.p
-            variants={fadeUp}
-            className="lg:col-span-5 text-[16px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px] sm:text-[17px]"
-          >
-            Over 1.1 lakh square feet of dedicated workshop area — segregated into bays so carbon steel work never crosses paths with stainless steel or sanitary equipment.
-          </motion.p>
         </motion.div>
 
         <div className="mt-10 flex flex-col gap-6 lg:mt-12 lg:gap-8">
@@ -77,7 +58,6 @@ export function Facility() {
 
 function BayRow({ bay, index }: { bay: Bay; index: number }) {
   const Icon = ICON_MAP[bay.id as keyof typeof ICON_MAP] ?? Factory;
-  const summary = craneSummary(bay.cranes);
   const [imageOk, setImageOk] = useState(true);
 
   return (
@@ -136,16 +116,9 @@ function BayRow({ bay, index }: { bay: Bay; index: number }) {
 
         {/* Cranes */}
         <div className="mt-5 border-t border-[var(--color-line)] pt-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <p className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
-              Lifting capacity
-            </p>
-            {summary ? (
-              <p className="text-[12.5px] font-semibold tabular-nums text-[var(--color-accent)]">
-                {summary}
-              </p>
-            ) : null}
-          </div>
+          <p className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
+            Lifting capacity
+          </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {bay.cranes.map((crane) => (
               <span

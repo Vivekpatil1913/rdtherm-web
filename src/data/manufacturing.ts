@@ -1,8 +1,8 @@
 export const manufacturingHero = {
   eyebrow: "Manufacturing & Capabilities",
-  heading: ["Engineering, fabrication and ", "process know-how", " — under one roof."],
+  heading: ["Designed with Purpose. ", "Manufactured with Precision.", ""],
   description:
-    "From process design and detail engineering to in-house fabrication, NDT, hydro-testing and on-site erection — every stage of equipment delivery is owned and controlled by R&D Therm.",
+    "With over 32 years of experience, we bring together a skilled engineering and manufacturing team, advanced manufacturing infrastructure, and industry-recognised certifications to deliver process equipment built to your exact specification.",
 };
 
 export const strengths = [
@@ -65,10 +65,10 @@ export const facility = [
     image:
       "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1400&q=80&auto=format&fit=crop",
     bays: [
-      { label: "Under shed", value: "50,000 sq ft" },
-      { label: "Open yard", value: "35,000 sq ft" },
+      { label: "Under shed", value: "20,000 sq ft" },
+      { label: "Open yard", value: "15,000 sq ft" },
     ],
-    cranes: ["25 T × 1", "15 T × 1", "10 T × 1", "5 T × 5", "3 T × 4"],
+    cranes: ["10 T × 1", "3 T × 1", "2 T × 1"],
     body:
       "Our flagship bay handles heavy CS pressure vessels, columns, reactors and complete process skids up to 100 tonnes shipping weight.",
   },
@@ -78,267 +78,106 @@ export const facility = [
     image:
       "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1400&q=80&auto=format&fit=crop",
     bays: [
-      { label: "Under shed", value: "25,000 sq ft" },
-      { label: "Atmosphere", value: "Controlled" },
+      { label: "Under shed", value: "10,000 sq ft" },
+      { label: "Open yard", value: "5,000 sq ft" },
     ],
-    cranes: ["10 T × 1", "5 T × 1"],
+    cranes: ["10 T × 1", "3 T × 1", "2 T × 1"],
     body:
       "Dedicated SS bay with controlled atmosphere — segregated tooling, consumables and grinding stations to prevent cross-contamination.",
   },
 ];
 
-// Categorised machine inventory — used by the interactive MachineShowcase
+// Categorised machine inventory — used by the interactive MachineShowcase.
+// `specs` may be empty: those categories render as title-only cards.
 export const machineCategories = [
   {
     id: "cutting",
     label: "Cutting",
-    subtitle: "Laser, plasma and oxy-gas cutting for every plate thickness.",
     machines: [
       {
-        name: "TruLaser 3060",
-        type: "Fibre Laser Cutter",
+        name: "CNC Plate Cutting",
+        image: "/images/manufacturing/plate-cutting.webp",
         specs: [
-          "Power: 4,000 W",
-          "Bed: 2,500 × 6,000 mm",
-          "MS up to 25 mm, SS up to 20 mm",
+          "Bed size: 2,500 × 12,000 mm",
+          "Carbon steel up to 40 mm",
+          "Stainless steel up to 32 mm",
         ],
       },
       {
-        name: "CNC Profile Cutter",
-        type: "Plasma + Oxy-gas",
-        specs: [
-          "Bed: 2,500 × 12,000 mm",
-          "Thickness: up to 30 mm",
-          "Dual cutting heads",
-        ],
-      },
-      {
-        name: "Sheet Shearing Machine",
-        type: "Hydraulic Shear",
-        specs: [
-          "Capacity: 3,100 mm × 10 mm",
-          "CS, SS, alloy plates",
-          "Precision back-gauge",
-        ],
+        name: "Pipe Cutting",
+        image: "/images/manufacturing/pipe-cutting.webp",
+        specs: ["For pipe cutting up to 8 inch"],
       },
     ],
   },
   {
     id: "forming",
     label: "Forming",
-    subtitle: "Bending, rolling and dished-end forming for shells and heads.",
     machines: [
       {
-        name: "E-Brake 300T",
-        type: "CNC Electronic Press Brake",
-        specs: [
-          "Capacity: 300 ton",
-          "Dual-drive servo control",
-          "Up to 4 m bend length",
-        ],
-      },
-      {
-        name: "Plate Bending Roller",
-        type: "3-Roll Plate Roller",
-        specs: [
-          "Width: up to 2,500 mm",
-          "Thickness: up to 45 mm",
-          "Pre-pinch & full circle",
-        ],
-      },
-      {
-        name: "Dished End Forming",
-        type: "Spinning & Flanging",
-        specs: [
-          "Diameter: up to 4,000 mm",
-          "Hemispherical & torispherical",
-          "Hot & cold forming",
-        ],
+        name: "Plate Rolling",
+        image: "/images/manufacturing/plate-rolling.webp",
+        specs: ["Plate rolling for 2,500 mm width and 16 mm thick"],
       },
     ],
   },
   {
     id: "welding",
     label: "Welding",
-    subtitle: "Manual, automatic and robotic welding qualified to ASME / PED.",
     machines: [
-      {
-        name: "Robotic Welding Arm",
-        type: "6-Axis Industrial Robot",
-        specs: [
-          "Repeatable tube-to-tubesheet welds",
-          "Programmable weave & oscillation",
-          "GMAW / GTAW heads",
-        ],
-      },
-      {
-        name: "SAW Column & Boom",
-        type: "Submerged Arc Welder",
-        specs: [
-          "Column 6 m × Boom 6 m",
-          "Heavy shell longitudinal & circ welds",
-          "Single & tandem wire",
-        ],
-      },
-      {
-        name: "Auto Seam Welder",
-        type: "L-seam & C-seam",
-        specs: [
-          "TIG, MIG, CO₂ processes",
-          "Up to 4 m seam length",
-          "PLC controlled tracking",
-        ],
-      },
+      { name: "Manual TIG / MIG Welding", image: null, specs: [] },
+      { name: "6 Axis Robotic Welding", image: "/images/manufacturing/robotic-welding.webp", specs: [] },
+      { name: "Special Purpose Machine", image: "/images/manufacturing/special-purpose-welding-machine.webp", specs: [] },
+      { name: "SAW Column and Boom", image: null, specs: [] },
     ],
   },
   {
     id: "machining",
     label: "Machining",
-    subtitle: "Drilling, turning and finishing on heavy parts and small precision components.",
     machines: [
-      {
-        name: "Radial Drill Machine",
-        type: "German-Make Heavy Duty",
-        specs: [
-          "Drill capacity: up to 80 mm",
-          "Vessel nozzles & tubesheet holes",
-          "High positional accuracy",
-        ],
-      },
-      {
-        name: "Conventional Lathe",
-        type: "Heavy Lathe",
-        specs: [
-          "OD capacity: up to 1,800 mm",
-          "Bed length: 5 m",
-          "Flange, shaft & spool machining",
-        ],
-      },
-      {
-        name: "Small Radial Drill",
-        type: "Precision Drilling",
-        specs: [
-          "Sanitary fittings & instruments",
-          "Tight-tolerance work",
-          "Bench-mounted operations",
-        ],
-      },
+      { name: "Radial Drilling Machine", image: "/images/manufacturing/radial-drill-machine.webp", specs: [] },
+      { name: "Conventional Lathe Machine", image: null, specs: [] },
     ],
   },
   {
     id: "surface",
     label: "Surface Prep",
-    subtitle: "Shot blasting, painting, powder coating and metalising.",
     machines: [
-      {
-        name: "Shot Blasting Booth",
-        type: "Enclosed Booth",
-        specs: [
-          "7 m × 7 m × 16 m",
-          "SA 2½ surface prep",
-          "Dust collection + PPE compliant",
-        ],
-      },
-      {
-        name: "Painting & Curing Line",
-        type: "Conveyor System",
-        specs: [
-          "7 m × 7 m × 12 m booth",
-          "Airless & air-spray",
-          "Climate-controlled curing",
-        ],
-      },
-      {
-        name: "Metalising Cabin",
-        type: "Aluminium Spray",
-        specs: [
-          "7 m × 7 m × 4 m",
-          "Up to 300 micron coating",
-          "For marine & corrosive service",
-        ],
-      },
-      {
-        name: "Powder Coating",
-        type: "Electrostatic System",
-        specs: [
-          "Curing oven up to 200 °C",
-          "Architectural & equipment-grade",
-          "RAL colour matching",
-        ],
-      },
+      { name: "Shot Blasting Booth", image: null, specs: [] },
+      { name: "Painting & Curing Line", image: null, specs: [] },
+      { name: "Metalising Cabin", image: null, specs: [] },
+      { name: "Powder Coating", image: null, specs: [] },
     ],
   },
   {
     id: "testing",
     label: "Testing",
-    subtitle: "Hydro, pneumatic, NDT and dimensional inspection in-house.",
     machines: [
-      {
-        name: "Hydro Test Pump",
-        type: "High-Pressure Hydrostatic",
-        specs: [
-          "Pressure: up to 500 bar",
-          "Calibrated pressure gauges",
-          "Witness & client inspection bay",
-        ],
-      },
-      {
-        name: "Pneumatic Test Rig",
-        type: "Low-Volume Air Test",
-        specs: [
-          "Pressure: up to 30 bar",
-          "Soap-bubble & sound test",
-          "Safety-zoned bay",
-        ],
-      },
-      {
-        name: "NDT Lab",
-        type: "RT · UT · PT · MT · PMI",
-        specs: [
-          "ASNT Level II & III inspectors",
-          "Hardness, weld gauge, PMI gun",
-          "Third-party witness ready",
-        ],
-      },
-      {
-        name: "Dimensional Tools",
-        type: "Calibrated Measurement",
-        specs: [
-          "Vernier calipers up to 2,500 mm",
-          "Height gauges & surface plates",
-          "Bend tester (180° / 12.5 mm)",
-        ],
-      },
+      { name: "Hydro Test Pump", image: null, specs: [] },
+      { name: "Pneumatic Test Rig", image: null, specs: [] },
+      { name: "NDT Lab", image: null, specs: [] },
+      { name: "Dimensional Tools", image: null, specs: [] },
     ],
   },
 ];
 
 export const qualifiedMaterials = [
-  "Carbon Steel (IS 2062, SA 516 Gr 60/70)",
-  "Low-Alloy Steel (SA 387 Gr 11, 22)",
-  "Corten Weathering Steel (SA 242)",
-  "Stainless Steel 304L / 316L",
-  "Stainless Steel 904L",
-  "Stainless Steel 310 / 321",
-  "Duplex 2205",
-  "Super-Duplex 2507",
-  "Cupronickel 90/10 & 70/30",
-  "Hastelloy C-276 & B-3",
-  "Monel 400 & K-500",
-  "Inconel 600 & 625",
-  "Titanium Gr 2",
-  "Clad / Lined Plates",
+  "Stainless Steel 304 / 304L",
+  "Stainless Steel 316 / 316L",
+  "Carbon Steel (SA 516 Gr. 70)",
+  "MS (IS 2062)",
+  "Hastelloy",
+  "Titanium",
 ];
 
 export const designSoftware = [
-  { name: "HTRI", role: "Thermal design of exchangers" },
-  { name: "PV Elite", role: "ASME Sec VIII Div 1 & 2 calculations" },
-  { name: "SolidWorks", role: "3D modelling & detail drawings" },
-  { name: "AutoCAD", role: "GA & isometric drawings" },
-  { name: "NozzlePro", role: "Nozzle / pipe stress analysis" },
-  { name: "STAAD Pro", role: "Structural & support analysis" },
-  { name: "ANSYS", role: "FEA — vibration, thermal, fatigue" },
-  { name: "Tekla Structures", role: "Steel structure detailing" },
+  { name: "CADEM", role: "" },
+  { name: "AutoCAD", role: "" },
+  { name: "ProgeCAD", role: "" },
+  { name: "Solid Edge", role: "" },
+  { name: "HTRI", role: "Outsourced" },
+  { name: "NozzlePro", role: "Outsourced" },
+  { name: "ANSYS", role: "Outsourced" },
 ];
 
 export const qualityMetrics = [
@@ -357,12 +196,6 @@ export const qualityMethods = [
   { title: "Process Mapping", body: "Every job mapped from RA to dispatch with built-in inspection hold points." },
 ];
 
-export const weldingCerts = [
-  "ASME Section IX — GMAW, GTAW, SMAW, SAW, FCAW",
-  "PED 2014/68/EU welding qualification",
-  "ASTM D 4228-05 painter qualification",
-  "SA 2½ surface preparation (ISO 8501-1)",
-];
 
 export const certifications = [
   "ASME U-Stamp",
@@ -405,5 +238,34 @@ export const processSteps = [
     step: "06",
     title: "Delivery & Erection",
     body: "Packing, logistics and on-site erection / commissioning — your equipment from drawing to operation.",
+  },
+];
+
+/**
+ * Scanned certificates shown as a 3-up wall under the code chips.
+ *
+ * Drop the scans into /public/images/certifications/ and point `image` at
+ * them. An entry with an empty `image` renders a labelled placeholder tile
+ * instead of a broken one, so this list is safe to ship before the files
+ * arrive — and safe if one ever goes missing.
+ */
+export const certificateDocs = [
+  {
+    title: "ASME U-Stamp",
+    issuer: "The American Society of Mechanical Engineers",
+    image: "",
+    alt: "R&D Therm ASME U-Stamp certificate of authorization for pressure vessel manufacture",
+  },
+  {
+    title: "ISO 9001:2015",
+    issuer: "Quality management system",
+    image: "",
+    alt: "R&D Therm ISO 9001:2015 quality management system certificate",
+  },
+  {
+    title: "IBR (India)",
+    issuer: "Indian Boiler Regulations",
+    image: "",
+    alt: "R&D Therm IBR certificate for boiler and steam pressure part manufacture",
   },
 ];

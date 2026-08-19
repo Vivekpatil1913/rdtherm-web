@@ -130,7 +130,7 @@ export const journeySection = {
   eyebrow: "Our Journey",
   heading: ["Three decades of ", "process equipment"] as const,
   description:
-    "Key milestones in the R&D Therm story — from a 1,100 sq ft Nashik shop in 1998 to a global supplier of code-compliant equipment.",
+    "Key milestones in the R&D Therm story — from a 1,100 sq ft Nashik shop in 1995 to a global supplier of code-compliant equipment.",
 };
 
 // `image` is the milestone photograph shown alongside the copy in
@@ -258,18 +258,50 @@ export const timeline = [
   },
 ];
 
-// The Journey rail reads best with six stops — seventeen ticks crowd the line
-// and the auto-advance cycle runs past a minute. So the stage shows a curated
-// arc of the full timeline above: founding, first global licensor approval,
-// the Konark merger, the ASME U-Stamp, the heaviest dispatch, and today.
-// Chronological order; every year here must exist in `timeline`.
-const JOURNEY_YEARS = ["1998", "2007", "2017", "2019", "2024", "2026"];
-
-export const journeyMilestones = JOURNEY_YEARS.map((year) => {
-  const milestone = timeline.find((m) => m.year === year);
-  if (!milestone) throw new Error(`journeyMilestones: no timeline entry for ${year}`);
-  return milestone;
-});
+// The Journey rail reads best with six stops — a longer list crowds the line
+// and pushes the auto-advance cycle past a minute. These are the six the
+// business tells its story with; the fuller year-by-year record lives in
+// `timeline` above and feeds the (currently unused) long-form sections.
+export const journeyMilestones = [
+  {
+    year: "1995",
+    title: "The Beginning",
+    body: "Started operations with a 1,100 sq. ft. facility at SICOE, Nashik, India.",
+    image: "/images/journey/1995.webp",
+  },
+  {
+    year: "2005",
+    title: "Expansion",
+    body: "Expanded our manufacturing facility to 4,000 sq. ft. and received shop approvals from Lloyd’s, BVIS, and TCE.",
+    image: "/images/journey/2005.webp",
+  },
+  {
+    year: "2017",
+    title: "A New Chapter",
+    body: "Amalgamated with the Konark Global Group, marking a significant step forward in our growth and capabilities.",
+    image: "/images/journey/2017.webp",
+  },
+  {
+    year: "2019",
+    title: "ASME U-Stamp & IBR",
+    body: "Received U Stamp certification and IBR certification.",
+    image:
+      "https://images.unsplash.com/photo-1572883454114-1cf0031ede2a?w=1400&q=80&auto=format&fit=crop",
+  },
+  {
+    year: "2022",
+    title: "Advancing Our Capabilities",
+    body: "Invested in advanced manufacturing machinery to improve productivity and optimize operational costs. Expanded our team to undertake and execute larger and more complex projects.",
+    image: "/images/journey/2022.webp",
+  },
+  {
+    year: "2026",
+    title: "Entering Flow Technology",
+    body: "Collaborated with Flowid, a Netherlands-based flow technology company, for the manufacturing and supply of flow reactors and flow skids in India.",
+    image:
+      "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1400&q=80&auto=format&fit=crop",
+  },
+];
 
 // "Worldwide Impact" band. The artwork carries the map on its right side and
 // leaves the left third empty by design, so the copy sits in that space.
@@ -282,6 +314,9 @@ export const globalPresence = {
     "building partnerships that power progress.",
   ] as const,
   image: "/images/about/newmap.webp",
+  // Portrait crop of the same artwork — the wide plate loses the map once the
+  // band is phone-width, so small screens get their own file.
+  mobileImage: "/images/about/mobilemap.webp",
   imageAlt:
     "World map marking the countries R&D Therm has supplied process equipment to across six continents",
   stats: [

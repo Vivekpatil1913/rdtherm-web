@@ -13,7 +13,6 @@ export interface ApiProduct {
   id: string;
   slug: string;
   title: string;
-  summary: string;
   cover: string;
   featured: boolean;
   specs: string[];

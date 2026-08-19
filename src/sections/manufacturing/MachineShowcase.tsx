@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
@@ -31,14 +32,14 @@ export function MachineShowcase() {
             variants={fadeUp}
             className="lg:col-span-7 text-[32px] leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[60px] font-bold"
           >
-            Every machine you&apos;d expect to find in a{" "}
-            <span className="text-[var(--color-accent)]">code shop</span>.
+            The Right Tools for{" "}
+            <span className="text-[var(--color-accent)]">Every Challenge</span>
           </motion.h2>
           <motion.p
             variants={fadeUp}
             className="lg:col-span-5 text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[460px]"
           >
-            From a 4 kW fibre laser to a 300-tonne press brake, hydro-test bays at 500 bar, and a 6-axis welding robot — explore the kit on our shop floor.
+            Our facility is equipped with a comprehensive range of modern machinery — from precision cutting and rolling to advanced welding setups and testing equipment. Every machine is maintained to the highest standards, enabling us to handle complex fabrication requirements with accuracy, efficiency, and confidence.
           </motion.p>
         </motion.div>
 
@@ -84,11 +85,7 @@ export function MachineShowcase() {
             transition={{ duration: 0.4, ease: EASE_OUT_SOFT }}
             className="mt-10"
           >
-            <p className="text-[15px] sm:text-[18px] leading-[1.6] text-[var(--color-ink-soft)] max-w-[600px]">
-              {active.subtitle}
-            </p>
-
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {active.machines.map((m, i) => (
                 <motion.article
                   key={m.name}
@@ -99,34 +96,43 @@ export function MachineShowcase() {
                     delay: 0.05 + i * 0.06,
                     ease: EASE_OUT_SOFT,
                   }}
-                  className="group relative flex flex-col gap-5 rounded-[18px] border border-[var(--color-line)] bg-white p-6 lg:p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.18)]"
+                  className="group relative flex flex-col gap-5 rounded-[18px] border border-[var(--color-line)] bg-white p-5 lg:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.18)]"
                 >
-                  <div className="flex h-28 items-center justify-center rounded-[12px] bg-[var(--color-bg-soft)]">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)]">
-                      {active.label} · {String(i + 1).padStart(2, "0")}
-                    </p>
+                  <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[12px] bg-[var(--color-bg-soft)]">
+                    {m.image ? (
+                      <Image
+                        src={m.image}
+                        alt={m.name}
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      />
+                    ) : (
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)]">
+                        {active.label} · {String(i + 1).padStart(2, "0")}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="flex flex-col gap-2">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
-                      {m.type}
-                    </p>
-                    <h3 className="text-[20px] font-semibold leading-tight">{m.name}</h3>
-                  </div>
+                  <h3 className="text-[20px] font-semibold leading-tight">{m.name}</h3>
 
-                  <ColumnTick />
+                  {m.specs.length ? (
+                    <>
+                      <ColumnTick />
 
-                  <ul className="flex flex-col gap-2 text-[13px] leading-[1.55] text-[var(--color-ink-soft)]">
-                    {m.specs.map((s) => (
-                      <li key={s} className="flex items-start gap-2">
-                        <span
-                          aria-hidden
-                          className="mt-1.5 inline-block size-1 rounded-full bg-[var(--color-accent)]"
-                        />
-                        <span>{s}</span>
-                      </li>
-                    ))}
-                  </ul>
+                      <ul className="flex flex-col gap-2 text-[13px] leading-[1.55] text-[var(--color-ink-soft)]">
+                        {m.specs.map((s) => (
+                          <li key={s} className="flex items-start gap-2">
+                            <span
+                              aria-hidden
+                              className="mt-1.5 inline-block size-1 rounded-full bg-[var(--color-accent)]"
+                            />
+                            <span>{s}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : null}
                 </motion.article>
               ))}
             </div>

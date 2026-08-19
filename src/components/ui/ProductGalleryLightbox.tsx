@@ -19,12 +19,22 @@ export type ProductGalleryImage = {
   caption?: string;
 };
 
+/**
+ * "landscape" — the default wide hero + side tiles, for photos shot wider than
+ * they are tall. "portrait" — an even grid of tall tiles for products that are
+ * photographed vertically (air receivers), so a tall vessel is never cropped
+ * into a wide frame. Recommended upload for portrait: 1080 x 1920 px (9:16) —
+ * the same ratio as the tile, so the photo fills it edge to edge.
+ */
+export type ProductGalleryOrientation = "landscape" | "portrait";
+
 type Props = {
   title: string;
   images: ProductGalleryImage[];
+  orientation?: ProductGalleryOrientation;
 };
 
-export function ProductGalleryLightbox({ title, images }: Props) {
+export function ProductGalleryLightbox({ title, images, orientation = "landscape" }: Props) {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -41,46 +51,83 @@ export function ProductGalleryLightbox({ title, images }: Props) {
   };
 
   const [hero, ...rest] = images;
+  const isPortrait = orientation === "portrait";
+
+  // Portrait tiles are narrow by nature, so a one- or two-photo gallery gets
+  // fewer columns instead of sitting tiny in a corner of a four-up grid.
+  const portraitColumns =
+    images.length === 1
+      ? "grid-cols-1 sm:grid-cols-2"
+      : images.length === 2
+        ? "grid-cols-2 sm:grid-cols-3"
+        : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
+  const portraitSizes =
+    images.length === 1
+      ? "(max-width: 640px) 100vw, 50vw"
+      : images.length === 2
+        ? "(max-width: 640px) 50vw, 33vw"
+        : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw";
 
   return (
     <>
       <section className="bg-[var(--color-bg-soft)] pb-8 lg:pb-10">
         <Container size="wide">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5">
-            <GalleryTile
-              image={hero}
-              alt={hero.alt ?? title}
-              className="relative lg:col-span-8 aspect-[16/10] lg:aspect-[16/11]"
-              priority
-              onClick={() => openAt(0)}
-            />
-
-            <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-5">
-              {rest.slice(0, 2).map((img, i) => (
+          {isPortrait ? (
+            /* Tall product photos: every tile keeps the same 9:16 portrait
+               frame as the upload spec and the image is contained (never
+               cropped), so photos sit edge to edge with only the grid gap
+               between them. */
+            <div className={`grid gap-2 sm:gap-3 ${portraitColumns}`}>
+              {images.map((img, i) => (
                 <GalleryTile
                   key={img.url}
                   image={img}
                   alt={img.alt ?? title}
-                  className="relative aspect-square lg:aspect-[16/10]"
-                  onClick={() => openAt(i + 1)}
+                  className="relative aspect-[9/16]"
+                  sizes={portraitSizes}
+                  fit="contain"
+                  priority={i === 0}
+                  onClick={() => openAt(i)}
                 />
               ))}
             </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5">
+              <GalleryTile
+                image={hero}
+                alt={hero.alt ?? title}
+                className="relative lg:col-span-8 aspect-[16/10] lg:aspect-[16/11]"
+                priority
+                onClick={() => openAt(0)}
+              />
 
-            {rest.length > 2 ? (
-              <div className="lg:col-span-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
-                {rest.slice(2).map((img, i) => (
+              <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-5">
+                {rest.slice(0, 2).map((img, i) => (
                   <GalleryTile
                     key={img.url}
                     image={img}
                     alt={img.alt ?? title}
-                    className="relative aspect-[5/4]"
-                    onClick={() => openAt(i + 3)}
+                    className="relative aspect-square lg:aspect-[16/10]"
+                    onClick={() => openAt(i + 1)}
                   />
                 ))}
               </div>
-            ) : null}
-          </div>
+
+              {rest.length > 2 ? (
+                <div className="lg:col-span-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
+                  {rest.slice(2).map((img, i) => (
+                    <GalleryTile
+                      key={img.url}
+                      image={img}
+                      alt={img.alt ?? title}
+                      className="relative aspect-[5/4]"
+                      onClick={() => openAt(i + 3)}
+                    />
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          )}
         </Container>
       </section>
 
@@ -103,12 +150,16 @@ function GalleryTile({
   image,
   alt,
   className,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw",
+  fit = "cover",
   priority,
   onClick,
 }: {
   image: { url: string; alt?: string; label?: string; caption?: string };
   alt: string;
   className: string;
+  sizes?: string;
+  fit?: "cover" | "contain";
   priority?: boolean;
   onClick: () => void;
 }) {
@@ -128,7 +179,12 @@ function GalleryTile({
       onClick={onClick}
       onKeyDown={handleKey}
       className={
-        "group relative cursor-zoom-in overflow-hidden rounded-[16px] border border-[var(--color-line)] bg-[var(--color-bg-dark)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 " +
+        "group relative cursor-zoom-in overflow-hidden rounded-[18px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 " +
+        // Contained (portrait) tiles stay frameless — no card, no border, no
+        // padding — so the letterboxed area blends into the section background.
+        (fit === "contain"
+          ? "bg-transparent "
+          : "border border-[var(--color-line)] bg-[var(--color-bg-dark)] ") +
         className
       }
     >
@@ -136,8 +192,11 @@ function GalleryTile({
         src={image.url}
         alt={alt}
         fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-        className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+        sizes={sizes}
+        className={
+          "transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06] " +
+          (fit === "contain" ? "rounded-[18px] object-contain" : "object-cover")
+        }
         priority={priority}
       />
       {caption ? (

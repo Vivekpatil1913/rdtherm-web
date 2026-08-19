@@ -37,7 +37,9 @@ export function TrustedBy({ logos = [] }: { logos?: ApiLogo[] }) {
         />
 
         {/* items-start + fixed-height logo box keeps every name on the same
-            baseline no matter how tall or short the logo art is. */}
+            baseline no matter how tall or short the logo art is. Names wrap
+            onto as many lines as they need — the row is top-aligned, so a
+            two-line name grows downward without shifting its neighbours. */}
         <div
           className="marquee-track flex w-max items-start gap-4 lg:gap-5 px-4 lg:px-5"
           aria-label="Companies that trust R&D Therm"
@@ -64,7 +66,7 @@ export function TrustedBy({ logos = [] }: { logos?: ApiLogo[] }) {
               {logo.imageUrl ? (
                 <span
                   title={logo.name}
-                  className="block w-full truncate text-center text-[13px] lg:text-[14px] font-semibold leading-snug tracking-tight text-[var(--color-ink)]"
+                  className="block w-full break-words text-center text-[13px] lg:text-[14px] font-semibold leading-snug tracking-tight text-[var(--color-ink)]"
                 >
                   {logo.name}
                 </span>

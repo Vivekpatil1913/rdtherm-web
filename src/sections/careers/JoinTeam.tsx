@@ -169,10 +169,10 @@ export function JoinTeam() {
                   <Mail className="size-4" />
                 </span>
                 <a
-                  href="mailto:sales@rdtherm.com"
+                  href={`mailto:${siteConfig.hr.email}`}
                   className="hover:text-[var(--color-accent)]"
                 >
-                  sales@rdtherm.com
+                  {siteConfig.hr.email}
                 </a>
               </li>
               <li className="flex items-center gap-3 text-[var(--color-ink)]">
@@ -180,10 +180,10 @@ export function JoinTeam() {
                   <Phone className="size-4" />
                 </span>
                 <a
-                  href={`tel:${siteConfig.contact.phone}`}
+                  href={`tel:${siteConfig.hr.phoneHref}`}
                   className="hover:text-[var(--color-accent)]"
                 >
-                  {siteConfig.contact.phone}
+                  {siteConfig.hr.phone}
                 </a>
               </li>
             </ul>
@@ -391,7 +391,7 @@ export function JoinTeam() {
 
             {status === "error" ? (
               <p className="mt-4 text-[13px] font-medium text-[var(--color-accent)]">
-                {errorMsg || "Something went wrong. Please retry or email sales@rdtherm.com."}
+                {errorMsg || `Something went wrong. Please retry or email ${siteConfig.hr.email}.`}
               </p>
             ) : null}
           </motion.form>

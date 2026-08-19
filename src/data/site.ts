@@ -16,6 +16,11 @@ export const siteConfig = {
       { label: "Sunday", value: "Closed" },
     ],
   },
+  hr: {
+    phone: "+91 72198 94104",
+    phoneHref: "+917219894104",
+    email: "hr@konarkgloble.com",
+  },
   social: [
     { label: "Facebook", href: "#" },
     { label: "Instagram", href: "#" },
