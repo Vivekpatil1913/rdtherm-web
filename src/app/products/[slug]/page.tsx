@@ -30,6 +30,17 @@ const COMMON_COMPLIANCE = ["ASME Section VIII", "ASME U-Stamp", "PED 2014/68/EU"
  */
 const PORTRAIT_GALLERY_SLUGS = new Set(["air-receiver"]);
 
+/**
+ * Products that carry an extra call-to-action opening an external site in a new
+ * tab, keyed by slug. Only listed products render the button.
+ */
+const PRODUCT_EXTERNAL_CTA: Record<string, { label: string; href: string }> = {
+  "air-receiver": {
+    label: "View Air Receiver Range",
+    href: "__CTA_URL__",
+  },
+};
+
 export async function generateMetadata(
   props: PageProps<"/products/[slug]">,
 ): Promise<Metadata> {
@@ -72,6 +83,7 @@ export default async function ProductDetailPage(
     { label: "Materials", items: product.materials },
     { label: "Compliance", items: compliance },
   ].filter((g) => g.items && g.items.length > 0);
+  const externalCta = PRODUCT_EXTERNAL_CTA[slug];
 
   return (
     <>
@@ -100,9 +112,16 @@ export default async function ProductDetailPage(
               </h1>
             </Reveal>
             <Reveal as="div" className="lg:col-span-4">
-              <Button href="/contact" variant="primary">
-                Request a quote
-              </Button>
+              <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <Button href="/contact" variant="primary">
+                  Request a quote
+                </Button>
+                {externalCta ? (
+                  <Button href={externalCta.href} target="_blank" variant="dark">
+                    {externalCta.label}
+                  </Button>
+                ) : null}
+              </div>
             </Reveal>
           </div>
         </Container>
@@ -175,9 +194,16 @@ export default async function ProductDetailPage(
                 </h3>
               </div>
               <div className="lg:col-span-4 lg:flex lg:justify-end">
-                <Button href="/contact" variant="dark">
-                  Request a quote
-                </Button>
+                <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:justify-end">
+                  <Button href="/contact" variant="dark">
+                    Request a quote
+                  </Button>
+                  {externalCta ? (
+                    <Button href={externalCta.href} target="_blank" variant="white">
+                      {externalCta.label}
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             </div>
           </Reveal>

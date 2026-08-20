@@ -34,6 +34,9 @@ type CommonProps = {
 
 type ButtonAsLink = CommonProps & {
   href: string;
+  /** Set to "_blank" to open in a new tab; `rel` then defaults to a safe value. */
+  target?: React.HTMLAttributeAnchorTarget;
+  rel?: string;
   onClick?: never;
   type?: never;
 };
@@ -145,6 +148,21 @@ export function Button(props: ButtonProps) {
   );
 
   if ("href" in props && props.href) {
+    const external = /^(https?:|mailto:|tel:)/.test(props.href);
+    // External or new-tab links bypass the client router and always carry
+    // noopener so the opened page cannot reach back through window.opener.
+    if (external || props.target) {
+      return (
+        <a
+          href={props.href}
+          target={props.target}
+          rel={props.rel ?? (props.target === "_blank" ? "noopener noreferrer" : undefined)}
+          className={cls}
+        >
+          {content}
+        </a>
+      );
+    }
     return (
       <Link href={props.href} className={cls}>
         {content}
