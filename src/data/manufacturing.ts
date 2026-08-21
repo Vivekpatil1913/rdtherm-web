@@ -249,23 +249,29 @@ export const processSteps = [
  * instead of a broken one, so this list is safe to ship before the files
  * arrive — and safe if one ever goes missing.
  */
+// `file` is the certificate scan itself (a PDF in /public). A card with one
+// previews the document and opens it in a new tab; a card without one falls
+// back to a placeholder until the scan arrives.
 export const certificateDocs = [
   {
     title: "ASME U-Stamp",
     issuer: "The American Society of Mechanical Engineers",
-    image: "",
+    validity: "2025 – 2028",
+    file: "/images/certifications/rdtherm-asme-u-stamp-certificate-2025-2028.pdf",
     alt: "R&D Therm ASME U-Stamp certificate of authorization for pressure vessel manufacture",
   },
   {
     title: "ISO 9001:2015",
     issuer: "Quality management system",
-    image: "",
+    validity: "2024 – 2027",
+    file: "/images/certifications/rdtherm-iso-9001-certificate-2024-2027.pdf",
     alt: "R&D Therm ISO 9001:2015 quality management system certificate",
   },
   {
     title: "IBR (India)",
     issuer: "Indian Boiler Regulations",
-    image: "",
+    validity: "Valid till 31 Dec 2026",
+    file: "/images/certifications/rdtherm-ibr-certificate-2026.pdf",
     alt: "R&D Therm IBR certificate for boiler and steam pressure part manufacture",
   },
 ];
