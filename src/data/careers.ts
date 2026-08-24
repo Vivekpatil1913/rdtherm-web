@@ -12,19 +12,19 @@ export const careersHero = {
 export const benefits = [
   {
     title: "Real ownership",
-    body: "Every engineer here owns at least one project end-to-end — from drawing to dispatch.",
+    body: "Our engineers are trusted with real responsibilities and technical challenges, with experienced mentors available to guide, support, and help you grow along the way.",
   },
   {
     title: "Continuous learning",
-    body: "Welding qualifications, code training, NDT certification — we invest in growing your skills.",
+    body: "Grow through new challenges and hands-on experience. Work across disciplines, learn from different areas of engineering, and continuously expand technical knowledge and problem-solving skills.",
   },
   {
     title: "Modern facility",
-    body: "Air-conditioned engineering bays, climate-controlled stainless steel shop and clean utility areas.",
+    body: "Work in a modern, well-equipped workshop combined with a comfortable office environment in the Nashik city bringing engineering, collaboration, and hands-on work together under one roof.",
   },
   {
     title: "Health & safety first",
-    body: "ISO 45001-certified safety system, full PPE, and a culture where stopping for safety is celebrated.",
+    body: "Your health and safety always come first. We are committed to maintaining a safe, well-organized workplace where everyone can work confidently and responsibly.",
   },
 ];
 

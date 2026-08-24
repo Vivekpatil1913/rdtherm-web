@@ -19,32 +19,32 @@ export const strengths = [
   {
     number: "03",
     title: "Modern Fabrication Shop",
-    body: "Dedicated CS and SS bays, plasma cutting, automatic seam welders, CNC rolling and a dedicated dished-end forming line.",
+    body: "Dedicated SS and MS bays, plasma cutting, special purpose welding machine, robotic welding.",
   },
   {
     number: "04",
     title: "Qualified Welding Procedures",
-    body: "Over 200+ qualified WPS/PQRs covering GTAW, SMAW, SAW, FCAW and orbital welding for sanitary process equipment.",
+    body: "Over 80+ qualified WPS/PQR covering GTAW, SMAW, SAW and FCAW.",
   },
   {
     number: "05",
     title: "NDT & Inspection",
-    body: "In-house RT, UT, PT, MT, PMI and hardness testing — performed by ASNT Level II / Level III qualified inspectors.",
+    body: "Inhouse RT, UT, PMI, DP performed by Level II/III NDT engineers.",
   },
   {
     number: "06",
     title: "Hydro & Pneumatic Testing",
-    body: "Test bays for hydro and pneumatic testing of equipment up to high pressures, with calibrated instrumentation.",
+    body: "Hydro and pneumatic testing of equipment up to high pressure with calibrated instrumentation.",
   },
   {
     number: "07",
     title: "Surface Treatment & Finishing",
-    body: "Pickling, passivation, electropolishing and shot blasting — including 0.4 µm Ra finishes for sanitary applications.",
+    body: "Pickling and passivation for stainless steel equipments, blasting and painting for carbon steel equipments and surface finish less than 0.4 μm for sanitary applications.",
   },
   {
     number: "08",
     title: "Project Management",
-    body: "Single point of contact, integrated MS Project schedules and weekly progress dashboards for every active order.",
+    body: "Inhouse developed project management software SETU from order to dispatch for seamless order execution.",
   },
 ];
 
@@ -125,10 +125,10 @@ export const machineCategories = [
     id: "welding",
     label: "Welding",
     machines: [
-      { name: "Manual TIG / MIG Welding", image: null, specs: [] },
+      { name: "Manual TIG / MIG Welding", image: "/images/manufacturing/TIGMIG.webp", specs: [] },
       { name: "6 Axis Robotic Welding", image: "/images/manufacturing/robotic-welding.webp", specs: [] },
       { name: "Special Purpose Machine", image: "/images/manufacturing/special-purpose-welding-machine.webp", specs: [] },
-      { name: "SAW Column and Boom", image: null, specs: [] },
+      { name: "SAW Column and Boom", image: "/images/manufacturing/Rolling.webp", specs: [] },
     ],
   },
   {
@@ -136,29 +136,29 @@ export const machineCategories = [
     label: "Machining",
     machines: [
       { name: "Radial Drilling Machine", image: "/images/manufacturing/radial-drill-machine.webp", specs: [] },
-      { name: "Conventional Lathe Machine", image: null, specs: [] },
+      { name: "Conventional Lathe Machine", image: "/images/manufacturing/Conventional Lathe Machine.webp", specs: [] },
     ],
   },
-  {
-    id: "surface",
-    label: "Surface Prep",
-    machines: [
-      { name: "Shot Blasting Booth", image: null, specs: [] },
-      { name: "Painting & Curing Line", image: null, specs: [] },
-      { name: "Metalising Cabin", image: null, specs: [] },
-      { name: "Powder Coating", image: null, specs: [] },
-    ],
-  },
-  {
-    id: "testing",
-    label: "Testing",
-    machines: [
-      { name: "Hydro Test Pump", image: null, specs: [] },
-      { name: "Pneumatic Test Rig", image: null, specs: [] },
-      { name: "NDT Lab", image: null, specs: [] },
-      { name: "Dimensional Tools", image: null, specs: [] },
-    ],
-  },
+  // {
+  //   id: "surface",
+  //   label: "Surface Prep",
+  //   machines: [
+  //     { name: "Shot Blasting Booth", image: null, specs: [] },
+  //     { name: "Painting & Curing Line", image: null, specs: [] },
+  //     { name: "Metalising Cabin", image: null, specs: [] },
+  //     { name: "Powder Coating", image: null, specs: [] },
+  //   ],
+  // },
+  // {
+  //   id: "testing",
+  //   label: "Testing",
+  //   machines: [
+  //     { name: "Hydro Test Pump", image: null, specs: [] },
+  //     { name: "Pneumatic Test Rig", image: null, specs: [] },
+  //     { name: "NDT Lab", image: null, specs: [] },
+  //     { name: "Dimensional Tools", image: null, specs: [] },
+  //   ],
+  // },
 ];
 
 export const qualifiedMaterials = [

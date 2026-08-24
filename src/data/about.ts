@@ -285,8 +285,7 @@ export const journeyMilestones = [
     year: "2019",
     title: "ASME U-Stamp & IBR",
     body: "Received U Stamp certification and IBR certification.",
-    image:
-      "https://images.unsplash.com/photo-1572883454114-1cf0031ede2a?w=1400&q=80&auto=format&fit=crop",
+    image: "/images/journey/2019.webp",
   },
   {
     year: "2022",
@@ -298,8 +297,7 @@ export const journeyMilestones = [
     year: "2026",
     title: "Entering Flow Technology",
     body: "Collaborated with Flowid, a Netherlands-based flow technology company, for the manufacturing and supply of flow reactors and flow skids in India.",
-    image:
-      "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1400&q=80&auto=format&fit=crop",
+    image: "/images/journey/2026.webp",
   },
 ];
 

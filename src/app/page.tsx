@@ -61,7 +61,7 @@ export default async function HomePage() {
       <Industries items={industries} />
       <TrustedBy logos={logos} />
       <LatestBlog posts={blogs.slice(0, 3)} />
-      <Testimonials items={testimonials} />
+      {/* <Testimonials items={testimonials} /> */}
     </>
   );
 }
