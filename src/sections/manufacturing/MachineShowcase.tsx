@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { SectionTag } from "@/components/ui/SectionTag";
 import { ColumnTick } from "@/components/ui/SectionDivider";
 import { fadeUp, stagger, viewportOnce, EASE_OUT_SOFT } from "@/animations/motion";
-import { machineCategories } from "@/data/manufacturing";
+import { machineCategories, type Machine } from "@/data/manufacturing";
 import { cn } from "@/lib/cn";
 
 export function MachineShowcase() {
@@ -98,21 +98,10 @@ export function MachineShowcase() {
                   }}
                   className="group relative flex flex-col gap-5 rounded-[18px] border border-[var(--color-line)] bg-white p-5 lg:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.18)]"
                 >
-                  <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[12px] bg-[var(--color-bg-soft)]">
-                    {m.image ? (
-                      <Image
-                        src={m.image}
-                        alt={m.name}
-                        fill
-                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                      />
-                    ) : (
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)]">
-                        {active.label} · {String(i + 1).padStart(2, "0")}
-                      </p>
-                    )}
-                  </div>
+                  <MachineFrame
+                    machine={m}
+                    placeholder={`${active.label} · ${String(i + 1).padStart(2, "0")}`}
+                  />
 
                   <h3 className="text-[20px] font-semibold leading-tight">{m.name}</h3>
 
@@ -140,5 +129,100 @@ export function MachineShowcase() {
         </AnimatePresence>
       </Container>
     </section>
+  );
+}
+
+/** How long each photo holds before the gallery advances. */
+const SLIDE_MS = 4000;
+
+/**
+ * The card's photo frame. A machine with a single photo renders exactly as
+ * before; two or more turn it into a gallery that advances on its own and can
+ * be driven by the dots. Autoplay pauses while the pointer is over the frame
+ * (or a dot has focus) so a visitor is never fighting the timer.
+ */
+function MachineFrame({ machine, placeholder }: { machine: Machine; placeholder: string }) {
+  const photos = machine.images?.length
+    ? machine.images
+    : machine.image
+      ? [machine.image]
+      : [];
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (photos.length < 2 || paused || reduceMotion) return;
+    const t = setInterval(() => setIndex((i) => (i + 1) % photos.length), SLIDE_MS);
+    return () => clearInterval(t);
+  }, [photos.length, paused, reduceMotion]);
+
+  return (
+    <div
+      className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[12px] bg-[var(--color-bg-soft)]"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {photos.length ? (
+        <AnimatePresence initial={false}>
+          <motion.span
+            key={photos[index]}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: EASE_OUT_SOFT }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={photos[index]}
+              alt={
+                photos.length > 1
+                  ? `${machine.name} — photo ${index + 1} of ${photos.length}`
+                  : machine.name
+              }
+              fill
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            />
+          </motion.span>
+        </AnimatePresence>
+      ) : (
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)]">
+          {placeholder}
+        </p>
+      )}
+
+      {photos.length > 1 ? (
+        <>
+          {/* Scrim so the dots stay legible over a bright photo */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent"
+          />
+          <div className="absolute inset-x-0 bottom-3 flex items-center justify-center gap-1.5">
+            {photos.map((src, i) => {
+              const isActive = i === index;
+              return (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  onFocus={() => setPaused(true)}
+                  onBlur={() => setPaused(false)}
+                  aria-label={`Show photo ${i + 1} of ${photos.length}`}
+                  aria-current={isActive}
+                  className={cn(
+                    "h-1.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70",
+                    isActive
+                      ? "w-5 bg-[var(--color-accent)]"
+                      : "w-1.5 bg-white/65 hover:bg-white",
+                  )}
+                />
+              );
+            })}
+          </div>
+        </>
+      ) : null}
+    </div>
   );
 }

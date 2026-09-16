@@ -75,8 +75,7 @@ export const facility = [
     id: "ss-shop",
     title: "Stainless Steel Workshop",
     imageLabel: "Stainless Steel Workshop",
-    image:
-      "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1400&q=80&auto=format&fit=crop",
+    image: "/images/manufacturing/ss-shop.webp",
     bays: [
       { label: "Under shed", value: "10,000 sq ft" },
       { label: "Open yard", value: "5,000 sq ft" },
@@ -87,9 +86,20 @@ export const facility = [
   },
 ];
 
+export type Machine = {
+  name: string;
+  /** Single card photo. Omit it (or leave it null) to render a placeholder. */
+  image?: string | null;
+  /** Two or more photos turn the card into an auto-advancing gallery. */
+  images?: string[];
+  specs: string[];
+};
+
+export type MachineCategory = { id: string; label: string; machines: Machine[] };
+
 // Categorised machine inventory — used by the interactive MachineShowcase.
 // `specs` may be empty: those categories render as title-only cards.
-export const machineCategories = [
+export const machineCategories: MachineCategory[] = [
   {
     id: "cutting",
     label: "Cutting",
@@ -135,8 +145,23 @@ export const machineCategories = [
     id: "machining",
     label: "Machining",
     machines: [
-      { name: "Radial Drilling Machine", image: "/images/manufacturing/radial-drill-machine-2.webp", specs: [] },
-      { name: "Conventional Lathe Machine", image: "/images/manufacturing/conventional-lathe-machine-1.webp", specs: [] },
+      {
+        name: "Radial Drilling Machine",
+        images: [
+          "/images/manufacturing/radial-drill-machine-1.webp",
+          "/images/manufacturing/radial-drill-machine-2.webp",
+          "/images/manufacturing/radial-drill-machine-3.webp",
+        ],
+        specs: [],
+      },
+      {
+        name: "Conventional Lathe Machine",
+        images: [
+          "/images/manufacturing/conventional-lathe-machine-1.webp",
+          "/images/manufacturing/conventional-lathe-machine-2.webp",
+        ],
+        specs: [],
+      },
     ],
   },
   // {
