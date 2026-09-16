@@ -60,10 +60,9 @@ export const facility = [
   {
     id: "cs-shop",
     title: "Carbon Steel Workshop",
-    // Swap for a real shop-floor photo when available — the section falls back to
-    // a branded placeholder frame if the image ever fails to load.
-    image:
-      "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1400&q=80&auto=format&fit=crop",
+    image: "/images/manufacturing/ss-shop.webp",
+    // Caption shown on the photo — names what the shot actually is.
+    imageLabel: "SS Shop",
     bays: [
       { label: "Under shed", value: "20,000 sq ft" },
       { label: "Open yard", value: "15,000 sq ft" },
@@ -75,6 +74,7 @@ export const facility = [
   {
     id: "ss-shop",
     title: "Stainless Steel Workshop",
+    imageLabel: "Stainless Steel Workshop",
     image:
       "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1400&q=80&auto=format&fit=crop",
     bays: [
@@ -135,8 +135,8 @@ export const machineCategories = [
     id: "machining",
     label: "Machining",
     machines: [
-      { name: "Radial Drilling Machine", image: "/images/manufacturing/radial-drill-machine.webp", specs: [] },
-      { name: "Conventional Lathe Machine", image: "/images/manufacturing/Conventional Lathe Machine.webp", specs: [] },
+      { name: "Radial Drilling Machine", image: "/images/manufacturing/radial-drill-machine-2.webp", specs: [] },
+      { name: "Conventional Lathe Machine", image: "/images/manufacturing/conventional-lathe-machine-1.webp", specs: [] },
     ],
   },
   // {

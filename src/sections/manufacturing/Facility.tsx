@@ -157,7 +157,7 @@ function BayRow({ bay, index }: { bay: Bay; index: number }) {
           {bay.image && imageOk ? (
             <Image
               src={bay.image}
-              alt={`${bay.title} — R&D Therm shop floor`}
+              alt={`${bay.imageLabel || bay.title} — R&D Therm shop floor`}
               fill
               sizes="(max-width: 1024px) 100vw, 620px"
               className="relative object-cover transition-transform duration-700 group-hover:scale-[1.05]"
@@ -172,7 +172,7 @@ function BayRow({ bay, index }: { bay: Bay; index: number }) {
           />
           <span className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/12 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md">
             <span className="size-1.5 rounded-full bg-[var(--color-accent)]" aria-hidden />
-            {bay.title}
+            {bay.imageLabel || bay.title}
           </span>
         </div>
       </div>

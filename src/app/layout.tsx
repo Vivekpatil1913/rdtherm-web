@@ -16,7 +16,7 @@ const monaSans = Mona_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const SITE_URL = "https://rdtherm.example.com";
+const SITE_URL = "https://rdtherm.com";
 const DEFAULT_TITLE = `${siteConfig.name} — Process Equipment, Engineered & Manufactured Right`;
 const DEFAULT_DESCRIPTION = siteConfig.description;
 const DEFAULT_OG_IMAGE = "/images/hero/rdtherm-logo.png";
@@ -56,7 +56,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  // Favicon is auto-generated from src/app/icon.png via Next.js file convention.
+  // Favicons are wired by the Next.js file convention from src/app/:
+  // favicon.ico (legacy + Google search), icon.svg / icon.png (browser tabs)
+  // and apple-icon.png (iOS home screen). The PWA manifest lives in manifest.ts.
+  appleWebApp: {
+    title: siteConfig.shortName,
+  },
   openGraph: {
     type: "website",
     siteName: siteConfig.shortName,

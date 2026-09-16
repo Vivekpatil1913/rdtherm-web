@@ -15,7 +15,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "videos.pexels.com" },
       { protocol: "https", hostname: "i.pravatar.cc" },
       // Images uploaded through the Admin panel and served by the API.
-      { protocol: "https", hostname: "rdtherm-api.sumagodemo.com" },
+      // { protocol: "https", hostname: "rdtherm-api.sumagodemo.com" },
+      { protocol: "https", hostname: "newrdthermapi.konarkglobal.com" },
       { protocol: "http", hostname: "localhost", port: "4000" },
     ],
   },

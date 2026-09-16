@@ -8,7 +8,8 @@
  *   updated, deactivated and deleted records are reflected on the next request.
  */
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://rdtherm-api.sumagodemo.com";
+// const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://rdtherm-api.sumagodemo.com";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://newrdthermapi.konarkglobal.com";
 const TIMEOUT_MS = 8000;
 
 type GetOptions = {

@@ -12,6 +12,8 @@ import { submitLead } from "@/services/content";
 import { Recaptcha, type RecaptchaHandle } from "@/components/ui/Recaptcha";
 
 const MESSAGE_LIMIT = 250;
+// Mirrors the backend rule so the user is told before the request is sent.
+const MESSAGE_MIN = 5;
 
 // Name: letters/spaces (+ basic name punctuation) only — no digits or symbols.
 const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
@@ -92,6 +94,8 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
     if (!form.phone.trim()) next.phone = "Please enter your phone number.";
     else if (!MOBILE_RE.test(form.phone)) next.phone = "Enter a 10-digit number starting 6, 7, 8 or 9.";
     if (!form.message.trim()) next.message = "Please enter a short message.";
+    else if (form.message.trim().length < MESSAGE_MIN)
+      next.message = `Message must be at least ${MESSAGE_MIN} characters.`;
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -122,6 +126,10 @@ export function ContactSection({ settings }: { settings?: ApiSettings | null }) 
       setSubmitted(true);
       setForm(INITIAL_STATE);
       setErrors({});
+    } else if (res.fieldErrors && Object.keys(res.fieldErrors).length) {
+      // Surface the backend's per-field validation errors under the matching fields.
+      setErrors(res.fieldErrors as Partial<Record<keyof FormState, string>>);
+      setError("Please correct the highlighted fields and try again.");
     } else {
       setError(res.error || "Could not send your enquiry. Please try again.");
     }

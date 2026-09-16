@@ -19,7 +19,7 @@ export const siteConfig = {
   hr: {
     phone: "+91 72198 94104",
     phoneHref: "+917219894104",
-    email: "hr@konarkgloble.com",
+    email: "hr@konarkglobal.com",
   },
   social: [
     { label: "Facebook", href: "#" },

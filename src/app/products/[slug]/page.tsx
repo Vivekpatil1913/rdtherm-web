@@ -20,8 +20,6 @@ const excerpt = (html: string, max = 160) => {
   return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
 };
 
-const COMMON_COMPLIANCE = ["ASME Section VIII", "ASME U-Stamp", "PED 2014/68/EU", "IBR", "ISO 9001:2015"];
-
 /**
  * Products photographed vertically (tall vessel, narrow frame). Their gallery
  * switches to a portrait grid so the shot is never cropped into a wide tile.
@@ -37,7 +35,7 @@ const PORTRAIT_GALLERY_SLUGS = new Set(["air-receiver"]);
 const PRODUCT_EXTERNAL_CTA: Record<string, { label: string; href: string }> = {
   "air-receiver": {
     label: "View Air Receiver Range",
-    href: "__CTA_URL__",
+    href: "https://airstore.rdtherm.com",
   },
 };
 
@@ -76,12 +74,13 @@ export default async function ProductDetailPage(
   const index = all.findIndex((p) => p.slug === slug);
   const total = all.length || 1;
   const related = all.filter((p) => p.slug !== slug).slice(0, 4);
-  const compliance = product.compliance?.length ? product.compliance : COMMON_COMPLIANCE;
+  // Every list is optional in the admin — a group the admin left empty is
+  // dropped here, so its heading never appears on the page.
   const chipGroups = [
     { label: "Specifications", items: product.specs },
     { label: "Applications", items: product.applications },
     { label: "Materials", items: product.materials },
-    { label: "Compliance", items: compliance },
+    { label: "Compliance", items: product.compliance },
   ].filter((g) => g.items && g.items.length > 0);
   const externalCta = PRODUCT_EXTERNAL_CTA[slug];
 
