@@ -1,3 +1,15 @@
+/**
+ * Canonical origin for every absolute URL the site emits — metadataBase (so
+ * canonical and og:url), robots.txt and the XML sitemap all read this one
+ * value, which is what stopped them agreeing before. Override per environment
+ * with NEXT_PUBLIC_SITE_URL so a staging deploy never claims the live domain.
+ * No trailing slash.
+ */
+const CONFIGURED_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://rdtherm.com";
+export const SITE_URL = CONFIGURED_SITE_URL.endsWith("/")
+  ? CONFIGURED_SITE_URL.slice(0, -1)
+  : CONFIGURED_SITE_URL;
+
 export const siteConfig = {
   name: "R & D Therm (I) Pvt. Ltd.",
   shortName: "R&D Therm",

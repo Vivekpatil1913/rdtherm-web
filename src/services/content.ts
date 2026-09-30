@@ -12,6 +12,8 @@ import type {
   ApiIndustry,
   ApiJobOpening,
   ApiLogo,
+  ApiSeoPage,
+  ApiSeoPageSummary,
   ApiProduct,
   ApiSettings,
   ApiTeamMember,
@@ -46,11 +48,26 @@ export const getBlog = (slug: string) => apiGet<ApiBlog | null>(`/blogs/${slug}`
 export const getTestimonials = () => apiGet<ApiTestimonial[]>("/testimonials", []);
 export const getIndustries = () => apiGet<ApiIndustry[]>("/industries", []);
 export const getTeam = () => apiGet<ApiTeamMember[]>("/team", []);
-export const getFaqs = () => apiGet<ApiFaq[]>("/faqs", []);
+/**
+ * FAQs for a product page: that product's own questions first, then the general
+ * ones that apply to every product. Omit the slug for the general set alone.
+ */
+export const getFaqs = (productSlug?: string) =>
+  apiGet<ApiFaq[]>(
+    productSlug ? `/faqs?product=${encodeURIComponent(productSlug)}` : "/faqs",
+    [],
+  );
 export const getCareers = () => apiGet<ApiJobOpening[]>("/careers", []);
 export const getCaseStudies = () => apiGet<ApiCaseStudy[]>("/case-studies", []);
 export const getCaseStudy = (slug: string) => apiGet<ApiCaseStudy | null>(`/case-studies/${slug}`, null);
 export const getSettings = () => apiGet<ApiSettings | null>("/settings", null);
+
+/** Every published SEO landing page — powers the footer list and the sitemap. */
+export const getSeoPages = () => apiGet<ApiSeoPageSummary[]>("/seo-pages", []);
+
+/** One landing page by slug, with its references already resolved. */
+export const getSeoPage = (slug: string) =>
+  apiGet<ApiSeoPage | null>(`/seo-pages/${encodeURIComponent(slug)}`, null);
 
 export const getLogos = () => apiGet<ApiLogo[]>("/logos", []);
 /** Logos filtered by kind (client / integration / certification). */

@@ -8,6 +8,9 @@ import { DesignSoftware } from "@/sections/manufacturing/DesignSoftware";
 // import { QualityMetrics } from "@/sections/manufacturing/QualityMetrics";
 // import { ProcessSteps } from "@/sections/manufacturing/ProcessSteps";
 import { Certifications } from "@/sections/manufacturing/Certifications";
+import { CapabilitiesCta } from "@/sections/manufacturing/CapabilitiesCta";
+import { RelatedLocationPages } from "@/sections/seo/RelatedLocationPages";
+import { getSeoPages } from "@/services/content";
 import { manufacturingHero } from "@/data/manufacturing";
 
 const TITLE = "Manufacturing & Machinery";
@@ -38,6 +41,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ManufacturingPage() {
+  const seoPages = await getSeoPages();
   const [start, accent, end] = manufacturingHero.heading;
   return (
     <>
@@ -60,6 +64,11 @@ export default async function ManufacturingPage() {
       {/* <QualityMetrics /> */}
       {/* <ProcessSteps /> */}
       <Certifications />
+      <RelatedLocationPages
+        pages={seoPages}
+        heading="Manufacturing and fabrication services by location"
+      />
+      <CapabilitiesCta />
     </>
   );
 }

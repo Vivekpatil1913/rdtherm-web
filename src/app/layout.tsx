@@ -6,8 +6,8 @@ import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
 import { ScrollManager } from "@/components/utility/ScrollManager";
 import { LenisProvider } from "@/components/utility/LenisProvider";
-import { siteConfig } from "@/data/site";
-import { getSettings, getProducts } from "@/services/content";
+import { siteConfig, SITE_URL } from "@/data/site";
+import { getSettings, getProducts, getSeoPages } from "@/services/content";
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -16,7 +16,8 @@ const monaSans = Mona_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const SITE_URL = "https://rdtherm.com";
+// SITE_URL is imported from @/data/site so canonical, og:url, robots.txt and
+// the sitemap can never disagree about the domain again.
 const DEFAULT_TITLE = `${siteConfig.name} — Process Equipment, Engineered & Manufactured Right`;
 const DEFAULT_DESCRIPTION = siteConfig.description;
 const DEFAULT_OG_IMAGE = "/images/hero/rdtherm-logo.png";
@@ -145,7 +146,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Products power the navbar's "Products" mega-menu (list + live preview card).
-  const [settings, products] = await Promise.all([getSettings(), getProducts()]);
+  const [settings, products, locationPages] = await Promise.all([
+    getSettings(),
+    getProducts(),
+    getSeoPages(),
+  ]);
   const navProducts = products.map((p) => ({
     slug: p.slug,
     title: p.title,
@@ -171,7 +176,7 @@ export default async function RootLayout({
         <LenisProvider />
         <Navbar products={navProducts} />
         <main className="flex-1">{children}</main>
-        <Footer settings={settings} />
+        <Footer settings={settings} locationPages={locationPages} />
         <FloatingActions />
       </body>
     </html>

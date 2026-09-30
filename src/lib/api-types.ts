@@ -58,11 +58,72 @@ export interface ApiIndustry {
   cover: string;
 }
 
+/** One body section of an SEO landing page, as authored in the admin. */
+export interface ApiSeoSection {
+  heading: string;
+  body: string;
+  bullets: string[];
+}
+
+export interface ApiSeoFaq {
+  question: string;
+  answer: string;
+}
+
+/** Row in the landing-page index — enough for the footer and the sitemap. */
+export interface ApiSeoPageSummary {
+  slug: string;
+  name: string;
+  h1: string;
+  updatedAt?: string;
+  /** Products this landing page covers — drives contextual internal linking. */
+  productSlugs?: string[];
+}
+
+/**
+ * A full landing page. `industries`, `products` and `caseStudies` are resolved
+ * server-side from live records, so a page can only ever show content that
+ * genuinely exists and is still published.
+ */
+export interface ApiSeoPage {
+  slug: string;
+  name: string;
+  primaryKeyword: string;
+  seoTitle: string;
+  metaDescription: string;
+  h1: string;
+  heroDescription: string;
+  heroImageUrl?: string | null;
+  heroImageAlt?: string | null;
+  sections: ApiSeoSection[];
+  faqs: ApiSeoFaq[];
+  ogTitle?: string | null;
+  ogDescription?: string | null;
+  ogImageUrl?: string | null;
+  canonicalUrl?: string | null;
+  industries: { key: string; label: string; description?: string | null }[];
+  products: { slug: string; title: string; cover?: string | null; specs: string[] }[];
+  caseStudies: {
+    slug: string;
+    title: string;
+    client: string;
+    industry: string;
+    summary: string;
+    cover?: string | null;
+  }[];
+}
+
 export interface ApiLogo {
   id: string;
   name: string;
   imageUrl?: string | null;
   kind: "client" | "integration" | "certification";
+  /**
+   * Slug of this client's case study, when there is one and it is live. The API
+   * withholds it for an unpublished study, so a present slug is always safe to
+   * link to.
+   */
+  caseStudySlug?: string | null;
 }
 
 export interface ApiTeamMember {
@@ -78,6 +139,8 @@ export interface ApiFaq {
   id: string;
   question: string;
   answer: string;
+  /** Owning product, or null for a FAQ shown on every product page. */
+  productId?: string | null;
 }
 
 export interface ApiJobOpening {

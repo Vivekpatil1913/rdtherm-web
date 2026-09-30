@@ -11,7 +11,19 @@ import { fadeUp, stagger, viewportOnce, EASE_OUT_SOFT } from "@/animations/motio
 import { siteConfig } from "@/data/site";
 import { heroQuote } from "@/data/home";
 
-const VIDEO_SOURCES = ["/videos/hero/website_banner_v2_web.mp4"];
+const VIDEO_SRC = "/videos/hero/website_banner_v2_web.mp4";
+const POSTER_SRC = "/images/hero/hero-poster.jpg";
+/** Timestamp the poster was captured from, so playback can pick up where it left off. */
+const POSTER_TIME = 2;
+
+/** requestIdleCallback where it exists, a short timeout everywhere else (Safari). */
+function whenIdle(fn: () => void) {
+  const w = window as Window & {
+    requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+  };
+  if (w.requestIdleCallback) w.requestIdleCallback(fn, { timeout: 2000 });
+  else w.setTimeout(fn, 200);
+}
 
 const PORTRAIT_IMG =
   "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&q=80";
@@ -19,24 +31,38 @@ const PORTRAIT_IMG =
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [videoReady, setVideoReady] = useState(false);
+  // The banner is a 36 MB 1080p clip. It autoplays for everyone, but the request
+  // is held back until the page has finished loading so it never competes with
+  // the hero's LCP paint — the poster covers that first moment.
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    const attach = () => whenIdle(() => setVideoSrc(VIDEO_SRC));
+    if (document.readyState === "complete") {
+      attach();
+      return;
+    }
+    window.addEventListener("load", attach, { once: true });
+    return () => window.removeEventListener("load", attach);
+  }, []);
 
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
-
-    // Sync state with actual video element state
-    setIsPlaying(!v.paused);
+    if (!v || !videoSrc) return;
 
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
-    const onCanPlay = () => setVideoReady(true);
+    // Resume at the frame the poster was taken from, so the clip's opening
+    // fade-from-black doesn't flash over it. Each loop replays the fade as authored.
+    const onLoadedMetadata = () => {
+      if (v.currentTime === 0 && v.duration > POSTER_TIME) v.currentTime = POSTER_TIME;
+    };
 
     v.addEventListener("play", onPlay);
     v.addEventListener("pause", onPause);
-    v.addEventListener("canplay", onCanPlay);
+    v.addEventListener("loadedmetadata", onLoadedMetadata);
 
-    // Attempt autoplay (must be muted for browser to allow it)
+    // Autoplay is only permitted while muted.
     v.muted = true;
     v.play().catch(() => {
       // Autoplay rejected — wait for user click on the play button.
@@ -46,11 +72,17 @@ export function Hero() {
     return () => {
       v.removeEventListener("play", onPlay);
       v.removeEventListener("pause", onPause);
-      v.removeEventListener("canplay", onCanPlay);
+      v.removeEventListener("loadedmetadata", onLoadedMetadata);
     };
-  }, []);
+  }, [videoSrc]);
 
   const togglePlay = async () => {
+    // Pressed during the brief window before the source is attached — bring the
+    // clip forward now and let the effect above start playback.
+    if (!videoSrc) {
+      setVideoSrc(VIDEO_SRC);
+      return;
+    }
     const v = videoRef.current;
     if (!v) return;
     try {
@@ -123,18 +155,16 @@ export function Hero() {
           <video
             ref={videoRef}
             className="absolute inset-0 h-full w-full object-cover"
+            // The poster is the element the browser paints (and preload-scans)
+            // for LCP; the clip itself is attached once the page has loaded.
+            poster={POSTER_SRC}
+            src={videoSrc ?? undefined}
             autoPlay
             muted
             loop
             playsInline
-            // No poster — the video itself is the first thing shown, so fetch it
-            // eagerly rather than waiting on metadata only.
-            preload="auto"
-          >
-            {VIDEO_SOURCES.map((src) => (
-              <source key={src} src={src} type="video/mp4" />
-            ))}
-          </video>
+            preload="none"
+          />
 
           {/* Dark overlay — must not capture clicks so the play/pause button works */}
           <div

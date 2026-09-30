@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProductGalleryLightbox } from "@/components/ui/ProductGalleryLightbox";
 import { ProductFaqs } from "@/sections/products/ProductFaqs";
-import { getProduct, getProducts, getFaqs } from "@/services/content";
+import { RelatedLocationPages } from "@/sections/seo/RelatedLocationPages";
+import { getProduct, getProducts, getFaqs, getSeoPages } from "@/services/content";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&q=80&auto=format&fit=crop";
@@ -29,13 +30,15 @@ const excerpt = (html: string, max = 160) => {
 const PORTRAIT_GALLERY_SLUGS = new Set(["air-receiver"]);
 
 /**
- * Products that carry an extra call-to-action opening an external site in a new
- * tab, keyed by slug. Only listed products render the button.
+ * Products that carry an extra call-to-action beside "Request a quote", keyed
+ * by slug. Only listed products render it.
+ *
+ * The button is deliberately inert — it has no destination yet. Give an entry a
+ * `href` here and the Button renders as a link instead, with no other change.
  */
-const PRODUCT_EXTERNAL_CTA: Record<string, { label: string; href: string }> = {
+const PRODUCT_EXTRA_CTA: Record<string, { label: string }> = {
   "air-receiver": {
     label: "View Air Receiver Range",
-    href: "https://airstore.rdtherm.com",
   },
 };
 
@@ -68,7 +71,12 @@ export default async function ProductDetailPage(
   props: PageProps<"/products/[slug]">,
 ) {
   const { slug } = await props.params;
-  const [product, all, faqs] = await Promise.all([getProduct(slug), getProducts(), getFaqs()]);
+  const [product, all, faqs, seoPages] = await Promise.all([
+    getProduct(slug),
+    getProducts(),
+    getFaqs(slug),
+    getSeoPages(),
+  ]);
   if (!product) notFound();
 
   const index = all.findIndex((p) => p.slug === slug);
@@ -82,7 +90,7 @@ export default async function ProductDetailPage(
     { label: "Materials", items: product.materials },
     { label: "Compliance", items: product.compliance },
   ].filter((g) => g.items && g.items.length > 0);
-  const externalCta = PRODUCT_EXTERNAL_CTA[slug];
+  const extraCta = PRODUCT_EXTRA_CTA[slug];
 
   return (
     <>
@@ -115,9 +123,9 @@ export default async function ProductDetailPage(
                 <Button href="/contact" variant="primary">
                   Request a quote
                 </Button>
-                {externalCta ? (
-                  <Button href={externalCta.href} target="_blank" variant="dark">
-                    {externalCta.label}
+                {extraCta ? (
+                  <Button type="button" variant="dark">
+                    {extraCta.label}
                   </Button>
                 ) : null}
               </div>
@@ -179,6 +187,8 @@ export default async function ProductDetailPage(
       {/* FAQ */}
       <ProductFaqs faqs={faqs} />
 
+      <RelatedLocationPages pages={seoPages} productSlug={slug} />
+
       {/* CTA */}
       <section className="bg-[var(--color-bg)] py-16 lg:py-20">
         <Container size="wide">
@@ -197,9 +207,9 @@ export default async function ProductDetailPage(
                   <Button href="/contact" variant="dark">
                     Request a quote
                   </Button>
-                  {externalCta ? (
-                    <Button href={externalCta.href} target="_blank" variant="white">
-                      {externalCta.label}
+                  {extraCta ? (
+                    <Button type="button" variant="white">
+                      {extraCta.label}
                     </Button>
                   ) : null}
                 </div>

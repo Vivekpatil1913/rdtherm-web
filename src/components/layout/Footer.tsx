@@ -6,6 +6,7 @@ import { ArrowRight, ChevronRight, MapPin, Phone, Mail, Clock, Calendar } from "
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { footerLinks, siteConfig } from "@/data/site";
+import type { ApiSeoPageSummary } from "@/lib/api-types";
 import type { ApiSettings } from "@/lib/api-types";
 import { cn } from "@/lib/cn";
 
@@ -22,7 +23,14 @@ function toExternalUrl(href: string): string | null {
   return `https://${v}`;
 }
 
-export function Footer({ settings }: { settings?: ApiSettings | null }) {
+export function Footer({
+  settings,
+  locationPages = [],
+}: {
+  settings?: ApiSettings | null;
+  /** Published service + location landing pages, listed under "Locations". */
+  locationPages?: ApiSeoPageSummary[];
+}) {
   const pathname = usePathname();
 
   // Live contact details from the CMS, falling back to static config.
@@ -37,6 +45,10 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
   );
 
 
+  // Five columns share a 12-track row; with no Locations column the remaining
+  // two widen to keep the row full instead of leaving a gap.
+  const sideSpan = locationPages.length > 0 ? "lg:col-span-2" : "lg:col-span-3";
+
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
@@ -49,9 +61,9 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
       />
 
       <Container size="wide" className="relative z-10 pt-16 pb-8 lg:pt-20 lg:pb-10">
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14">
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10 xl:gap-12">
           {/* Brand */}
-          <div className="flex flex-col items-start gap-5">
+          <div className="flex flex-col items-start gap-5 lg:col-span-3">
             <Logo className="[&_img]:h-[4.5rem]" />
             <p className="max-w-[300px] text-[14px] leading-relaxed text-[var(--color-ink-soft)]">
               Code-compliant pressure vessels, reactors and process equipment — engineered,
@@ -67,7 +79,7 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
           </div>
 
           {/* Links — split into two sub-columns */}
-          <FooterColumn title="Links">
+          <FooterColumn title="Links" className="lg:col-span-3">
             <div className="grid grid-cols-2 gap-x-8 gap-y-3">
               <ul className="flex flex-col gap-3">
                 {footerLinks.primary.map((link) => (
@@ -90,8 +102,24 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
             </div>
           </FooterColumn>
 
+          {/* Locations — service + location landing pages, when any are published.
+              Only real pages are listed; this is navigation, not a keyword block. */}
+          {locationPages.length > 0 ? (
+            <FooterColumn title="Locations" className="lg:col-span-2">
+              <ul className="flex flex-col gap-3">
+                {locationPages.map((page) => (
+                  <li key={page.slug}>
+                    <FooterLink href={`/${page.slug}`} active={isActive(`/${page.slug}`)}>
+                      {page.h1}
+                    </FooterLink>
+                  </li>
+                ))}
+              </ul>
+            </FooterColumn>
+          ) : null}
+
           {/* Contact info */}
-          <FooterColumn title="Contact Info">
+          <FooterColumn title="Contact Info" className={sideSpan}>
             <ul className="flex flex-col gap-4 text-[14px] leading-relaxed text-[var(--color-ink-soft)]">
               <ContactRow icon={<MapPin className="size-4" />} align="start">
                 <span className="sm:max-w-[230px]">{contact.address}</span>
@@ -116,7 +144,7 @@ export function Footer({ settings }: { settings?: ApiSettings | null }) {
           </FooterColumn>
 
           {/* Working hours */}
-          <FooterColumn title="Working Hours">
+          <FooterColumn title="Working Hours" className={sideSpan}>
             <ul className="flex flex-col gap-4 text-[14px] leading-[1.5] text-[var(--color-ink-soft)]">
               {hours.map((h) => {
                 const isRange = h.value.includes("-");
@@ -227,12 +255,15 @@ function ContactRow({
 function FooterColumn({
   title,
   children,
+  className,
 }: {
   title: string;
   children: React.ReactNode;
+  /** Grid span for the footer's 12-column row. */
+  className?: string;
 }) {
   return (
-    <div className="flex flex-col gap-5">
+    <div className={cn("flex flex-col gap-5", className)}>
       <div>
         <h3 className="text-[22px] font-bold tracking-tight text-[var(--color-brand-blue)]">{title}</h3>
         <span aria-hidden className="mt-2.5 block h-[3px] w-9 rounded-full bg-[var(--color-accent)]" />

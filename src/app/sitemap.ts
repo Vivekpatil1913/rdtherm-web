@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
-import { getProducts, getBlogs } from "@/services/content";
-
-const SITE_URL = "https://rdtherm.example.com";
+import { getProducts, getBlogs, getSeoPages } from "@/services/content";
+import { SITE_URL } from "@/data/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const [products, blogs] = await Promise.all([getProducts(), getBlogs()]);
+  const [products, blogs, seoPages] = await Promise.all([
+    getProducts(),
+    getBlogs(),
+    getSeoPages(),
+  ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: "/", priority: 1.0, changeFrequency: "weekly" },
@@ -31,5 +34,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "yearly",
   }));
 
-  return [...staticRoutes, ...productRoutes, ...blogRoutes];
+  // Service + location landing pages live at the site root, and are authored in
+  // the admin — so the sitemap has to read them rather than list them by hand.
+  const seoRoutes: MetadataRoute.Sitemap = seoPages.map((page) => ({
+    url: `${SITE_URL}/${page.slug}`,
+    lastModified: page.updatedAt ? new Date(page.updatedAt) : now,
+    priority: 0.8,
+    changeFrequency: "monthly",
+  }));
+
+  return [...staticRoutes, ...productRoutes, ...seoRoutes, ...blogRoutes];
 }

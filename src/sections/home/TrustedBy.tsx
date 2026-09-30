@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { fadeUp, viewportOnce } from "@/animations/motion";
 import type { ApiLogo } from "@/lib/api-types";
@@ -44,35 +46,75 @@ export function TrustedBy({ logos = [] }: { logos?: ApiLogo[] }) {
           className="marquee-track flex w-max items-start gap-4 lg:gap-5 px-4 lg:px-5"
           aria-label="Companies that trust R&D Therm"
         >
-          {marqueeLogos.map((logo, i) => (
-            <div
-              key={`${logo.id}-${i}`}
-              className="marquee-item group/logo flex w-32 lg:w-40 shrink-0 flex-col items-center gap-2 p-3 transition-transform duration-300 hover:-translate-y-1"
-            >
-              <span className="flex h-20 lg:h-24 w-full items-center justify-center">
+          {marqueeLogos.map((logo, i) => {
+            const href = logo.caseStudySlug ? `/case-studies/${logo.caseStudySlug}` : null;
+
+            const tile = (
+              <>
+                <span className="relative flex h-20 lg:h-24 w-full items-center justify-center">
+                  {logo.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={logo.imageUrl}
+                      alt={logo.name}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  ) : (
+                    <span className="text-center text-[16px] lg:text-[18px] font-semibold leading-tight tracking-tight text-[var(--color-ink)]">
+                      {logo.name}
+                    </span>
+                  )}
+                  {/* Only a linked logo gets an affordance, so the marquee still
+                      reads as a wall of trust marks rather than a row of buttons. */}
+                  {href ? (
+                    <span
+                      aria-hidden
+                      className="absolute -right-1 -top-1 inline-flex size-6 items-center justify-center rounded-full bg-[var(--color-accent)] text-white opacity-0 transition-opacity duration-300 group-hover/logo:opacity-100"
+                    >
+                      <ArrowUpRight className="size-3.5" />
+                    </span>
+                  ) : null}
+                </span>
                 {logo.imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={logo.imageUrl}
-                    alt={logo.name}
-                    className="max-h-full max-w-full object-contain"
-                  />
-                ) : (
-                  <span className="text-center text-[16px] lg:text-[18px] font-semibold leading-tight tracking-tight text-[var(--color-ink)]">
+                  <span
+                    title={logo.name}
+                    className={
+                      "block w-full break-words text-center text-[13px] lg:text-[14px] font-semibold leading-snug tracking-tight transition-colors duration-300 " +
+                      (href
+                        ? "text-[var(--color-ink)] group-hover/logo:text-[var(--color-accent)]"
+                        : "text-[var(--color-ink)]")
+                    }
+                  >
                     {logo.name}
                   </span>
-                )}
-              </span>
-              {logo.imageUrl ? (
-                <span
-                  title={logo.name}
-                  className="block w-full break-words text-center text-[13px] lg:text-[14px] font-semibold leading-snug tracking-tight text-[var(--color-ink)]"
-                >
-                  {logo.name}
-                </span>
-              ) : null}
-            </div>
-          ))}
+                ) : null}
+              </>
+            );
+
+            const className =
+              "marquee-item group/logo flex w-32 lg:w-40 shrink-0 flex-col items-center gap-2 p-3 transition-transform duration-300 hover:-translate-y-1";
+
+            // The list is duplicated to loop the marquee, so the clone is hidden
+            // from assistive tech and taken out of the tab order.
+            const isClone = i >= logos.length;
+
+            return href ? (
+              <Link
+                key={`${logo.id}-${i}`}
+                href={href}
+                className={className + " rounded-[14px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"}
+                aria-label={`${logo.name} — read the case study`}
+                aria-hidden={isClone || undefined}
+                tabIndex={isClone ? -1 : undefined}
+              >
+                {tile}
+              </Link>
+            ) : (
+              <div key={`${logo.id}-${i}`} className={className} aria-hidden={isClone || undefined}>
+                {tile}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -85,7 +127,10 @@ export function TrustedBy({ logos = [] }: { logos?: ApiLogo[] }) {
           animation: marquee-scroll 40s linear infinite;
           will-change: transform;
         }
-        .marquee-wrap:hover .marquee-track {
+        /* Hover pauses so a logo can be clicked; focus-within does the same
+           for a keyboard user tabbing through the linked ones. */
+        .marquee-wrap:hover .marquee-track,
+        .marquee-wrap:focus-within .marquee-track {
           animation-play-state: paused;
         }
         @media (prefers-reduced-motion: reduce) {

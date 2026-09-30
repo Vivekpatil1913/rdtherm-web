@@ -34,14 +34,25 @@ type Props = {
   orientation?: ProductGalleryOrientation;
 };
 
+/**
+ * Gallery alt text is optional in the admin, so the API can legitimately send an
+ * empty string. `??` would pass that through and render alt="" on a real photo,
+ * so blank is treated as missing and the image is named after the product.
+ */
+function imageAlt(alt: string | undefined, title: string, index: number) {
+  const supplied = (alt ?? "").trim();
+  if (supplied) return supplied;
+  return index === 0 ? title : `${title} - view ${index + 1}`;
+}
+
 export function ProductGalleryLightbox({ title, images, orientation = "landscape" }: Props) {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
-  const slides = images.map((img) => ({
+  const slides = images.map((img, i) => ({
     src: img.url,
-    alt: img.alt ?? title,
-    title: img.label || img.alt,
+    alt: imageAlt(img.alt, title, i),
+    title: img.label || imageAlt(img.alt, title, i),
     description: img.caption,
   }));
 
@@ -82,7 +93,7 @@ export function ProductGalleryLightbox({ title, images, orientation = "landscape
                 <GalleryTile
                   key={img.url}
                   image={img}
-                  alt={img.alt ?? title}
+                  alt={imageAlt(img.alt, title, i)}
                   className="relative aspect-[9/16]"
                   sizes={portraitSizes}
                   fit="contain"
@@ -95,7 +106,7 @@ export function ProductGalleryLightbox({ title, images, orientation = "landscape
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5">
               <GalleryTile
                 image={hero}
-                alt={hero.alt ?? title}
+                alt={imageAlt(hero.alt, title, 0)}
                 className="relative lg:col-span-8 aspect-[16/10] lg:aspect-[16/11]"
                 priority
                 onClick={() => openAt(0)}
@@ -106,7 +117,7 @@ export function ProductGalleryLightbox({ title, images, orientation = "landscape
                   <GalleryTile
                     key={img.url}
                     image={img}
-                    alt={img.alt ?? title}
+                    alt={imageAlt(img.alt, title, i + 1)}
                     className="relative aspect-square lg:aspect-[16/10]"
                     onClick={() => openAt(i + 1)}
                   />
@@ -119,7 +130,7 @@ export function ProductGalleryLightbox({ title, images, orientation = "landscape
                     <GalleryTile
                       key={img.url}
                       image={img}
-                      alt={img.alt ?? title}
+                      alt={imageAlt(img.alt, title, i + 3)}
                       className="relative aspect-[5/4]"
                       onClick={() => openAt(i + 3)}
                     />
